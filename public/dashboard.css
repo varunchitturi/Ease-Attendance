@@ -281,6 +281,9 @@ hr{
 #timeJoinedBtn:hover{
     color: #F5B364 !important;
 }
+#timeLeftBtn:hover{
+    color: #F5B364 !important;
+}
 .filter-button{
     -webkit-appearance: none!important;
     margin-bottom: 10px;
