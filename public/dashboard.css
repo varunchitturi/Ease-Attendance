@@ -90,6 +90,42 @@ hr{
     font-size: .75rem;
     text-transform: uppercase;
 }
+.dropdown-item{
+    cursor: pointer;
+}
+.dropdown-item.roster-active{
+    background-color: #F5B364;
+    color: white!important;
+}
+.dropdown-item.roster-active:hover{
+    background-color: #F5B364!important;
+    color: white!important;
+}
+
+.container .dropdown .dropdown-menu a:hover
+{
+    background-color: #ffffff;
+    color: #F5B364;
+}
+.container .dropdown .dropdown-menu a:focus
+{
+    background-color: #ffffff;
+    color: #F5B364;
+}
+.container .dropdown .dropdown-menu a:active
+{
+    background-color: #ffffff;
+    color: #F5B364;
+}
+
+.dropdown-menu{
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-width: 200px;
+    max-width: 700px;
+    max-height: 400px;
+    z-index: 998!important;
+}
 
 /*
  * Content
@@ -144,7 +180,7 @@ hr{
 }
 .active{
     color: #F5B364 !important;
-    font-weight: bold;
+    font-weight: bold!important;
 }
 
 .tab-content{
@@ -200,7 +236,7 @@ hr{
 #status{
     color: black;
     margin-top: 10px;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
 }
 
 .dots {
@@ -275,7 +311,7 @@ hr{
     margin-left: 300px;
 }
 #myTabContent{
-    min-width: 1100px;
+    min-width: 1200px;
 }
 .tab-title{
     color: black;
@@ -298,14 +334,20 @@ hr{
     outline: none;
     border-color: #F5B364;
 }
-#add-on-registered{
+
+#dropdown-roster{
+    color: black;
+    margin-left: 0!important;
+    margin-bottom: 20px;
+}
+#add-on-registered-update, #add-on-registered-create,#dropdown-roster{
     margin-top: -5px;
-    margin-left: 30px;
+    margin-left: 20px;
     background: none;
     outline: none;
     border-color: #F5B364;
 }
-#add-on-registered:hover{
+#add-on-registered-update:hover, #add-on-registered-create:hover,#dropdown-roster:hover{
     background: #F5B364;
     color: white;
     outline: none;
@@ -344,14 +386,15 @@ hr{
 }
 #meeting-id, #meeting-name{
     margin-left: 15px!important;
-    margin-bottom: 20px;
+
 }
 #meeting-id{
     width: 230px;
-
+    margin-bottom: 10px;
 }
 #meeting-name{
     width: 400px;
+    margin-bottom: 20px;
 }
 .modal-input{
     margin-bottom: 20px;
@@ -462,7 +505,7 @@ hr{
     Content:"You have already added a meeting with this ID";
 }
 .failureServer:before{
-    Content:"Sorry, we had some trouble connecting to the server;
+    Content:"Sorry, we had some trouble connecting to the server";
 }
 #meeting-id-attendance{
     color: #bababa;
@@ -572,4 +615,36 @@ hr{
 #current-participant-number{
     color: #ebac62;
     display: inline!important;
+}
+@media (max-width: 1445px) {
+    #dashboard-sidebar{
+        min-width: 100px;
+        max-width: 100px;
+        padding: 15px !important;
+        border-radius: 0 20px 20px 0 !important;
+        margin-left: 15px;
+    }
+    #user-name{
+        display: none;
+    }
+    #tab-col{
+        margin-left: 100px;
+    }
+    .sidebar-text{
+        display: none;
+    }
+    .sidebar-icon{
+        font-size: 23px!important;
+    }
+    .nav-link{
+        text-align: center!important;
+
+    }
+
+    .sidebar-title{
+        display: none;
+    }
+    .space{
+        display: none;
+    }
 }

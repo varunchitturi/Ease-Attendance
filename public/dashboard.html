@@ -11,20 +11,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=0.6"/>
     <meta name="robots" content="index, follow">
     <title>Ease Attendance | Dashboard</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
     <!-- Bootstrap core CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-    <!-- JQuery -->
-    <!-- Bootstrap tooltips -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-    <!-- Bootstrap core JavaScript -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="vendor/jquery.input-allow.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 
@@ -40,53 +36,53 @@
 </head>
 <div class="notify"><span id="notifyType"></span></div>
 <body>
-<a href="/documentation" id="documentation-link"><div id="help-button"><span class="iconify" data-inline="false" data-icon="ion:help" style="font-size: 25px;"></span>
+<a title="View documentation" href="/documentation" target="_blank" id="documentation-link"><div id="help-button"><span class="iconify" data-inline="false" data-icon="ion:help" style="font-size: 25px;"></span>
 </div></a>
 <div class="container-fluid row full-width">
 
     <div class="sidebar-sticky col" id="dashboard-sidebar">
         <h4 id="user-name"></h4>
         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-            <span>Menu</span>
+            <span class="sidebar-title">Menu</span>
         </h6>
         <hr>
         <ul class="nav flex-column nav-tabs" id="dashboard-tabs" role = "tablist">
             <li class="nav-item">
-                <a class="nav-link active" id="attendance-tab" href="#attendance" data-toggle="tab" role="tab" aria-controls="attendance" aria-selected="true">
-                    <span class="iconify" data-inline="false" data-icon="bi:card-checklist" style="font-size: 18px;"></span>
-                     &nbsp;Attendance <span class="sr-only">(current)</span>
+                <a class="nav-link active tab-link" id="attendance-tab" href="#attendance" data-toggle="tab" role="tab" aria-controls="attendance" aria-selected="true">
+                    <span class="iconify sidebar-icon" data-inline="false" data-icon="bi:card-checklist" style="font-size: 18px;"></span>
+                    <span class="space">&nbsp;&nbsp;</span><span class="sidebar-text">Attendance</span> <span class="sr-only">(current)</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="meetings-tab" href="#meetings" data-toggle="tab" role="tab" aria-controls="meetings" aria-selected="false">
-                    <span class="iconify" data-inline="false" data-icon="bi:people" style="font-size: 18px;"></span>
-                    &nbsp;My Rosters
+                <a class="nav-link tab-link" id="meetings-tab" href="#meetings" data-toggle="tab" role="tab" aria-controls="meetings" aria-selected="false">
+                    <span class="iconify sidebar-icon" data-inline="false" data-icon="bi:people" style="font-size: 18px;"></span>
+                    <span class="space">&nbsp;&nbsp;</span><span class="sidebar-text">My Rosters</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="records-tab" href="#records" data-toggle="tab" role="tab" aria-controls="students" aria-selected="false">
-                    <span class="iconify" data-inline="false" data-icon="ic:outline-access-time" style="font-size: 18px;"></span>
-                    &nbsp;Meeting Records
+                <a class="nav-link tab-link" id="records-tab" href="#records" data-toggle="tab" role="tab" aria-controls="students" aria-selected="false">
+                    <span class="iconify sidebar-icon" data-inline="false" data-icon="ic:outline-access-time" style="font-size: 18px;"></span>
+                    <span class="space">&nbsp;&nbsp;</span><span class="sidebar-text">Meeting Records</span>
                 </a>
             </li>
         </ul>
 
         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-            <span>Account</span>
+            <span class="sidebar-title">Account</span>
         </h6>
         <hr>
         <ul class="nav flex-column mb-2">
             <li class="nav-item">
                 <a onclick="resetSettingInput()" id="settings-link" class="nav-link" data-toggle="modal" data-target="#settings-modal" href="#">
-                    <span class="iconify" data-inline="false" data-icon="ant-design:setting-outlined" style="font-size: 18px;"></span>
-                    Settings
+                    <span class="iconify sidebar-icon" data-inline="false" data-icon="ant-design:setting-outlined" style="font-size: 18px;"></span>
+                    <span class="sidebar-text">Settings</span>
                 </a>
             </li>
             <li class="nav-item">
                 <span class="nav-link" href="#">
                     <a onclick="logout()" id="logout-button">
-                         <span class="iconify" data-inline="false" data-icon="bx:bx-log-out" style=" font-size: 18px;"></span>
-                        Sign Out</a>
+                         <span class="iconify sidebar-icon" data-inline="false" data-icon="bx:bx-log-out" style=" font-size: 18px;"></span>
+                        <span class="sidebar-text">Sign Out</span></a>
                 </span>
             </li>
         </ul>
@@ -102,13 +98,21 @@
                 <h5 id="status">Status:
                     <span id="status-dot" class='dot dot-danger'></span>
                 </h5>
+                <div  class="dropdown show">
+                    <button class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdown-roster" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Choose Roster
+                    </button>
+                    <div class="dropdown-menu" id="dropdown-roster-menu" aria-labelledby="dropdown-roster">
+                    </div>
+                </div>
                 <div id="person-search" class="input-group flex-nowrap float-left">
                     <div id="search-prepend" class="input-group-prepend">
                         <span class="input-group-text" id="addon-wrapping"><span class="iconify" data-inline="false" data-icon="ant-design:search-outlined" style="font-size: 20px;"></span></span>
                     </div>
                     <input id="student-search-input-field" onclick="this.select()" type="text" class="form-control student-search-input" placeholder="Participant Name" aria-label="Student Name" aria-describedby="addon-wrapping">
                 </div>
-                <button onclick="addNotRegistered()" class="float-left btn" data-toggle="modal" data-target="#add-edit-meeting-modal" type="button" id="add-on-registered">Update Roster</button>
+                <button onclick="addNotRegisteredCreate()" class="float-left btn" data-toggle="modal" data-target="#add-edit-meeting-modal" type="button" id="add-on-registered-create">Create New Roster</button>
+                <button onclick="addNotRegisteredUpdate()" class="float-left btn" data-toggle="modal" data-target="#add-edit-meeting-modal" type="button" id="add-on-registered-update">Update Roster</button>
                 <div id="filter-group" class="btn-group float-right" role="group" aria-label="Basic example">
                     <a id="all-filter" onclick="filterClick(this.id)" type="button" class="btn btn-secondary filter-button filter-active">All</a>
                     <a id="present-filter" onclick="filterClick(this.id)" type="button" class="btn btn-secondary filter-button">Present</a>
@@ -146,7 +150,7 @@
                 <table class="table" id="my-meetings-table">
                     <thead>
                     <tr>
-                        <th class="table-head-title meeting-table-title" scope="col">Meeting Name</th>
+                        <th class="table-head-title meeting-table-title" scope="col">Roster Name</th>
                         <th class="table-head-title meeting-table-title" scope="col" >Meeting ID</th>
                     </tr>
                     </thead>
@@ -237,12 +241,12 @@
                 </div>
                 <div class="modal-body">
                     <div class="col-5">
-                        <h5 class="modal-title">Meeting Details</h5>
+                        <h5 class="modal-title">Roster Details</h5>
                         <div id="meeting-name" class="input-group flex-nowrap float-left">
                             <div id="meeting-name-prepend" class="input-group-prepend">
                                 <span class="input-group-text">Name</span>
                             </div>
-                            <input id="meeting-name-input-field" onclick="this.select()" type="text" class="form-control modal-input" placeholder="Meeting Name" aria-label="Meeting Name" aria-describedby="addon-wrapping">
+                            <input id="meeting-name-input-field" onclick="this.select()" type="text" class="form-control modal-input" placeholder="Roster Name" aria-label="Roster Name" aria-describedby="addon-wrapping">
                         </div>
                         <div id="meeting-id" class="input-group flex-nowrap float-left">
                             <div id="meeting-id-prepend" class="input-group-prepend">
