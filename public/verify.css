@@ -13,8 +13,23 @@
     border-radius: 10px;
     width: 140px;
     height: 40px !important;
-    border: 0 solid black;
-    background-color: #ff787c;
-    color: white;
+    border: 1px solid #ea5a5e;
+    background-color: white;
+    color: #ea5a5e;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+#resend-button:hover{
+    border-radius: 10px;
+    width: 140px;
+    height: 40px !important;
+    border: 0 solid black;
+    background-color: #ea5a5e;
+    color: white;
+    box-shadow: 0 4px 4px 2px rgba(0, 0, 0, 0.25);
+}
+#resend-help{
+    margin-top: 20px;
+}
+#support-email{
+    color: #ea5a5e;
 }
