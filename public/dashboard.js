@@ -54,6 +54,7 @@ let rosterCreateButton = $("#add-on-registered-create")
 let rosterUpdateButton = $("#add-on-registered-update")
 let chooseRoster = $("#dropdown-roster")
 let chooseRosterMenu = $("#dropdown-roster-menu")
+$("[data-toggle=popover]").popover();
 function hideRegisterRosterButtons(){
     rosterCreateButton.prop('disabled',true)
     rosterCreateButton.hide()

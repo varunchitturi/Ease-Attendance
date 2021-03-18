@@ -272,6 +272,18 @@ hr{
 .sort-buttons{
     cursor : pointer;
 }
+#time-last-left-info{
+    margin-left: 5px;
+}
+#time-last-left-info:focus{
+    outline: none!important;
+}
+#time-last-left-info:hover{
+    cursor: pointer;
+    outline: none!important;
+    color: #F5B364 !important;
+
+}
 #firstNameBtn:hover{
     color: #F5B364 !important;
 }
