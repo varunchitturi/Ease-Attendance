@@ -45,7 +45,7 @@ let editingIndex = 1
 let checkVerificationTimer
 let notRegisteredCount = 0
 let MeetingIsOccurring = false
-let ParticipantTableSortBy = "first" // can be "first" or "last" or "time" to sort participants table
+let ParticipantTableSortBy = "first" // can be "first" or "last" or "time" or "timeLeft" to sort participants table
 let listNamesShown = []
 let shouldRefresh = false
 let zoomID = -1
