@@ -82,6 +82,8 @@
         <a href="#meeting-record"><h6>Meeting Records</h6></a>
         <hr>
         <a href="#not-registered"><h6>Update Participants</h6></a>
+        <hr>
+        <a href="#time-joined-left"><h6>Time Joined/Left</h6></a>
         <br>
         <h3>Uninstall</h3>
         <hr>
@@ -97,10 +99,10 @@
 
         <h2 id="prerequisites" class="step-title">Prerequisites</h2>
         <ul class=" ">
-            <li class="guide-li">Have separate scheduled Zoom meetings for each class. Ease Attendance keeps track of class roster for <br>each meeting, and will compare the meeting participants with the roster to check attendance.</li>
+            <li class="guide-li">Have repeating, pre-scheduled meetings, as Ease Attendance uses the Meeting ID to identify Rosters.</li>
             <img src="Images/Zoom_Meetings.png" class="guide-img"/>
             <li class="guide-li">For the best experience, have students log into classes with their full name, ex. “John Doe”. This will allow the sort by<br>first/last names to work most effectively.</li>
-            <li class="guide-li">Inform students to not change their displayed Zoom names, or else Ease Attendance might miss their attendance.</li>
+            <li class="guide-li">Inform students to not change their displayed Zoom names, or Ease Attendance might miss their attendance.</li>
         </ul>
         <h2 id="install-zoom" class="step-title doc-link">Step 1 - Install Zoom App</h2>
         <ol class="guide-list">
@@ -118,22 +120,33 @@
             <li class="guide-list-element guide-li">Enter in your credentials. <p class="secondary">Note: Make sure the email you enter is the same as the email you use to sign in to Zoom</p> </li>
             <img src="Images/sign-up-ease.png" class="guide-img"/>
             <li class="guide-list-element guide-li">Verify your email</li>
-            <img src="Images/verify-ease.png" class="guide-img"/>
+            <img src="Images/MarchUpdate/VerifyEmail.png" class="guide-img"/>
             <li class="guide-list-element guide-li">After verifying your email, you will be redirected to the Ease Attendance Dashboard</li>
-            <img src="Images/DashboardEmpty.png" class="guide-img"/>
+            <img src="Images/MarchUpdate/AttendanceTab.png" class="guide-img"/>
         </ol>
         <h2 id="roster" class="step-title doc-link">Step 3 - Add Class Roster</h2>
         <ul>
             <li class="guide-li"><h4>Automatic </h4></li>
             <ol class="guide-list">
                 <li class="guide-list-element guide-li">Start a Zoom Meetings and watch your meeting participants fill up the dashboard.</li>
-                <img src="Images/DashboardUpdateParticipants.png" class="guide-img"/>
-                <li class="guide-list-element guide-li">When the participants finish coming into the Zoom meeting, click on update participants in the <br>Ease Attendance dashboard to store them in a Meeting Roster. Confirm the meeting details and click finish.
+                <img src="Images/MarchUpdate/UnregisteredMeetingIDCreateRoster.png" class="guide-img"/>
+                <li class="guide-list-element guide-li">When the participants finish coming into the Zoom meeting, click on update participants in the Ease Attendance dashboard to store them in a Meeting Roster. Confirm the meeting details and click finish.
                     <p class="secondary">Note: If the meeting ends, and no roster has been created, Ease Attendance will prompt you to create one.</p></li>
-
-                <img src="Images/DashboardAddMeetingAutomatic.png" class="guide-img"/>
+                <img src="Images/MarchUpdate/UnregisteredMeetingIDCreateRoster.png" class="guide-img"/>
                 <li class="guide-list-element guide-li">Go to the My Meetings tab to confirm that your meeting has been created</li>
-                <img src="Images/DashboardMeetingAutomaticAdded.png" class="guide-img"/>
+                <img src="Images/MarchUpdate/MyMeetingsTab.png" class="guide-img"/>
+            </ol>
+            <li class="guide-li"><h4>Create Multiple Rosters per Meeting ID </h4></li>
+            <ol class="guide-list">
+                <li class="guide-list-element guide-li">If starting a Zoom Meeting which already contains a roster, Ease Attendance allows users to create a new Roster for the same Meeting ID with the Create New Roster button.</li>
+                <img src="Images/MarchUpdate/CreateNewRosterDuringMeetingBefore.png" class="guide-img"/>
+                <li class="guide-list-element guide-li"> Clicking on this allows users to choose between creating a new roster with all students absent, present, or not registered in the current roster, or to create a meeting with all unregistered students in the meeting.</li>
+                <img src="Images/MarchUpdate/CreateRosterWithAllorUnregistered.png" class="guide-img"/>
+                <li class="guide-list-element guide-li"> An easy way of creating a new roster is to ask a different group of student to join the meeting, then create a new roster with these unregistered students.
+                    <p class="secondary">Note: You must name the new Roster differently than your previous Roster</p></li>
+                <img src="Images/MarchUpdate/CreatingNewRosterWithUnregisteredStudents.png" class="guide-img"/>
+                <li class="guide-list-element guide-li"> After creating multiple rosters, users can click between them to choose which roster to display and compare for attendance.</li>
+                <img src="Images/MarchUpdate/ChooseBetweenRosters.png" class="guide-img"/>
             </ol>
             <li class="guide-li"><h4>Manual </h4><p class="secondary">Note: This action will not create a meeting for you on Zoom but instead registers the following as a class roster on Ease Attendance</p></li>
             <ol class="guide-list">
@@ -141,7 +154,9 @@
                 <img src="Images/DashboardEmptyMyMeetings.png" class="guide-img"/>
                 <li class="guide-list-element guide-li">Click on add meeting </li>
                 <img src="Images/DashboardAddMeetingManual.png" class="guide-img"/>
-                <li class="guide-list-element guide-li">Input your Zoom meeting details and add students to your class roster</li>
+                <li class="guide-list-element guide-li">Input your Zoom meeting details and add students to your class roster
+                    <p class="secondary">Note: If a user creates multiple Rosters with the same Meeting ID, then both will be visible under the "Choose Roster" in the "Take Attendance" Tab</p></li>
+                </li>
                 <img src="Images/DashboardAddMeetingManualComplete.png" class="guide-img"/>
                 <li class="guide-list-element guide-li">Confirm meeting details and click finish. Now you'll be able to see your newly-created meeting.</li>
                 <img src="Images/DashboardMeetingAutomaticAdded.png" class="guide-img"/>
@@ -168,8 +183,8 @@
             <p class="noNumberElement">Search for specific participants by entering their names in the Participant Search during a Meeting.</p>
             <img src="Images/ParticipantSearch.png" class="guide-img" />
             <h2 id="sort-last-first-names" class="step-title doc-link">Sort Participants</h2>
-            <p class="noNumberElement">Sort participants by first or last name by clicking on the "First Name" or "Last Name" buttons.</p>
-            <img src="Images/SortParticipantsFirstLastNames.png" class="guide-img" />
+            <p class="noNumberElement">Sort participants by first, last name, or time joined/left by clicking on the "First Name" or "Last Name" buttons.</p>
+            <img src="Images/MarchUpdate/SortByThings.png" class="guide-img" />
             <h2 id="refresh-button" class="step-title doc-link">Refresh</h2>
             <p class="noNumberElement">Refreshing your meeting can fix some temporary issues or update participants quicker.</p>
             <img id="refreshImg" src="Images/Refresh.png" class="guide-img"width="500px"/>
@@ -207,6 +222,12 @@
                 <li class="noNumberElement guide-li">If you have unregistered participants in your Meeting and wish to add them to your class roster, just click on the <br>"Update Participants" on the "Take Attendance" tab of the Dashboard</li>
                 <li class="noNumberElement guide-li">A popup will show all the old Class Roster combined with all unregistered participants.</li>
                 <li class="noNumberElement guide-li">Clicking "Finish" will save the Class Roster with the new participants</li>
+            </ul>
+
+            <h2 id="time-joined-left" class="step-title doc-link">Time Joined/Left</h2>
+            <ul class="guide-list">
+                <li class="noNumberElement guide-li">Whenever a participant first joins the meeting, the time  is recorded and stored for the particular meeting. A user can sort between these by clicking on "Time First Joined" in the table.</li>
+                <li class="noNumberElement guide-li">Similarly, every time a participant leaves the meeting, the time is recorded and updated on the table, under "Time Last Left"(which can also be sorted). Note that the "Time Last Left" includes the time that participants leave the main room to go to Zoom breakout rooms.</li>
             </ul>
         </div>
 
