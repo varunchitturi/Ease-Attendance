@@ -284,6 +284,9 @@ hr{
     color: #F5B364 !important;
 
 }
+#popover-info{
+    outline: none;
+}
 #firstNameBtn:hover{
     color: #F5B364 !important;
 }
@@ -326,7 +329,7 @@ hr{
     margin-left: 300px;
 }
 #myTabContent{
-    min-width: 1200px;
+    min-width: 1260px;
 }
 .tab-title{
     color: black;
@@ -367,6 +370,9 @@ hr{
     color: white;
     outline: none;
     border-color: #F5B364;
+}
+.new-roster-drop{
+    -webkit-appearance: none;
 }
 .meeting-table-title{
     background-color: #ee6165 !important;

@@ -117,11 +117,11 @@
                         Create New Roster
                     </button>
                     <div class="dropdown-menu" id="dropdown-create-roster-with-all-participants" aria-labelledby="dropdown-roster">
-                        <a  class="dropdown-item btn" data-toggle="modal" data-target="#add-edit-meeting-modal" type="button" onclick="addNotRegisteredCreateAll()">With All Participants</a>
-                        <a  class="dropdown-item btn" data-toggle="modal" data-target="#add-edit-meeting-modal" type="button" onclick="addNotRegisteredCreateOnlyNotRegistered()">With Unregistered Participants</a>
+                        <a  class="dropdown-item btn new-roster-drop" data-toggle="modal" data-target="#add-edit-meeting-modal" type="button" onclick="addNotRegisteredCreateAll()">With All Participants</a>
+                        <a  class="dropdown-item btn new-roster-drop" data-toggle="modal" data-target="#add-edit-meeting-modal" type="button" onclick="addNotRegisteredCreateOnlyNotRegistered()">With Unregistered Participants</a>
                     </div>
                 </div>
-                <button onclick="addNotRegisteredUpdate()" class="float-left btn" data-toggle="modal" data-target="#add-edit-meeting-modal" type="button" id="add-on-registered-update">Update Roster</button>
+                <button onclick="addNotRegisteredUpdate()" class="float-left btn" data-toggle="modal" data-target="#add-edit-meeting-modal" type="button" id="add-on-registered-update">Update Current Roster</button>
                 <div id="filter-group" class="btn-group float-right" role="group" aria-label="Basic example">
                     <a id="all-filter" onclick="filterClick(this.id)" type="button" class="btn btn-secondary filter-button filter-active">All</a>
                     <a id="present-filter" onclick="filterClick(this.id)" type="button" class="btn btn-secondary filter-button">Present</a>
@@ -150,7 +150,7 @@
 
                         <th class="table-head-title"  scope="col">
                             <a id = "timeLeftBtn" onclick="sortByTimeLeft()" class = "sort-buttons" style="color: white">Time Last Left </a>
-                            <a id="time-last-left-info" class="iconify" tabindex="0" data-icon="akar-icons:info"  data-trigger="hover" data-container="body" data-toggle="popover" data-placement="top" data-content="When a participant transitions to or from a breakout room, they actually leave and rejoin the meeting"></a>
+                            <a id="popover-info" tabindex="0" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="top" data-content="When a participant transitions to or from a breakout room, they actually leave and rejoin the meeting"><span id="time-last-left-info" class="iconify" data-icon="akar-icons:info" ></span></a>
                         </th>
 
                         <th class="table-head-title" scope="col">Status</th>
@@ -370,6 +370,9 @@
 
 </script>
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script>
+
 <script type="text/javascript" src="dashboard.js"></script>
+
+
 </html>
 
