@@ -112,7 +112,15 @@
                     </div>
                     <input id="student-search-input-field" onclick="this.select()" type="text" class="form-control student-search-input" placeholder="Participant Name" aria-label="Student Name" aria-describedby="addon-wrapping">
                 </div>
-                <button onclick="addNotRegisteredCreate()" class="float-left btn" data-toggle="modal" data-target="#add-edit-meeting-modal" type="button" id="add-on-registered-create">Create New Roster</button>
+                <div  class="dropdown show">
+                    <button class="float-left btn dropdown-toggle" href="#" role="button" id="add-on-registered-create" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Create New Roster
+                    </button>
+                    <div class="dropdown-menu" id="dropdown-create-roster-with-all-participants" aria-labelledby="dropdown-roster">
+                        <a  class="dropdown-item btn" data-toggle="modal" data-target="#add-edit-meeting-modal" type="button" onclick="addNotRegisteredCreateAll()">With All Participants</a>
+                        <a  class="dropdown-item btn" data-toggle="modal" data-target="#add-edit-meeting-modal" type="button" onclick="addNotRegisteredCreateOnlyNotRegistered()">With Unregistered Participants</a>
+                    </div>
+                </div>
                 <button onclick="addNotRegisteredUpdate()" class="float-left btn" data-toggle="modal" data-target="#add-edit-meeting-modal" type="button" id="add-on-registered-update">Update Roster</button>
                 <div id="filter-group" class="btn-group float-right" role="group" aria-label="Basic example">
                     <a id="all-filter" onclick="filterClick(this.id)" type="button" class="btn btn-secondary filter-button filter-active">All</a>

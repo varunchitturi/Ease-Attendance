@@ -1084,7 +1084,15 @@ function addNotRegisteredUpdate(){
     }
 }
 
-function addNotRegisteredCreate(){
+function addNotRegisteredCreateAll(){
+    addNotRegisteredCreate("all")
+}
+
+function addNotRegisteredCreateOnlyNotRegistered(){
+    addNotRegisteredCreate("Not Registered")
+}
+
+function addNotRegisteredCreate(filter){
     let meetingIDInputField = $("#meeting-id-input-field")
     let meetingNameInputField = $("#meeting-name-input-field")
     let deleteMeetingButton =  $("#delete-meeting-button")
@@ -1103,7 +1111,7 @@ function addNotRegisteredCreate(){
     }
     rosterParticipantCount = 0
     for(let i = 0; i < Participants.length; i++){
-        if(Participants[i].state === "Not Registered"){
+        if(filter === 'all' || Participants[i].state === filter){
             const fullName = Participants[i].firstName + " " + Participants[i].lastName
             addStudent(fullName)
         }

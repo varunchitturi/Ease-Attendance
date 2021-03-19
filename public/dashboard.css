@@ -355,14 +355,14 @@ hr{
     margin-left: 0!important;
     margin-bottom: 20px;
 }
-#add-on-registered-update, #add-on-registered-create,#dropdown-roster{
+#add-on-registered-update, #add-on-registered-create,#dropdown-roster, #add-on-registered-create{
     margin-top: -5px;
     margin-left: 20px;
     background: none;
     outline: none;
     border-color: #F5B364;
 }
-#add-on-registered-update:hover, #add-on-registered-create:hover,#dropdown-roster:hover{
+#add-on-registered-update:hover, #add-on-registered-create:hover,#dropdown-roster:hover,#add-on-registered-create:hover {
     background: #F5B364;
     color: white;
     outline: none;
