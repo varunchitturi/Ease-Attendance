@@ -1103,8 +1103,10 @@ function addNotRegisteredCreate(){
     }
     rosterParticipantCount = 0
     for(let i = 0; i < Participants.length; i++){
-        const fullName = Participants[i].firstName + " " + Participants[i].lastName
-        addStudent(fullName)
+        if(Participants[i].state === "Not Registered"){
+            const fullName = Participants[i].firstName + " " + Participants[i].lastName
+            addStudent(fullName)
+        }
     }
 }
 
