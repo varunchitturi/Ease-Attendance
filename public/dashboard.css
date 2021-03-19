@@ -272,6 +272,21 @@ hr{
 .sort-buttons{
     cursor : pointer;
 }
+#time-last-left-info{
+    margin-left: 5px;
+}
+#time-last-left-info:focus{
+    outline: none!important;
+}
+#time-last-left-info:hover{
+    cursor: pointer;
+    outline: none!important;
+    color: #F5B364 !important;
+
+}
+#popover-info{
+    outline: none;
+}
 #firstNameBtn:hover{
     color: #F5B364 !important;
 }
@@ -279,6 +294,9 @@ hr{
     color: #F5B364 !important;
 }
 #timeJoinedBtn:hover{
+    color: #F5B364 !important;
+}
+#timeLeftBtn:hover{
     color: #F5B364 !important;
 }
 .filter-button{
@@ -311,7 +329,7 @@ hr{
     margin-left: 300px;
 }
 #myTabContent{
-    min-width: 1200px;
+    min-width: 1260px;
 }
 .tab-title{
     color: black;
@@ -340,18 +358,21 @@ hr{
     margin-left: 0!important;
     margin-bottom: 20px;
 }
-#add-on-registered-update, #add-on-registered-create,#dropdown-roster{
+#add-on-registered-update, #add-on-registered-create,#dropdown-roster, #add-on-registered-create{
     margin-top: -5px;
     margin-left: 20px;
     background: none;
     outline: none;
     border-color: #F5B364;
 }
-#add-on-registered-update:hover, #add-on-registered-create:hover,#dropdown-roster:hover{
+#add-on-registered-update:hover, #add-on-registered-create:hover,#dropdown-roster:hover,#add-on-registered-create:hover {
     background: #F5B364;
     color: white;
     outline: none;
     border-color: #F5B364;
+}
+.new-roster-drop{
+    -webkit-appearance: none;
 }
 .meeting-table-title{
     background-color: #ee6165 !important;

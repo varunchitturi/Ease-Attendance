@@ -32,6 +32,7 @@
     <script src="https://code.iconify.design/1/1.0.6/iconify.min.js"></script>
     <link rel="stylesheet" type="text/css" href="vendor/ldbtn.min.css">
     <link rel="stylesheet" type="text/css" href="vendor/loading.min.css">
+    <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js" integrity="sha512-nOQuvD9nKirvxDdvQ9OMqe2dgapbPB7vYAMrzJihw5m+aNcf0dX53m6YxM4LgA9u8e9eg9QX+/+mPu8kCNpV2A==" crossorigin="anonymous"></script>
 </head>
 <div class="notify"><span id="notifyType"></span></div>
@@ -111,8 +112,16 @@
                     </div>
                     <input id="student-search-input-field" onclick="this.select()" type="text" class="form-control student-search-input" placeholder="Participant Name" aria-label="Student Name" aria-describedby="addon-wrapping">
                 </div>
-                <button onclick="addNotRegisteredCreate()" class="float-left btn" data-toggle="modal" data-target="#add-edit-meeting-modal" type="button" id="add-on-registered-create">Create New Roster</button>
-                <button onclick="addNotRegisteredUpdate()" class="float-left btn" data-toggle="modal" data-target="#add-edit-meeting-modal" type="button" id="add-on-registered-update">Update Roster</button>
+                <div  class="dropdown show">
+                    <button class="float-left btn dropdown-toggle" href="#" role="button" id="add-on-registered-create" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Create New Roster
+                    </button>
+                    <div class="dropdown-menu" id="dropdown-create-roster-with-all-participants" aria-labelledby="dropdown-roster">
+                        <a  class="dropdown-item btn new-roster-drop" data-toggle="modal" data-target="#add-edit-meeting-modal" type="button" onclick="addNotRegisteredCreateAll()">With All Participants</a>
+                        <a  class="dropdown-item btn new-roster-drop" data-toggle="modal" data-target="#add-edit-meeting-modal" type="button" onclick="addNotRegisteredCreateOnlyNotRegistered()">With Unregistered Participants</a>
+                    </div>
+                </div>
+                <button onclick="addNotRegisteredUpdate()" class="float-left btn" data-toggle="modal" data-target="#add-edit-meeting-modal" type="button" id="add-on-registered-update">Update Current Roster</button>
                 <div id="filter-group" class="btn-group float-right" role="group" aria-label="Basic example">
                     <a id="all-filter" onclick="filterClick(this.id)" type="button" class="btn btn-secondary filter-button filter-active">All</a>
                     <a id="present-filter" onclick="filterClick(this.id)" type="button" class="btn btn-secondary filter-button">Present</a>
@@ -136,8 +145,14 @@
                         </th>
 
                         <th class="table-head-title"  scope="col">
-                            <a id = "timeJoinedBtn" onclick="sortByTime()" class = "sort-buttons" style="color: white">Time First Joined</a>
+                            <a id = "timeJoinedBtn" onclick="sortByTimeJoined()" class = "sort-buttons" style="color: white">Time First Joined</a>
                         </th>
+
+                        <th class="table-head-title"  scope="col">
+                            <a id = "timeLeftBtn" onclick="sortByTimeLeft()" class = "sort-buttons" style="color: white">Time Last Left </a>
+                            <a id="popover-info" tabindex="0" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="top" data-content="When a participant transitions to or from a breakout room, they actually leave and rejoin the meeting"><span id="time-last-left-info" class="iconify" data-icon="akar-icons:info" ></span></a>
+                        </th>
+
                         <th class="table-head-title" scope="col">Status</th>
                     </tr>
                     </thead>
@@ -355,6 +370,9 @@
 
 </script>
 <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script>
+
 <script type="text/javascript" src="dashboard.js"></script>
+
+
 </html>
 
