@@ -383,6 +383,7 @@ function evaluateParticipantTable(doc){
             document.getElementById("current-participant-number").innerHTML = ""
             meetingIndex = -1
             CurrentRosterName = ""
+            hideChooseRoster()
             clearTable()
         }
         for(let j = 0; j < newMessages.length; j++){
@@ -612,6 +613,7 @@ function evaluateParticipantTable(doc){
             EncounteredParticipants = new Set()
             document.getElementById("current-participants").innerHTML = ""
             document.getElementById("current-participant-number").innerHTML = ""
+            hideChooseRoster()
             clearTable()
         }
         else{
@@ -629,6 +631,7 @@ function evaluateParticipantTable(doc){
             document.getElementById("current-participants").innerHTML = ""
             document.getElementById("current-participant-number").innerHTML = ""
             CurrentMessages = []
+            hideChooseRoster()
             clearTable()
             document.getElementById("ld-spin").style.display = "none"
             document.getElementById("refresh").disabled = false
@@ -640,7 +643,7 @@ function evaluateParticipantTable(doc){
 function clearTable(){
     const participantTable = document.getElementById("participant-table")
     const currentNumRows = participantTable.rows.length
-    for(i = 0; i < currentNumRows-1; i++){
+    for(let i = 0; i < currentNumRows-1; i++){
         participantTable.deleteRow(1);
     }
 }
