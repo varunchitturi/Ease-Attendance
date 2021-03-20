@@ -92,6 +92,7 @@ hr{
 }
 .dropdown-item{
     cursor: pointer;
+    color: black;!important;
 }
 .dropdown-item.roster-active{
     background-color: #F5B364;
@@ -302,20 +303,32 @@ hr{
 .filter-button{
     -webkit-appearance: none!important;
     margin-bottom: 10px;
-    color: #acacac !important;
     background: none !important;
     border: none !important;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+#filter-button{
+    color: #acacac;
+}
+#filter-drop-menu{
+    color: black!important;
+}
+
+#filter-button:hover{
+    color: #F5B364;
 }
 .filter-button:hover{
     color: #F5B364 !important;
     background: none;
 }
-.filter-button:active{
-    background: none !important;
-}
 .filter-active{
-    font-weight: bold!important;
-    color: #F5B364 !important;
+    background-color: #F5B364 !important;
+    color: white!important;
+    border-radius: 0!important;
+}
+.filter-active:hover{
+    color: white!important;
 }
 #person-search{
     width: 225px;
@@ -329,7 +342,7 @@ hr{
     margin-left: 300px;
 }
 #myTabContent{
-    min-width: 1260px;
+    min-width: 860px;
 }
 .tab-title{
     color: black;
@@ -547,6 +560,10 @@ hr{
 }
 #refresh{
     margin-top: -5px;
+    color: #acacac !important;
+}
+#refresh:hover{
+    color: #F5B364 !important;
 }
 #refresh:disabled{
     cursor: default;
@@ -637,7 +654,7 @@ hr{
     color: #ebac62;
     display: inline!important;
 }
-@media (max-width: 1445px) {
+@media (max-width: 1500px) {
     #dashboard-sidebar{
         min-width: 100px;
         max-width: 100px;
