@@ -123,11 +123,19 @@
                 </div>
                 <button onclick="addNotRegisteredUpdate()" class="float-left btn" data-toggle="modal" data-target="#add-edit-meeting-modal" type="button" id="add-on-registered-update">Update Current Roster</button>
                 <div id="filter-group" class="btn-group float-right" role="group" aria-label="Basic example">
-                    <a id="all-filter" onclick="filterClick(this.id)" type="button" class="btn btn-secondary filter-button filter-active">All</a>
-                    <a id="present-filter" onclick="filterClick(this.id)" type="button" class="btn btn-secondary filter-button">Present</a>
-                    <a id="absent-filter" onclick="filterClick(this.id)" type="button" class="btn btn-secondary filter-button">Absent</a>
-                    <a id="left-meeting-filter" onclick="filterClick(this.id)" type="button" class="btn btn-secondary filter-button">Left Meeting</a>
-                    <a id="not-registered-filter" onclick="filterClick(this.id)" type="button" class="btn btn-secondary filter-button">Not Registered</a>
+                    <div id="filter-dropdown-group" class="dropdown">
+                        <a role="button" id="filter-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="0,10" title="Filters">
+                            <span id="filter-caret" class="iconify" data-icon="ion-caret-down" data-inline="false" style="margin-right: -3px"></span>
+                            <span id="filter-button-icon" class="iconify" style="font-size: 30px" data-icon="bx:bx-filter-alt" data-inline="false"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" id="filter-drop-menu">
+                            <a id="all-filter" onclick="filterClick(this.id)" type="button" class="btn btn-secondary filter-button filter-active dropdown-item">All</a>
+                            <a id="present-filter" onclick="filterClick(this.id)" type="button" class="btn btn-secondary filter-button dropdown-item">Present</a>
+                            <a id="absent-filter" onclick="filterClick(this.id)" type="button" class="btn btn-secondary filter-button dropdown-item">Absent</a>
+                            <a id="left-meeting-filter" onclick="filterClick(this.id)" type="button" class="btn btn-secondary filter-button dropdown-item">Left Meeting</a>
+                            <a id="not-registered-filter" onclick="filterClick(this.id)" type="button" class="btn btn-secondary filter-button dropdown-item">Not Registered</a>
+                        </div>
+                    </div>
                     <div id="refresh-cover" class="ld ld-over-full">
                         <a title="Refresh table" id="refresh" onclick="refreshTable()" type="button" class="btn btn-secondary filter-button"><span class="iconify restart-icon" data-inline="false" data-icon="ic:round-restart-alt" style="font-size: 30px;"></span></a>
                         <div id="ld-spin" class="ld ld-ring ld-spin"></div>

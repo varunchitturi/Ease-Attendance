@@ -54,7 +54,25 @@ let rosterCreateButton = $("#add-on-registered-create")
 let rosterUpdateButton = $("#add-on-registered-update")
 let chooseRoster = $("#dropdown-roster")
 let chooseRosterMenu = $("#dropdown-roster-menu")
+const filterUpHTML = "<span id=\"filter-caret\" class=\"iconify\" data-icon=\"ion-caret-up\" data-inline=\"false\" style=\"margin-right: -3px\"></span>\n" +
+    "                            <span id=\"filter-button-icon\" class=\"iconify\" style=\"font-size: 30px\" data-icon=\"bx:bx-filter-alt\" data-inline=\"false\"></span>"
+const filterDownHTML = "<span id=\"filter-caret\" class=\"iconify\" data-icon=\"ion-caret-down\" data-inline=\"false\" style=\"margin-right: -3px\"></span>\n" +
+    "                            <span id=\"filter-button-icon\" class=\"iconify\" style=\"font-size: 30px\" data-icon=\"bx:bx-filter-alt\" data-inline=\"false\"></span>"
 $("[data-toggle=popover]").popover();
+const attrObserver = new MutationObserver((mutations) => {
+    mutations.forEach(mu => {
+        if (mu.type !== "attributes" && mu.attributeName !== "class") return;
+        if($('#filter-drop-menu').hasClass("show")){
+            document.getElementById("filter-button").innerHTML = filterUpHTML
+        }
+        else{
+            document.getElementById("filter-button").innerHTML = filterDownHTML
+        }
+    });
+});
+const filterMenu = document.getElementById("filter-drop-menu");
+attrObserver.observe(filterMenu, {attributes: true});
+
 function hideRegisterRosterButtons(){
     rosterCreateButton.prop('disabled',true)
     rosterCreateButton.hide()
