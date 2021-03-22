@@ -52,27 +52,21 @@ function authenticate(){
                                 firestore.collection("ZoomOAuth").doc(Authdoc.id).update({
                                     firebaseID: cred.user.uid
                                 }).then(()=>{
-                                    auth.currentUser.sendEmailVerification().then(() => {
-                                        const user = cred.user
-                                        firestore.collection("Users").doc(user.uid).set({
-                                            name: user.displayName,
-                                            email: user.email
-                                        })
-                                            .then(function() {
-                                                document.getElementById("signup").disabled = false
-                                                document.getElementById("signin-cover").classList.remove("running")
-                                                window.location.href = "verify"
-                                            })
-                                            .catch(function(error) {
-                                                document.getElementById("signin-cover").classList.remove("running")
-                                                document.getElementById("signUpMessage").innerHTML = error.message
-                                                document.getElementById("signup").disabled = false
-                                            });
-                                    }).catch((error) => {
-                                        document.getElementById("signin-cover").classList.remove("running")
-                                        document.getElementById("signUpMessage").innerHTML = "Please enter a valid email"
-                                        document.getElementById("signup").disabled = false
+                                    const user = cred.user
+                                    firestore.collection("Users").doc(user.uid).set({
+                                        name: user.displayName,
+                                        email: user.email
                                     })
+                                        .then(function() {
+                                            document.getElementById("signup").disabled = false
+                                            document.getElementById("signin-cover").classList.remove("running")
+                                            window.location.href = "dashboard"
+                                        })
+                                        .catch(function(error) {
+                                            document.getElementById("signin-cover").classList.remove("running")
+                                            document.getElementById("signUpMessage").innerHTML = error.message
+                                            document.getElementById("signup").disabled = false
+                                        });
                                 }).catch((error)=> {
                                     document.getElementById("signin-cover").classList.remove("running")
                                     document.getElementById("signUpMessage").innerHTML = error.message
@@ -203,16 +197,7 @@ $("#login-pass").on('keyup', function (e) {
     }
 });
 
-function resend(){
-    auth.currentUser.sendEmailVerification().then(() => {
-        document.getElementById("resend-title").innerHTML = "Please verify your email"
-        document.getElementById("resend-description").innerHTML = "A new verification link has just been sent to your email"
-    }).catch((error) => {
-        document.getElementById("resend-title").innerHTML = error.message
-        document.getElementById("resend-description").innerHTML = ""
-    })
 
-}
 
 
 

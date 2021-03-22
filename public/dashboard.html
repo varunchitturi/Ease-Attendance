@@ -312,11 +312,6 @@
         </div>
     </div>
     </div>
-    <div hidden id="verifyEmail" class="container justify-content-center text-center">
-        <h3 id="verifyEmailTitle">Please verify email</h3>
-        <h6 id="verifyEmailDescription">A verification link has been sent to your email. If you did not receive it, resend the verification link or change your email in settings</h6>
-        <button type="button" onclick="resendVerificationEmail()" class="btn save-setting-button">Resend Verification Email</button>
-    </div>
 </div>
 
     <!--Settings Modal-->
@@ -338,7 +333,6 @@
                         <input autocomplete="off" id="displayName-input-field" onclick="this.select()" type="text" class="form-control " placeholder="Enter a new name" aria-label="New Name" aria-describedby="addon-wrapping">
                     </div>
                     <button type="button" onclick="saveDisplayName()" class="btn save-setting-button">Save Changes</button>
-                    <button hidden id="settings-resend-verification-link-button" type="button" onclick="settingsResendVerificationEmail()" class="btn save-setting-button">Resend verification email</button>
                     <h6>Password</h6>
                     <div id="pass-current-email" class="input-group flex-nowrap float-left">
                         <div id="pass-current-email-prepend" class="input-group-prepend">
