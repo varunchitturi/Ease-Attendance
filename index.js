@@ -107,9 +107,6 @@ app.get('/signup', (req, res) => {
 app.get('/support', (req, res) => {
     res.sendFile(path.join(__dirname + '/public/support.html'));
 })
-app.get('/verify', (req, res) => {
-    res.sendFile(path.join(__dirname + '/public/verify.html'));
-})
 app.get('/authorize', (req, res) => {
     const authorizationCode = req.query.code
     console.log(authorizationCode)
