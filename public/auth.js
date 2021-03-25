@@ -86,6 +86,7 @@ function authenticate(){
                     if(emailRegistered === false){
                         document.getElementById("signin-cover").classList.remove("running")
                         document.getElementById("signUpMessage").innerHTML = "Make sure you downloaded the zoom app and your email is the same as your zoom email"
+                        document.getElementById("zoomButton").style.display = "inline-block";
                         document.getElementById("signup").disabled = false
                     }
                 }).catch((error) => {
