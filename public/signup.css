@@ -411,11 +411,9 @@ label.valid:after {
     background-color: white;
     border: 1px solid #2a6ee2;
     color: #000000;
-    width: auto;
-    padding: 10px 29px;
-    border-radius: 55px;
-    font-size: 15px;
-    cursor: pointer;
+    margin-top: 15px!important;
+    padding: 5px 25px 15px;
+    height: 18px;
     text-decoration: none;
     display: none;
 }
