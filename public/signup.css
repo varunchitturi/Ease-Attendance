@@ -407,6 +407,20 @@ label.valid:after {
     color: #ee6165!important;
     font-size: 20px;
 }
+.zoom-button{
+    background-color: white;
+    border: 1px solid #2a6ee2;
+    color: #000000;
+    margin-top: 15px!important;
+    padding: 5px 25px 15px;
+    height: 18px;
+    text-decoration: none;
+    display: none;
+}
+.zoom-button:hover{
+    background-color: #2a6ee2;
+    color: white;
+}
 @media screen and (max-width: 1200px) {
     .container {
         width: calc( 100% - 30px);
