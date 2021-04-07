@@ -289,7 +289,7 @@ app.post('/api/requests', (req, res) => {
     if(req && req.headers && (req.headers.authorization === process.env.zoom_verification_token)){
         const body = req.body
         const host_id = body.payload.object.host_id
-        if(body.event === "meeting.started"){
+        if(body.event === "meeting.started" || body.event === "webinar.started"){
             db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc)=>{
                 if(!meetingDoc.exists){
                     updateStartMeeting(body,host_id);
@@ -318,7 +318,7 @@ app.post('/api/requests', (req, res) => {
                 console.error(error.message)
             })
         }
-        else if(body.event === "meeting.participant_joined"){
+        else if(body.event === "meeting.participant_joined" || body.event === "webinar.participant_joined"){
             const participant = body.payload.object.participant
             const participantName = participant.user_name
             let participantEmail = participant.email
@@ -359,7 +359,7 @@ app.post('/api/requests', (req, res) => {
                 console.error(error.message)
             })
         }
-        else if(body.event === "meeting.participant_left"){
+        else if(body.event === "meeting.participant_left" || body.event === "webinar.participant_left"){
             const participant = body.payload.object.participant
             const participantID = participant.id
             const participantName = participant.user_name
@@ -403,7 +403,7 @@ app.post('/api/requests', (req, res) => {
                 console.error(error.message)
             })
         }
-        else if(body.event === "meeting.ended"){
+        else if(body.event === "meeting.ended" || body.event === "webinar.ended"){
             console.log("Meeting ended: " + body.payload.object.topic)
             db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) =>{
                 if(meetingDoc.exists){
