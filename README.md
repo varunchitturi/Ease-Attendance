@@ -1,5 +1,5 @@
 
-# Ease Attendance
+![Ease-Attendance](https://socialify.git.ci/varunchitturi/ease-attendance/image?description=1&font=Inter&logo=https%3A%2F%2Ffirebasestorage.googleapis.com%2Fv0%2Fb%2Feaseattendance-c68ed.appspot.com%2Fo%2FLogo%2520Mail.png%3Falt%3Dmedia%26token%3D433a639c-7d04-42ed-8984-e618fbc760dc&pattern=Charlie%20Brown&theme=Dark)
 
 #### Developers: Varun Chitturi and Aditya Patel
 
