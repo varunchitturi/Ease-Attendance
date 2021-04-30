@@ -43,7 +43,7 @@ const footerBlock = "<footer>\n" +
     "                <h5 class=\"footer-title\">Pages</h5>\n" +
     "                <a href=\"/\" class=\"footer-link\"><h6>Home</h6></a>\n" +
     "                <a href=\"documentation\" class=\"footer-link\"><h6>Documentation</h6></a>\n" +
-    "                <a href=\"https://www.buymeacoffee.com/varunchitturi\" target=\"_blank\" class=\"footer-link\"><h6>Donate</h6></a>\n" +
+    "                <a href=\"https://www.buymeacoffee.com/easeattendance\" target=\"_blank\" class=\"footer-link\"><h6>Donate</h6></a>\n" +
     "                <a href=\"features\" class=\"footer-link\"><h6>Features</h6></a>\n" +
     "                <a href=\"about-us\" class=\"footer-link\"><h6>About Us</h6></a>\n" +
     "                <a href=\"support\" class=\"footer-link\"><h6>Support</h6></a>\n" +
