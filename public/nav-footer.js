@@ -12,7 +12,7 @@ const navBlock = " <nav class=\"navbar fixed-top navbar-expand-lg\">\n" +
     "    <div class=\"collapse text-center navbar-collapse justify-content-end\" id=\"main-navigation\">\n" +
     "        <ul class=\"navbar-nav\">\n" +
     "            <li class=\"nav-item nav-right\">\n" +
-    "                <a id=\"#donate\" target=\"_blank\" class=\"nav-link middle\" href=\"https://www.buymeacoffee.com/varunchitturi\">Donate</a>\n" +
+    "                <a id=\"#donate\" target=\"_blank\" class=\"nav-link middle\" href=\"https://www.buymeacoffee.com/easeattendance\">Donate</a>\n" +
     "            </li>\n" +
     "            <li class=\"nav-item nav-right\">\n" +
     "                <a id=\"#features\" class=\"nav-link middle\" href=\"/features\">Features</a>\n" +
