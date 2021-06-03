@@ -122,7 +122,10 @@
                     </div>
                 </div>
                 <button onclick="addNotRegisteredUpdate()" class="float-left btn" data-toggle="modal" data-target="#add-edit-meeting-modal" type="button" id="add-on-registered-update">Update Current Roster</button>
-                <div id="filter-group" class="btn-group float-right" role="group" aria-label="Basic example">
+                <div id="export-button" class="btn-group float-right" role="group" aria-label="Export Button">
+                    <a title="Export meeting" id="export-meeting" onclick="exportMeeting()" type="button" class="btn btn-secondary filter-button"><span class="iconify export-icon" data-icon="mdi:export-variant" data-inline="false" style="font-size: 28px;"></span></a>
+                </div>
+                <div id="filter-group" class="btn-group float-right" role="group" aria-label="Choose Filter">
                     <div id="filter-dropdown-group" class="dropdown">
                         <a role="button" id="filter-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="0,10" title="Filters">
                             <span id="filter-caret" class="iconify" data-icon="ion-caret-down" data-inline="false" style="margin-right: -3px"></span>
@@ -140,6 +143,7 @@
                         <a title="Refresh table" id="refresh" onclick="refreshTable()" type="button" class="btn btn-secondary filter-button"><span class="iconify restart-icon" data-inline="false" data-icon="ic:round-restart-alt" style="font-size: 30px;"></span></a>
                         <div id="ld-spin" class="ld ld-ring ld-spin"></div>
                     </div>
+
                 </div>
                 <table class="table" id="participant-table">
                     <thead id="participant-table-head">
@@ -246,6 +250,7 @@
                                 </table>
                             </div>
                             <div class="modal-footer">
+                                <button onclick="exportMeetingRecord()" id="export-record-button" type="button" class="btn btn-primary">Export Record</button>
                                 <button onclick="deleteRecord()" id="delete-record-button" type="button" class="btn btn-primary">Delete Record</button>
                             </div>
                         </div>
