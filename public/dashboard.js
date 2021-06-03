@@ -52,6 +52,7 @@ let zoomID = -1
 let rosterParticipantCount = 0
 let rosterCreateButton = $("#add-on-registered-create")
 let rosterUpdateButton = $("#add-on-registered-update")
+let exportMeetingButton = $("#export-button")
 let chooseRoster = $("#dropdown-roster")
 let chooseRosterMenu = $("#dropdown-roster-menu")
 const filterUpHTML = "<span id=\"filter-caret\" class=\"iconify\" data-icon=\"ion-caret-up\" data-inline=\"false\" style=\"margin-right: -3px\"></span>\n" +
@@ -100,6 +101,14 @@ function hideChooseRoster(){
     chooseRoster.prop("disabled",true)
     chooseRosterMenu.empty()
 }
+function hideExportButton(){
+    exportMeetingButton.hide()
+    exportMeetingButton.prop("disabled",true)
+}
+function showExportButton(){
+    exportMeetingButton.show()
+    exportMeetingButton.prop("disabled",false)
+}
 function createRosterLink(name,id,index){
     return "<a onClick=\"changeRoster(this)\" data-meeting-id=\"" + id + "\" data-roster-name=\"" + name + "\" data-roster-index=\"" + index + "\" class=\"dropdown-item\">" + name + "</a>"
 }
@@ -131,6 +140,7 @@ function changeRoster(roster){
 }
 hideRegisterRosterButtons()
 hideChooseRoster()
+hideExportButton()
 const studentTableBlock = "<th scope=\"col\"> <input type=\"text\" placeholder=\"First name\" class=\"form-control student-name student-first-name modal-input\"></th>\n" +
     "<th scope=\"col\"> <input type=\"text\" placeholder=\"Last name\" class=\"form-control student-name modal-input\"></th>\n" +
     "<th scope=\"col\"> <button onclick=\"deleteStudent(this)\" class=\"btn trash-btn\" type=\"button\"><span class=\"iconify\" data-inline=\"false\" data-icon=\"ei:trash\" style=\"font-size: 30px;\"></span></button></th>"
@@ -363,6 +373,30 @@ function decryptMessages(messages){
         console.log(currentMessage)
     }
 }
+function exportMeeting(){
+    if(MeetingIsOccurring){
+        const downloadElement = document.createElement('a')
+        const now = new Date()
+        let recordDataString = "First_Name,Last_Name,Time_First_Joined,Time_Last_Left,Status\n"
+        const downloadName = CurrentMeeting + " - " + CurrentMeetingID + " - " + now.toLocaleString()
+        for(let i = 0; i < Participants.length; i++){
+            let participantTimeJoined = ""
+            let participantTimeLeft = ""
+            if(Participants[i].timeJoined){
+                participantTimeJoined = isoToLocalString(Participants[i].timeJoined)
+            }
+            if(Participants[i].timeLeft){
+                participantTimeLeft = isoToLocalString(Participants[i].timeLeft)
+            }
+            recordDataString += Participants[i].firstName + "," + Participants[i].lastName + "," + participantTimeJoined + "," + participantTimeLeft + "," + Participants[i].state + "\n"
+        }
+        downloadElement.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(recordDataString))
+        downloadElement.setAttribute('download', downloadName);
+        document.body.appendChild(downloadElement);
+        downloadElement.click();
+        document.body.removeChild(downloadElement);
+    }
+}
 function evaluateParticipantTable(doc){
     if(doc.data()){
         const meetingMessages = doc.data().messageLog
@@ -392,12 +426,14 @@ function evaluateParticipantTable(doc){
             CurrentRosterName = ""
             hideChooseRoster()
             clearTable()
+            hideExportButton()
         }
         for(let j = 0; j < newMessages.length; j++){
             const currentMessage = CryptoJS.AES.decrypt(newMessages[j], auth.currentUser.uid).toString(CryptoJS.enc.Utf8);
             const data = currentMessage.split(" ")
             const eventType = data[0]
             if(eventType === "meeting.started"){
+                showExportButton()
                 EncounteredParticipants = new Set()
                 MeetingIsOccurring = true
                 const participantTable = document.getElementById("participant-table")
@@ -587,6 +623,7 @@ function evaluateParticipantTable(doc){
             document.getElementById("currentMeeting-name").innerHTML = "No Meeting Has Started"
             document.getElementById("meeting-id-attendance").value = ""
             document.getElementById("meeting-id-attendance").hidden = true
+            hideExportButton()
             hideRegisterRosterButtons()
             if(meetingIndex === -1){
                 $('#add-edit-meeting-modal').modal('show');
@@ -639,6 +676,7 @@ function evaluateParticipantTable(doc){
             document.getElementById("current-participant-number").innerHTML = ""
             CurrentMessages = []
             hideChooseRoster()
+            hideExportButton()
             clearTable()
             document.getElementById("ld-spin").style.display = "none"
             document.getElementById("refresh").disabled = false
@@ -1246,6 +1284,37 @@ function confirmDeleteAllRecords(){
         }
     }
     $("#delete-record-warning-modal").modal("hide")
+}
+
+function download(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+}
+
+
+function exportMeetingRecord(){
+    const currentRecord = PastMeetings[currentRecordIndex]
+    const downloadElement = document.createElement('a')
+    let recordDataString = "Event\n"
+    const downloadName = currentRecord["MeetingName"] + " - " + currentRecord["MeetingID"] + " - " + currentRecord["MeetingStart"].toDate().toLocaleString()
+    const useruid = auth.currentUser.uid
+    for (let i = 0; i < currentRecord["events"].length; i++){
+        const event = CryptoJS.AES.decrypt(currentRecord["events"][i], useruid).toString(CryptoJS.enc.Utf8);
+        recordDataString += event + "\n"
+    }
+    downloadElement.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(recordDataString))
+    downloadElement.setAttribute('download', downloadName);
+    document.body.appendChild(downloadElement);
+    downloadElement.click();
+    document.body.removeChild(downloadElement);
 }
 
 function deleteMeeting(){
