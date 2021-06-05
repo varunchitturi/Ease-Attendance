@@ -560,12 +560,23 @@ hr{
 }
 #refresh{
     margin-top: -5px;
+    margin-right: -7px;
     color: #acacac !important;
 }
 #refresh:hover{
     color: #F5B364 !important;
 }
 #refresh:disabled{
+    cursor: default;
+}
+#export-meeting{
+    margin-top: -5px;
+    color: #acacac !important;
+}
+#export-meeting:hover{
+    color: #F5B364 !important;
+}
+#export-meeting:disabled{
     cursor: default;
 }
 .ld-ring{
@@ -581,6 +592,18 @@ hr{
 
 
 }
+
+#export-record-button{
+    background: none;
+    outline: none;
+    border-color: #6483f5;
+    color: black;
+}#export-record-button:hover{
+     background: #6483f5;
+     color: white;
+     outline: none;
+     border-color: #6483f5;
+ }
 #delete-record-button{
     background: none;
     outline: none;
