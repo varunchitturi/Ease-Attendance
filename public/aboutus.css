@@ -75,14 +75,17 @@ a{
 }
 .member-facebook-link{
     background-color: #557cef;
-
 }
+
 .member-git-link{
     background-color: #ffffff;
 
 }
 .member-insta-link{
     background-color: #111111;
+}
+.member-linkedin-link{
+    background-color: #437bfc;
 }
 .member-social{
     box-shadow: 0 2px 3px 1px #d0d0d0;
