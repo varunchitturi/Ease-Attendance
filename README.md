@@ -1,5 +1,14 @@
 
+
+
 ![Ease-Attendance](https://socialify.git.ci/Ease-Attendance/Ease-Attendance/image?description=1&font=Inter&logo=https%3A%2F%2Ffirebasestorage.googleapis.com%2Fv0%2Fb%2Feaseattendance-c68ed.appspot.com%2Fo%2FLogo%2520Mail.png%3Falt%3Dmedia%26token%3D433a639c-7d04-42ed-8984-e618fbc760dc&owner=1&pattern=Charlie%20Brown&theme=Dark)
+
+<div>
+    <a href="https://www.easeattendance.com"><img alt="Website" src="https://img.shields.io/website?down_color=important&down_message=Offline&logo=Ease%20Attendence&style=flat-square&up_color=green&up_message=Ease%20Attendence&url=https%3A%2F%2Fwww.easeattendance.com%2F"></a>
+    <br>
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Ease-Attendance/Ease-Attendance?style=flat-square">
+    <br>
+</div>
 
 #### Developers: Varun Chitturi and Aditya Patel
 
