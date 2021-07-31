@@ -278,6 +278,58 @@ function updateStartMeeting(body, host_id) {
     })
 }
 
+var code = "N2RiOWQ3NWQtNGJhMC00ZDY5LThkNDEtOTM3MmM1M2E5ZTdjMGZmMjgyOGItNDU0_P0A1_dad2a34a-8292-41a5-ab9a-57f20a319eb6"
+request({
+    url: 'https://webexapis.com/v1/access_token',
+    method: 'POST',
+    json: true,
+    body:{
+        "grant_type":"authorization_code",
+        "client_id":"Ca4738645486f4fc4d5834a81421851f4646cb935e396356e808b590d8412941b",
+        "client_secret":process.env.clientsecret,
+        "code":code,
+        "redirect_uri":"http://easeattendance.ngrok.io/authorize"
+    }
+}, (error, httpResponse, body) => {
+    if(error){
+        console.log(error)
+    }else{
+        console.log(body)
+        const accessToken = body.access_token
+        const refreshToken = body.refresh_token
+
+        request({
+            url:"https://webexapis.com/v1/webhooks",
+            method:'POST',
+            json:true,
+            headers: {
+                'Content-Type':"application/json",
+                'Authorization': "Bearer " + accessToken
+            },
+            body: {
+                "name": "Adi testing webhook",
+                "targetUrl": "https://www.easeattendance.com/webexwebhook",
+                "resource": "meetingParticipants",
+                "event": "started",
+                "secret": process.env.clientsecret
+            }
+        }, (error, httpResponse, body) => {
+            if(error){
+                console.log(error)
+            }else{
+                console.log(body)
+            }
+        })
+    }
+})
+
+app.post('/webexwebhook',(req,res)=>{
+    res.status(200)
+    res.send()
+    console.log(req)
+    console.log(req.body)
+    console.log(req.headers)
+})
 app.post('/api/requests', (req, res) => {
     res.status(200)
     res.send()
