@@ -279,7 +279,7 @@ function updateStartMeeting(body, host_id) {
 }
 
 //this should usually come from the website url but this for testing
-var code = "MTRhM2E0MzctM2I4Ny00ZjY2LThiMTgtYWRlZWMwMTAzMWNlZWY3NTNmNTUtMTQ0_P0A1_dad2a34a-8292-41a5-ab9a-57f20a319eb6"
+var code = "MjI2MTdkOTgtNjk4ZS00MzBiLThkYjYtMmI3NmE4YzAyODUwNjJiYTgxZjgtNjAx_P0A1_55c5ae3f-8d7f-427b-a4f9-5e3cb3dddf7b"
 request({
     url: 'https://webexapis.com/v1/access_token',
     method: 'POST',
@@ -289,7 +289,7 @@ request({
         "client_id":process.env.clientid,
         "client_secret":process.env.clientsecret,
         "code":code,
-        "redirect_uri":"http://easeattendance.ngrok.io/authorize"
+        "redirect_uri":"https://easeattendance.ngrok.io/authorize"
     }
 }, (error, httpResponse, body) => {
     if(error){
@@ -310,15 +310,81 @@ request({
             body: {
                 "name": "Adi testing webhook",
                 "targetUrl": "https://easeattendance.ngrok.io/webexwebhook",
-                "resource": "all",
-                "event": "all",
+                "resource": "meetings",
+                "event": "started",
                 'secret': process.env.clientsecret
             }
         }, (error, httpResponse, body) => {
             if(error){
-                console.log("cheese")
+                console.log("error in creating meetings started webhook")
             }else{
                 console.log(body)
+                request({
+                    url:"https://webexapis.com/v1/webhooks",
+                    method:'POST',
+                    json:true,
+                    headers: {
+                        'Authorization': "Bearer " + accessToken,
+                        "Accept":"application/json"
+                    },
+                    body: {
+                        "name": "Adi testing webhook",
+                        "targetUrl": "https://easeattendance.ngrok.io/webexwebhook",
+                        "resource": "meetings",
+                        "event": "ended",
+                        'secret': process.env.clientsecret
+                    }
+                }, (error, httpResponse, body) => {
+                    if(error){
+                        console.log("error in creating meetings ended webhook")
+                    }else{
+                        console.log(body)
+                        request({
+                            url:"https://webexapis.com/v1/webhooks",
+                            method:'POST',
+                            json:true,
+                            headers: {
+                                'Authorization': "Bearer " + accessToken,
+                                "Accept":"application/json"
+                            },
+                            body: {
+                                "name": "Adi testing webhook",
+                                "targetUrl": "https://easeattendance.ngrok.io/webexwebhook",
+                                "resource": "meetingParticipants",
+                                "event": "joined",
+                                'secret': process.env.clientsecret
+                            }
+                        }, (error, httpResponse, body) => {
+                            if(error){
+                                console.log("error in creating meetingParticipants joined webhook")
+                            }else{
+                                console.log(body)
+                                request({
+                                    url:"https://webexapis.com/v1/webhooks",
+                                    method:'POST',
+                                    json:true,
+                                    headers: {
+                                        'Authorization': "Bearer " + accessToken,
+                                        "Accept":"application/json"
+                                    },
+                                    body: {
+                                        "name": "Adi testing webhook",
+                                        "targetUrl": "https://easeattendance.ngrok.io/webexwebhook",
+                                        "resource": "meetingParticipants",
+                                        "event": "left",
+                                        'secret': process.env.clientsecret
+                                    }
+                                }, (error, httpResponse, body) => {
+                                    if(error){
+                                        console.log("error in creating meetingParticipants left webhook")
+                                    }else{
+                                        console.log(body)
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
             }
         })
     }
