@@ -278,6 +278,7 @@ function updateStartMeeting(body, host_id) {
     })
 }
 
+//this should usually come from the website url but this for testing
 var code = "MTRhM2E0MzctM2I4Ny00ZjY2LThiMTgtYWRlZWMwMTAzMWNlZWY3NTNmNTUtMTQ0_P0A1_dad2a34a-8292-41a5-ab9a-57f20a319eb6"
 request({
     url: 'https://webexapis.com/v1/access_token',
@@ -285,7 +286,7 @@ request({
     json: true,
     body:{
         "grant_type":"authorization_code",
-        "client_id":"Ca4738645486f4fc4d5834a81421851f4646cb935e396356e808b590d8412941b",
+        "client_id":process.env.clientid,
         "client_secret":process.env.clientsecret,
         "code":code,
         "redirect_uri":"http://easeattendance.ngrok.io/authorize"
@@ -324,11 +325,14 @@ request({
 })
 
 app.post('/webexwebhook',(req,res)=>{
-    res.status(200)
-    res.send()
     console.log(req)
     console.log(req.body)
     console.log(req.headers)
+    res.status(200)
+    res.send()
+})
+app.get('/webexwebhook',(req,res)=>{
+    console.log("banananananaa ")
 })
 app.post('/api/requests', (req, res) => {
     res.status(200)
