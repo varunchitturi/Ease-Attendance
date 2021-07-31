@@ -278,7 +278,7 @@ function updateStartMeeting(body, host_id) {
     })
 }
 
-var code = "ZGY1ZGJiYTgtNWQ4Yi00ZjU3LWFjMDgtMDJhNTk4ODczNWRmZmQ3ZGRiOTEtNjI5_P0A1_dad2a34a-8292-41a5-ab9a-57f20a319eb6"
+var code = "ZTk1YzllOWEtYjM3Ni00MTQyLTg0OTYtODUwODkwNzYyZTE3MjJlM2RmODEtZjgz_P0A1_dad2a34a-8292-41a5-ab9a-57f20a319eb6"
 request({
     url: 'https://webexapis.com/v1/access_token',
     method: 'POST',
@@ -303,21 +303,24 @@ request({
             method:'POST',
             json:true,
             headers: {
-                'Content-Type':"application/json",
-                'Authorization': "Bearer " + accessToken
+                'Authorization': "Bearer " + accessToken,
+                "Accept":"application/json"
             },
             body: {
                 "name": "Adi testing webhook",
                 "targetUrl": "https://www.easeattendance.com/webexwebhook",
-                "resource": "messages",
-                "event": "created",
-                "secret": process.env.clientsecret
+                "resource": "all",
+                "event": "all",
+                'secret': process.env.clientsecret
             }
         }, (error, httpResponse, body) => {
             if(error){
-                console.log(error)
+                console.log("cheese")
             }else{
                 console.log(body)
+                console.log(body.headers)
+                console.log(body.body)
+                console.log(httpResponse)
             }
         })
     }
