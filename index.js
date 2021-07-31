@@ -278,7 +278,7 @@ function updateStartMeeting(body, host_id) {
     })
 }
 
-var code = "N2RiOWQ3NWQtNGJhMC00ZDY5LThkNDEtOTM3MmM1M2E5ZTdjMGZmMjgyOGItNDU0_P0A1_dad2a34a-8292-41a5-ab9a-57f20a319eb6"
+var code = "ZGY1ZGJiYTgtNWQ4Yi00ZjU3LWFjMDgtMDJhNTk4ODczNWRmZmQ3ZGRiOTEtNjI5_P0A1_dad2a34a-8292-41a5-ab9a-57f20a319eb6"
 request({
     url: 'https://webexapis.com/v1/access_token',
     method: 'POST',
@@ -309,8 +309,8 @@ request({
             body: {
                 "name": "Adi testing webhook",
                 "targetUrl": "https://www.easeattendance.com/webexwebhook",
-                "resource": "meetingParticipants",
-                "event": "started",
+                "resource": "messages",
+                "event": "created",
                 "secret": process.env.clientsecret
             }
         }, (error, httpResponse, body) => {
