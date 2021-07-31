@@ -278,7 +278,7 @@ function updateStartMeeting(body, host_id) {
     })
 }
 
-var code = "ZTk1YzllOWEtYjM3Ni00MTQyLTg0OTYtODUwODkwNzYyZTE3MjJlM2RmODEtZjgz_P0A1_dad2a34a-8292-41a5-ab9a-57f20a319eb6"
+var code = "MTRhM2E0MzctM2I4Ny00ZjY2LThiMTgtYWRlZWMwMTAzMWNlZWY3NTNmNTUtMTQ0_P0A1_dad2a34a-8292-41a5-ab9a-57f20a319eb6"
 request({
     url: 'https://webexapis.com/v1/access_token',
     method: 'POST',
@@ -308,7 +308,7 @@ request({
             },
             body: {
                 "name": "Adi testing webhook",
-                "targetUrl": "https://www.easeattendance.com/webexwebhook",
+                "targetUrl": "https://easeattendance.ngrok.io/webexwebhook",
                 "resource": "all",
                 "event": "all",
                 'secret': process.env.clientsecret
@@ -318,9 +318,6 @@ request({
                 console.log("cheese")
             }else{
                 console.log(body)
-                console.log(body.headers)
-                console.log(body.body)
-                console.log(httpResponse)
             }
         })
     }
