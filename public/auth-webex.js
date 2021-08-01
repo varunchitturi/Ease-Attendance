@@ -80,10 +80,9 @@ function authenticate() {
                         })
                     })
                     if (emailRegistered === false) {
-                        // TODO: Register here
                         document.getElementById("signin-cover").classList.remove("running")
-                        document.getElementById("signUpMessage").innerHTML = "Make sure you downloaded the zoom or webex app and your email is the same as your zoom email"
-                        document.getElementById("zoomButton").style.display = "inline-block";
+                        document.getElementById("signUpMessage").innerHTML = "Make sure you downloaded the webex app and your email is the same as your webex email"
+                        document.getElementById("webexButton").style.display = "inline-block";
                         document.getElementById("signup").disabled = false
                     }
                 }).catch((error) => {
