@@ -3,7 +3,7 @@
 */
 var email = require("./email.js").email
 console.log("email html loaded")
-const port = process.env.PORT || 4040
+const port = process.env.PORT || 4000
 console.log("port selected = " + port)
 require('dotenv').config()
 console.log(".env vars loaded")
@@ -277,7 +277,7 @@ function updateStartMeeting(body, host_id) {
         console.error(error.message)
     })
 }
-
+/*
 //this should usually come from the website url but this for testing
 var code = "MjI2MTdkOTgtNjk4ZS00MzBiLThkYjYtMmI3NmE4YzAyODUwNjJiYTgxZjgtNjAx_P0A1_55c5ae3f-8d7f-427b-a4f9-5e3cb3dddf7b"
 request({
@@ -400,6 +400,7 @@ app.post('/webexwebhook',(req,res)=>{
 app.get('/webexwebhook',(req,res)=>{
     console.log("banananananaa ")
 })
+*/
 app.post('/api/requests', (req, res) => {
     res.status(200)
     res.send()

@@ -66,6 +66,11 @@
   color: white;
 }
 
+
+#sign-up-dropdown{
+  text-align: center;
+  justify-content: right;
+}
 @media (max-width: 991px){
   .landing-page-text{
     margin-top: -10px;
