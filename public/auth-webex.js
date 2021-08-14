@@ -29,7 +29,7 @@ function authenticate() {
             if (pass === repass && pass.length >= 8) {
                 document.getElementById("signin-cover").classList.add("running")
                 var emailRegistered = false
-                firestore.collection("ZoomOAuth").where("email", "==", email).get().then((querySnapshot) => {
+                firestore.collection("WebexOAuth").where("email", "==", email).get().then((querySnapshot) => {
                     querySnapshot.forEach((Authdoc) => {
                         emailRegistered = true
                         auth.createUserWithEmailAndPassword(email, pass).then(cred => {
@@ -45,7 +45,7 @@ function authenticate() {
                                 if (userEmail == null) {
                                     userEmail = ""
                                 }
-                                firestore.collection("ZoomOAuth").doc(Authdoc.id).update({
+                                firestore.collection("WebexOAuth").doc(Authdoc.id).update({
                                     firebaseID: cred.user.uid
                                 }).then(() => {
                                     const user = cred.user
