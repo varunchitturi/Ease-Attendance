@@ -168,7 +168,6 @@ app.get('/authorize', (req, res) => {
                             } else {
                                 res.sendFile(path.join(__dirname + '/public/index.html'));
                             }
-
                         }
                     })
                 }
@@ -182,6 +181,7 @@ app.get('/authorize', (req, res) => {
         res.sendFile(path.join(__dirname + '/public/index.html'));
     }
 })
+//TODO("Modularize this")
 app.get('/authorize_webex', (req, res) => {
     const authorizationCode = req.query.code
     if (authorizationCode && authorizationCode !== "") {
