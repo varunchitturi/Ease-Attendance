@@ -35,16 +35,13 @@ body {
 .features-style{
     background-color: #ffffff;
     text-shadow: 2px 2px 5px #fff, 0 0 0 #b0b0b0;
-    color: transparent;
 }
 .of-style{
     background-color: #ffffff;
     text-shadow: 2px 2px 5px #fff, 0 0 0 #b0b0b0;
-    color: transparent;
 }
 .name-style{
     color: #ee6165;
-    text-shadow: 4px 4px 3px #cfcaca;
 }
 .title-description{
     color: #4f4f4f;
@@ -165,7 +162,6 @@ body {
     color: white;
 }
 .start-row{
-    padding-bottom: 50px;
 }
 #title-black{
     color: black;
