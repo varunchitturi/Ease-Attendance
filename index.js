@@ -183,8 +183,11 @@ app.get('/authorize', (req, res) => {
 })
 //TODO("Modularize this")
 app.get('/authorize_webex', (req, res) => {
+    console.log(req.query)
     const authorizationCode = req.query.code
     if (authorizationCode && authorizationCode !== "") {
+        console.log("Got authorization code. Trying to send request to get accesstoken.")
+        console.log("authorization code = "+authorizationCode)
         try {
             request({
                 url: 'https://webexapis.com/v1/access_token',
@@ -199,12 +202,15 @@ app.get('/authorize_webex', (req, res) => {
                 }
             }, (error, httpResponse, body) => {
                 if (error) {
+                    console.log("Error getting accesstoken.")
                     console.error(error)
                     res.sendFile(path.join(__dirname + '/public/index.html'));
                     return
                 } else {
                     const accessToken = body.access_token
                     const refreshToken = body.refresh_token
+                    console.log("Got accesstoken")
+                    console.log("Recieved accesstoken = "+accessToken)
                     request({
                         url: 'https://webexapis.com/v1/memberships',
                         method: 'GET',
