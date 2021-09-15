@@ -51,7 +51,7 @@
         <hr>
         <a href="#"><h6>Prerequisites</h6></a>
         <hr>
-        <a href="#install-zoom"><h6>Step 1 - Install Zoom App</h6></a>
+        <a href="#install-zoom"><h6>Step 1 - Install App</h6></a>
         <hr>
         <a  href="#signup" ><h6>Step 2 - Sign Up</h6></a>
         <hr>
@@ -89,6 +89,8 @@
         <hr>
         <a href="#login-zoom"><h6>Step 1 - Login in to Zoom Marketplace</h6></a>
         <hr>
+        <a href="#login-zoom"><h6>Step 1 - Login in to Webex App Hub</h6></a>
+        <hr>
         <a href="#locate-zoom"><h6>Step 2 - Locate App</h6></a>
         <hr>
         <a href="#uninstall-zoom"><h6>Step 3 - Uninstalling</h6></a>
@@ -104,20 +106,22 @@
             <li class="guide-li">For the best experience, have students log into classes with their full name, ex. “John Doe”. This will allow the sort by<br>first/last names to work most effectively.</li>
             <li class="guide-li">Inform students to not change their displayed Zoom names, or Ease Attendance might miss their attendance.</li>
         </ul>
-        <h2 id="install-zoom" class="step-title doc-link">Step 1 - Install Zoom App</h2>
+        <h2 id="install-zoom" class="step-title doc-link">Step 1 - Install App</h2>
         <ol class="guide-list">
-            <li class="guide-list-element guide-li">Click the Add to Zoom button to install the app</li>
+            <li class="guide-list-element guide-li">Click the Add button for either Webex or Zoom</li>
             <div class="text-center text-lg-left justify-content-center justify-content-lg-start row">
                 <a class="text-center nav-link zoom-button zoom-button-doc" target="_blank" href="https://zoom.us/oauth/authorize?response_type=code&client_id=jr7r46eTRvyF0CPmGFBGGA&redirect_uri=https://www.easeattendance.com/authorize">Add to Zoom</a>
+                <!-- fix the formating of the webex button -->
+                <a class="text-center nav-link webex-button webex-button-doc" target="_blank" href="https://webexapis.com/v1/authorize?client_id=Ca4738645486f4fc4d5834a81421851f4646cb935e396356e808b590d8412941b&response_type=code&redirect_uri=https%3A%2F%2Feaseattendance.ngrok.io%2Fauthorize_webex&scope=spark%3Amemberships_read%20spark%3Akms%20meeting%3Aschedules_read%20meeting%3Aparticipants_read&state=default_state">Add to Webex</a>
             </div>
         </ol>
         <h2 id="signup" class="step-title doc-link">Step 2 - Sign Up</h2>
         <ol class="guide-list">
-            <li class="guide-list-element guide-li">After clicking the Add to Zoom button, your browser will redirect you to the Sign Up page. If it did not, click on the Sign Up button below.</li>
+            <li class="guide-list-element guide-li">After clicking the Add button, your browser will redirect you to the designated Sign Up page. If it did not, click on the Sign Up button below.</li>
             <div class="text-center text-lg-left justify-content-center justify-content-lg-start row">
                 <a id="sign-up" class="nav-link sign-up" href="/signup">Sign Up</a>
             </div>
-            <li class="guide-list-element guide-li">Enter in your credentials. <p class="secondary">Note: Make sure the email you enter is the same as the email you use to sign in to Zoom</p> </li>
+            <li class="guide-list-element guide-li">Enter in your credentials. <p class="secondary">Note: Make sure the email you enter is the same as the email you use to sign in to Zoom or Webex</p> </li>
             <img src="Images/sign-up-ease.png" class="guide-img"/>
             <li class="guide-list-element guide-li">After signing up, you will be redirected to the Ease Attendance Dashboard</li>
             <img src="Images/MarchUpdate/AttendanceTab.png" class="guide-img"/>
@@ -126,9 +130,9 @@
         <ul>
             <li class="guide-li"><h4>Automatic </h4></li>
             <ol class="guide-list">
-                <li class="guide-list-element guide-li">Start a Zoom Meetings and watch your meeting participants fill up the dashboard.</li>
+                <li class="guide-list-element guide-li">Start a Zoom or Webex Meetings and watch your meeting participants fill up the dashboard.</li>
                 <img src="Images/MarchUpdate/UnregisteredMeetingIDCreateRoster.png" class="guide-img"/>
-                <li class="guide-list-element guide-li">When the participants finish coming into the Zoom meeting, click on update participants in the Ease Attendance dashboard to store them in a Meeting Roster. Confirm the meeting details and click finish.
+                <li class="guide-list-element guide-li">When the participants finish coming into the meeting, click on update participants in the Ease Attendance dashboard to store them in a Meeting Roster. Confirm the meeting details and click finish.
                     <p class="secondary">Note: If the meeting ends, and no roster has been created, Ease Attendance will prompt you to create one.</p></li>
                 <img src="Images/MarchUpdate/UnregisteredMeetingIDCreateRoster.png" class="guide-img"/>
                 <li class="guide-list-element guide-li">Go to the My Meetings tab to confirm that your meeting has been created</li>
@@ -136,7 +140,7 @@
             </ol>
             <li class="guide-li"><h4>Create Multiple Rosters per Meeting ID </h4></li>
             <ol class="guide-list">
-                <li class="guide-list-element guide-li">If starting a Zoom Meeting which already contains a roster, Ease Attendance allows users to create a new Roster for the same Meeting ID with the Create New Roster button.</li>
+                <li class="guide-list-element guide-li">If starting a Meeting which already contains a roster, Ease Attendance allows users to create a new Roster for the same Meeting ID with the Create New Roster button.</li>
                 <img src="Images/MarchUpdate/CreateNewRosterDuringMeetingBefore.png" class="guide-img"/>
                 <li class="guide-list-element guide-li"> Clicking on this allows users to choose between creating a new roster with all students absent, present, or not registered in the current roster, or to create a meeting with all unregistered students in the meeting.</li>
                 <img src="Images/MarchUpdate/CreateRosterWithAllorUnregistered.png" class="guide-img"/>
@@ -146,13 +150,13 @@
                 <li class="guide-list-element guide-li"> After creating multiple rosters, users can click between them to choose which roster to display and compare for attendance.</li>
                 <img src="Images/MarchUpdate/ChooseBetweenRosters.png" class="guide-img"/>
             </ol>
-            <li class="guide-li"><h4>Manual </h4><p class="secondary">Note: This action will not create a meeting for you on Zoom but instead registers the following as a class roster on Ease Attendance</p></li>
+            <li class="guide-li"><h4>Manual </h4><p class="secondary">Note: This action will not create a meeting for you on Zoom or Webex but instead registers the following as a class roster on Ease Attendance</p></li>
             <ol class="guide-list">
                 <li class="guide-list-element guide-li">Go to the My Meetings tab</li>
                 <img src="Images/DashboardEmptyMyMeetings.png" class="guide-img"/>
                 <li class="guide-list-element guide-li">Click on add meeting </li>
                 <img src="Images/DashboardAddMeetingManual.png" class="guide-img"/>
-                <li class="guide-list-element guide-li">Input your Zoom meeting details and add students to your class roster
+                <li class="guide-list-element guide-li">Input your meeting details and add students to your class roster
                     <p class="secondary">Note: If a user creates multiple Rosters with the same Meeting ID, then both will be visible under the "Choose Roster" in the "Take Attendance" Tab</p></li>
                 </li>
                 <img src="Images/DashboardAddMeetingManualComplete.png" class="guide-img"/>
@@ -189,7 +193,7 @@
             <h2 id="meeting-records" class="step-title doc-link">Meeting Records</h2>
             <p class="noNumberElement">All Meeting Records are stored in the Ease Attendance Dashboard under the "Meeting Records" tab.</p>
             <p class="noNumberElement">Users can easily see when participants joined, left, and when the meeting started or ended, even after the meeting ends.</p>
-            <p class="noNumberElement">The search feature allows searching for when specific users joined/left your Zoom Meeting.</p>
+            <p class="noNumberElement">The search feature allows searching for when specific users joined/left your meeting.</p>
             <img id="meeting-record-img" src="Images/MeetingRecords.png" class="guide-img"width="500px"/>
         </div>
 
@@ -197,27 +201,27 @@
         <div class="indent">
             <h2 id="student-filters" class="step-title doc-link">Attendance Statuses</h2>
             <ul class="">
-                <li class="guide-li"><b><span style="color: #54cb84">Present</span></b> - The Participant is currently in your Zoom meeting.</li>
-                <li class="guide-li"><b><span style="color: #e23b39">Absent</span></b> - The Participant had never joined your Zoom meeting.</li>
-                <li class="guide-li"><b><span style="color: #f0ad4e">Left Meeting</span></b> - The Participant had previously joined your Zoom Meeting and then left it.</li>
-                <li class="guide-li"><b><mark style="background-color: #B8B8B8">Not Registered</mark></b> - This Participant does not show up on your Meeting's Class Roster.</li>
+                <li class="guide-li"><b><span style="color: #54cb84">Present</span></b> - The Participant is currently in your meeting.</li>
+                <li class="guide-li"><b><span style="color: #e23b39">Absent</span></b> - The Participant had never joined your meeting.</li>
+                <li class="guide-li"><b><span style="color: #f0ad4e">Left Meeting</span></b> - The Participant had previously joined your meeting and then left it.</li>
+                <li class="guide-li"><b><mark style="background-color: #B8B8B8">Not Registered</mark></b> - This Participant does not show up on your meeting's Class Roster.</li>
             </ul>
             <h2 id="meeting-definition" class="step-title doc-link">My Meetings</h2>
             <ul class="guide-list">
                 <li class="noNumberElement guide-li">Meetings are stored in your Ease Attendance account under the "My Meetings" tab</li>
-                <li class="noNumberElement guide-li">Under "My Meetings", users can create, delete and modify Meetings and their rosters.</li>
-                <li class="noNumberElement guide-li">These Meetings are used to compare with a list of Meeting Participants to see who's present, absent, ect.</li>
+                <li class="noNumberElement guide-li">Under "My Meetings", users can create, delete and modify meetings and their rosters.</li>
+                <li class="noNumberElement guide-li">These meetings are used to compare with a list of meeting Participants to see who's present, absent, ect.</li>
             </ul>
 
             <h2 id="meeting-record" class="step-title doc-link">Meeting Records</h2>
             <ul class="guide-list">
-                <li class="noNumberElement guide-li">All Meeting Records are stored in the Ease Attendance Dashboard under the "Meeting Records" tab.</li>
+                <li class="noNumberElement guide-li">All meeting Records are stored in the Ease Attendance Dashboard under the "Meeting Records" tab.</li>
                 <li class="noNumberElement guide-li">Users can easily see when participants joined, left, and when the meeting started or ended.</li>
             </ul>
 
             <h2 id="not-registered" class="step-title doc-link">Update Participants</h2>
             <ul class="guide-list">
-                <li class="noNumberElement guide-li">If you have unregistered participants in your Meeting and wish to add them to your class roster, just click on the <br>"Update Participants" on the "Take Attendance" tab of the Dashboard</li>
+                <li class="noNumberElement guide-li">If you have unregistered participants in your meeting and wish to add them to your class roster, just click on the <br>"Update Participants" on the "Take Attendance" tab of the Dashboard</li>
                 <li class="noNumberElement guide-li">A popup will show all the old Class Roster combined with all unregistered participants.</li>
                 <li class="noNumberElement guide-li">Clicking "Finish" will save the Class Roster with the new participants</li>
             </ul>
@@ -225,7 +229,7 @@
             <h2 id="time-joined-left" class="step-title doc-link">Time Joined/Left</h2>
             <ul class="guide-list">
                 <li class="noNumberElement guide-li">Whenever a participant first joins the meeting, the time  is recorded and stored for the particular meeting. A user can sort between these by clicking on "Time First Joined" in the table.</li>
-                <li class="noNumberElement guide-li">Similarly, every time a participant leaves the meeting, the time is recorded and updated on the table, under "Time Last Left"(which can also be sorted). Note that the "Time Last Left" includes the time that participants leave the main room to go to Zoom breakout rooms.</li>
+                <li class="noNumberElement guide-li">Similarly, every time a participant leaves the meeting, the time is recorded and updated on the table, under "Time Last Left"(which can also be sorted). Note that the "Time Last Left" includes the time that participants leave the main room to go to a breakout rooms.</li>
             </ul>
         </div>
 
@@ -234,6 +238,13 @@
         <ol class="guide-list">
             <li class="guide-list-element guide-li">Go to the <a target="_blank" href="https://marketplace.zoom.us/">Zoom Marketplace</a>&nbsp;and login</li>
             <img src="Images/Zoom-Marketplace.png" class="guide-img"/>
+        </ol>
+        <h2 style="text-align: center;">Or</h2>
+        <h2 id="login-zoom" class="step-title doc-link">Step 1 - Login in to Webex App Hub</h2>
+        <ol class="guide-list">
+            <li class="guide-list-element guide-li">Go to the <a target="_blank" href="https://apphub.webex.com/">Webex App Hub</a>&nbsp;and login</li>
+            <img src="Images/Zoom-Marketplace.png" class="guide-img"/>
+            <!-- put webex image here and the following images -->
         </ol>
         <h2 id="locate-zoom" class="step-title doc-link">Step 2 - Locate App</h2>
         <ol class="guide-list">
