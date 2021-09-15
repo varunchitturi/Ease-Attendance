@@ -59,24 +59,18 @@ function authenticate() {
                                             window.location.href = "dashboard"
                                         })
                                         .catch(function (error) {
-                                            document.getElementById("signin-cover").classList.remove("running")
-                                            document.getElementById("signUpMessage").innerHTML = error.message
-                                            document.getElementById("signup").disabled = false
+                                            errorMessage(error.message)
                                         });
                                 }).catch((error) => {
-                                    document.getElementById("signin-cover").classList.remove("running")
-                                    document.getElementById("signUpMessage").innerHTML = error.message
-                                    document.getElementById("signup").disabled = false
+                                    errorMessage(error.message)
                                 })
                             }).catch((e) => {
-                                document.getElementById("signin-cover").classList.remove("running")
-                                document.getElementById("signUpMessage").innerHTML = e.message
-                                document.getElementById("signup").disabled = false
+                                errorMessage(e.message)
+
                             })
                         }).catch(err => {
-                            document.getElementById("signin-cover").classList.remove("running")
-                            document.getElementById("signUpMessage").innerHTML = err.message
-                            document.getElementById("signup").disabled = false
+                            errorMessage(err.message)
+
                         })
                     })
                     if (emailRegistered === false) {
@@ -86,28 +80,24 @@ function authenticate() {
                         document.getElementById("signup").disabled = false
                     }
                 }).catch((error) => {
-                    document.getElementById("signin-cover").classList.remove("running")
-                    document.getElementById("signUpMessage").innerHTML = error.message
-                    document.getElementById("signup").disabled = false
+                    errorMessage(error.message)
                 })
             } else if (pass.length < 8) {
-                document.getElementById("signin-cover").classList.remove("running")
-                document.getElementById("signUpMessage").innerHTML = "Make sure your password is 8 or more characters"
-                document.getElementById("signup").disabled = false
+                errorMessage("Make sure your password is 8 or more characters")
             } else {
-                document.getElementById("signin-cover").classList.remove("running")
-                document.getElementById("signUpMessage").innerHTML = "The passwords do not match"
-                document.getElementById("signup").disabled = false
+                errorMessage("The passwords do not match")
             }
         } catch (err) {
-            document.getElementById("signin-cover").classList.remove("running")
-            document.getElementById("signUpMessage").innerHTML = err.message;
-            document.getElementById("signup").disabled = false
+            errorMessage(err.message)
         }
     }
 
 }
-
+function errorMessage(message){
+    document.getElementById("signin-cover").classList.remove("running")
+    document.getElementById("signUpMessage").innerHTML = message;
+    document.getElementById("signup").disabled = false
+}
 function validateEmail(email) {
     var re = /\S+@\S+\.\S+/;
     return re.test(email);
