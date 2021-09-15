@@ -242,28 +242,28 @@ app.get('/authorize_webex', (req, res) => {
 
                                     webhookMeetingStart = {
                                         "name": "meeting.started" + " " + userEmail,
-                                        "targetUrl": "http://easeattendance.eu.ngrok.io/api/requests",
+                                        "targetUrl": "http://easeattendance.eu.ngrok.io/api/webex_requests",
                                         "resource": "meetings",
                                         "event": "started",
                                         "secret": process.env.webex_clientsecret
                                     }
                                     webhookMeetingEnd = {
                                         "name": "meeting.ended" + " " + userEmail,
-                                        "targetUrl": "http://easeattendance.eu.ngrok.io/api/requests",
+                                        "targetUrl": "http://easeattendance.eu.ngrok.io/api/webex_requests",
                                         "resource": "meetings",
                                         "event": "ended",
                                         "secret": process.env.webex_clientsecret
                                     }
                                     webhookParticipantJoined = {
                                         "name": "participant.joined" + " " + userEmail,
-                                        "targetUrl": "http://easeattendance.eu.ngrok.io/api/requests",
+                                        "targetUrl": "http://easeattendance.eu.ngrok.io/api/webex_requests",
                                         "resource": "meetingParticipants",
                                         "event": "joined",
                                         "secret": process.env.webex_clientsecret
                                     }
                                     webhookParticipantLeft = {
                                         "name": "participant.left" + " " + userEmail,
-                                        "targetUrl": "http://easeattendance.eu.ngrok.io/api/requests",
+                                        "targetUrl": "http://easeattendance.eu.ngrok.io/api/webex_requests",
                                         "resource": "meetingParticipants",
                                         "event": "left",
                                         "secret": process.env.webex_clientsecret
@@ -710,7 +710,188 @@ app.post('/api/requests', (req, res) => {
         }
     }
 })
+app.post('/api/webex_requests', (req, res) => {
+    res.status(200)
+    res.send()
+    console.log("post request to /api/webex_requests sent ")
+    console.log(req.body)
+    console.log(req.headers.authorization)
+    if (req && req.headers && (req.headers.authorization === process.env.zoom_verification_token)) {
+        const body = req.body
+        const host_id = body.payload.object.host_id
+        if (body.event === "meeting.started" || body.event === "webinar.started") {
+            db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) => {
+                if (!meetingDoc.exists) {
+                    updateStartMeeting(body, host_id);
+                } else {
+                    let tryCounterA = 0
+                    let tryStartMeetingInterval = setInterval(() => {
+                        db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc2) => {
+                            if (!meetingDoc2.exists) {
+                                clearInterval(tryStartMeetingInterval)
+                                updateStartMeeting(body, host_id);
+                            } else {
+                                tryCounterA += 1
+                            }
+                            if (tryCounterA >= 10) {
+                                clearInterval(tryStartMeetingInterval)
+                                updateStartMeeting(body, host_id)
+                            }
+                        }).catch((error) => {
+                            console.error(error.message)
+                        })
+                    }, 3000)
+                }
+            }).catch((error) => {
+                console.error(error.message)
+            })
+        } else if (body.event === "meeting.participant_joined" || body.event === "webinar.participant_joined") {
+            const participant = body.payload.object.participant
+            const participantName = participant.user_name
+            let participantEmail = participant.email
+            if (participantEmail === "" || participantEmail == null) {
+                participantEmail = participant.user_name.replace(/\s/g, '#%^()!!');
+            }
+            console.log("Participant " + participantName + " has joined")
+            db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) => {
+                if (meetingDoc.exists && meetingDoc.data().uuid === body.payload.object.uuid) {
+                    let currentDate = new Date()
+                    let recordString = participantName + " has joined" + "  " + currentDate
+                    let messageString = "participant.joined " + participantName + " " + participantEmail
+                    updateParticipants(host_id, messageString, recordString, meetingDoc.data().hostUID)
+                } else {
+                    let tryCounterB = 0
+                    let tryJoinParticipantInterval = setInterval(() => {
+                        db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc2) => {
+                            if (meetingDoc2.exists && meetingDoc2.data().uuid === body.payload.object.uuid) {
+                                let currentDate = new Date()
+                                let recordString = participantName + " has joined" + "  " + currentDate
+                                let messageString = "participant.joined " + participantName + " " + participantEmail
+                                updateParticipants(host_id, messageString, recordString, meetingDoc2.data().hostUID)
+                                clearInterval(tryJoinParticipantInterval)
+                            } else {
+                                tryCounterB += 1
+                            }
+                            if (tryCounterB >= 10) {
+                                clearInterval(tryJoinParticipantInterval)
+                            }
+                        }).catch((error) => {
+                            console.error(error.message)
+                        })
+                    }, 3000)
+                }
+            }).catch((error) => {
+                console.error(error.message)
+            })
+        } else if (body.event === "meeting.participant_left" || body.event === "webinar.participant_left") {
+            const participant = body.payload.object.participant
+            const participantID = participant.id
+            const participantName = participant.user_name
+            let participantEmail = participant.email
+            if (participantEmail === "" || participantEmail == null) {
+                participantEmail = participant.user_name.replace(/\s/g, '#%^()!!');
+            }
+            console.log("Participant " + participantName + " has left")
+            db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) => {
+                if (meetingDoc.exists && meetingDoc.data().uuid === body.payload.object.uuid) {
+                    let currentDate = new Date()
+                    let recordString = participantName + " has left" + "  " + currentDate
+                    let messageString = "participant.left " + participantName + " " + participantEmail
+                    updateParticipants(host_id, messageString, recordString, meetingDoc.data().hostUID)
+                } else {
+                    let tryCounterC = 0
+                    let tryLeaveParticipantInterval = setInterval(() => {
+                        db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc2) => {
+                            if (meetingDoc2.exists && meetingDoc2.data().uuid === body.payload.object.uuid) {
+                                clearInterval(tryLeaveParticipantInterval)
+                                let currentDate = new Date()
+                                let recordString = participantName + " has left" + "  " + currentDate
+                                let messageString = "participant.left " + participantName + " " + participantEmail
+                                updateParticipants(host_id, messageString, recordString, meetingDoc2.data().hostUID)
+                                clearInterval(tryLeaveParticipantInterval)
+                            } else {
+                                tryCounterC += 1
+                            }
+                            if (tryCounterC >= 10) {
+                                clearInterval(tryLeaveParticipantInterval)
+                            }
 
+                        }).catch((error) => {
+                            console.error(error.message)
+                        })
+                    }, 3000)
+                }
+            }).catch((error) => {
+                console.error(error.message)
+            })
+        } else if (body.event === "meeting.ended" || body.event === "webinar.ended") {
+            console.log("Meeting ended: " + body.payload.object.topic)
+            db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) => {
+                if (meetingDoc.exists) {
+                    let meetingDocData = meetingDoc.data()
+                    let currentDate = new Date()
+                    let currentMessages = meetingDocData.messageLog
+                    currentMessages.push(CryptoJS.AES.encrypt("meeting.ended", meetingDocData.hostUID).toString())
+                    let currentRecords = meetingDocData.recordLog
+                    let recordString = "Meeting: " + body.payload.object.topic + " has ended " + "with ID: " + body.payload.object.id + "  " + currentDate
+                    currentRecords.push(CryptoJS.AES.encrypt(recordString, meetingDocData.hostUID).toString())
+                    let meetingID = meetingDocData.meetingID
+                    let hostUID = meetingDocData.hostUID
+                    let meetingName = meetingDocData.meetingName
+                    let meetingStart = meetingDocData.meetingStart
+                    let uuid = body.payload.object.uuid
+                    db.collection("Records").add({
+                        'Events': currentRecords,
+                        'MeetingID': meetingID,
+                        'useruid': hostUID,
+                        'MeetingName': meetingName,
+                        'MeetingStart': meetingStart,
+                        'MeetingEnd': new Date()
+                    })
+                        .then(() => {
+                        })
+                        .catch((error) => {
+                            console.error(error.message);
+                        });
+                    if (uuid === meetingDocData.uuid) {
+                        db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc2) => {
+                            if (meetingDoc2.exists && meetingDoc2.data().uuid === uuid) {
+                                db.collection("CurrentMeetings").doc(host_id).delete().then(() => {
+                                }).catch((error) => {
+                                    console.error(error.message)
+                                })
+                            }
+                        }).catch((error) => {
+                            console.error(error.message)
+                        })
+                    } else {
+                        let tryCounterD = 0
+                        let tryEndMeetingInterval = setInterval(() => {
+                            db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc2) => {
+                                if (meetingDoc2.exists && meetingDoc2.data().uuid === uuid) {
+                                    clearInterval(tryEndMeetingInterval)
+                                    db.collection("CurrentMeetings").doc(host_id).delete().then(() => {
+                                    }).catch((error) => {
+                                        console.error(error.message)
+                                    })
+                                } else {
+                                    tryCounterD += 1
+                                }
+                                if (tryCounterD >= 10) {
+                                    clearInterval(tryEndMeetingInterval)
+                                }
+                            }).catch((error) => {
+                                console.error(error.message)
+                            })
+                        }, 3000)
+                    }
+                }
+            }).catch((error) => {
+                console.error(error.message)
+            })
+        }
+    }
+})
 app.post('/deauthorize', (req, res) => {
     if (req.headers.authorization === process.env.zoom_verification_token) {
         console.log("post request to /deauthorize received " + req.body)
