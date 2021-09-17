@@ -719,7 +719,7 @@ app.post('/api/webex_requests', (req, res) => {
     if (req && req.headers && (req.headers.authorization === process.env.zoom_verification_token)) {
         const body = req.body
         const host_id = body.payload.object.host_id
-        if (body.event === "meeting.started" || body.event === "webinar.started") {
+        if (body.resourse === "meetings" && body.event === "started") {
             db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) => {
                 if (!meetingDoc.exists) {
                     updateStartMeeting(body, host_id);
@@ -745,7 +745,7 @@ app.post('/api/webex_requests', (req, res) => {
             }).catch((error) => {
                 console.error(error.message)
             })
-        } else if (body.event === "meeting.participant_joined" || body.event === "webinar.participant_joined") {
+        } else if (body.resource === "meetingParticipants" && body.event === "joined") {
             const participant = body.payload.object.participant
             const participantName = participant.user_name
             let participantEmail = participant.email
@@ -783,7 +783,7 @@ app.post('/api/webex_requests', (req, res) => {
             }).catch((error) => {
                 console.error(error.message)
             })
-        } else if (body.event === "meeting.participant_left" || body.event === "webinar.participant_left") {
+        } else if (body.resource === "meetingParticipants" && body.event === "left") {
             const participant = body.payload.object.participant
             const participantID = participant.id
             const participantName = participant.user_name
@@ -824,8 +824,8 @@ app.post('/api/webex_requests', (req, res) => {
             }).catch((error) => {
                 console.error(error.message)
             })
-        } else if (body.event === "meeting.ended" || body.event === "webinar.ended") {
-            console.log("Meeting ended: " + body.payload.object.topic)
+        } else if (body.resource === "meetings" && body.event === "ended") {
+            console.log("Meeting ended: " + body.data.meetingNumber)
             db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) => {
                 if (meetingDoc.exists) {
                     let meetingDocData = meetingDoc.data()
