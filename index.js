@@ -200,28 +200,28 @@ function createWebhooks(body, refreshToken, accessToken, res) {
 
             webhookMeetingStart = {
                 "name": "meeting.started" + " " + userEmail,
-                "targetUrl": "http://easeattendance.eu.ngrok.io/api/webex_requests",
+                "targetUrl": "http://easeattendance.sa.ngrok.io/api/webex_requests",
                 "resource": "meetings",
                 "event": "started",
                 "secret": process.env.webex_clientsecret
             }
             webhookMeetingEnd = {
                 "name": "meeting.ended" + " " + userEmail,
-                "targetUrl": "http://easeattendance.eu.ngrok.io/api/webex_requests",
+                "targetUrl": "http://easeattendance.sa.ngrok.io/api/webex_requests",
                 "resource": "meetings",
                 "event": "ended",
                 "secret": process.env.webex_clientsecret
             }
             webhookParticipantJoined = {
                 "name": "participant.joined" + " " + userEmail,
-                "targetUrl": "http://easeattendance.eu.ngrok.io/api/webex_requests",
+                "targetUrl": "http://easeattendance.sa.ngrok.io/api/webex_requests",
                 "resource": "meetingParticipants",
                 "event": "joined",
                 "secret": process.env.webex_clientsecret
             }
             webhookParticipantLeft = {
                 "name": "participant.left" + " " + userEmail,
-                "targetUrl": "http://easeattendance.eu.ngrok.io/api/webex_requests",
+                "targetUrl": "http://easeattendance.sa.ngrok.io/api/webex_requests",
                 "resource": "meetingParticipants",
                 "event": "left",
                 "secret": process.env.webex_clientsecret
@@ -387,7 +387,7 @@ app.get('/authorize_webex', (req, res) => {
                     "client_id": process.env.webex_clientid,
                     "client_secret":process.env.webex_clientsecret,
                     "code": authorizationCode,
-                    "redirect_uri":"https://easeattendance.eu.ngrok.io/authorize_webex"
+                    "redirect_uri":"https://easeattendance.sa.ngrok.io/authorize_webex"
                 }
             }, (error, httpResponse, body) => {
                 if (error) {
