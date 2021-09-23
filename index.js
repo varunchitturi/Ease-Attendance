@@ -720,10 +720,11 @@ app.post('/api/webex_requests', (req, res) => {
     res.send()
     console.log("post request to /api/webex_requests sent ")
     console.log(req.body)
-    console.log(req.headers.authorization)
-    if (req && req.headers && (req.headers.authorization === process.env.zoom_verification_token)) {
+    console.log(req.headers)
+    console.log(req)
+    if (req && req.headers && (req.body.appId == process.env.WebexIntegrationID)) {
         const body = req.body
-        const host_id = body.payload.object.host_id
+        const host_id = body.data.orgId
         if (body.resourse === "meetings" && body.event === "started") {
             db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) => {
                 if (!meetingDoc.exists) {
