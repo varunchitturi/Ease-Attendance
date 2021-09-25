@@ -30,7 +30,7 @@ function authenticate() {
                 document.getElementById("signin-cover").classList.add("running")
                 var emailRegistered = false
                 firestore.collection("WebexOAuth").where("email", "==", email).get().then((querySnapshot) => {
-                    querySnapshot.forEach((Authdoc) => {
+                    querySnapshot.forEach((WebexOAuthdoc) => {
                         emailRegistered = true
                         auth.createUserWithEmailAndPassword(email, pass).then(cred => {
                             auth.currentUser.updateProfile({
@@ -45,7 +45,7 @@ function authenticate() {
                                 if (userEmail == null) {
                                     userEmail = ""
                                 }
-                                firestore.collection("WebexOAuth").doc(Authdoc.id).update({
+                                firestore.collection("WebexOAuth").doc(WebexOAuthdoc.id).update({
                                     firebaseID: cred.user.uid
                                 }).then(() => {
                                     const user = cred.user
