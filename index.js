@@ -181,8 +181,8 @@ app.get('/authorize', (req, res) => {
         res.sendFile(path.join(__dirname + '/public/index.html'));
     }
 })
-
-function webexWebhookCreation2(userEmail, accessToken, res, userID) {
+function webexMeetingStartWebhookCreation(userEmail, accessToken,userID,res){
+    console.log("started webexMeetingStartWebhookCreation")
     webhookMeetingStart = {
         "name": "meeting.started" + " " + userEmail,
         "targetUrl": "http://easeattendance.sa.ngrok.io/api/webex_requests",
@@ -190,28 +190,6 @@ function webexWebhookCreation2(userEmail, accessToken, res, userID) {
         "event": "started",
         "secret": process.env.webex_clientsecret
     }
-    webhookMeetingEnd = {
-        "name": "meeting.ended" + " " + userEmail,
-        "targetUrl": "http://easeattendance.sa.ngrok.io/api/webex_requests",
-        "resource": "meetings",
-        "event": "ended",
-        "secret": process.env.webex_clientsecret
-    }
-    webhookParticipantJoined = {
-        "name": "participant.joined" + " " + userEmail,
-        "targetUrl": "http://easeattendance.sa.ngrok.io/api/webex_requests",
-        "resource": "meetingParticipants",
-        "event": "joined",
-        "secret": process.env.webex_clientsecret
-    }
-    webhookParticipantLeft = {
-        "name": "participant.left" + " " + userEmail,
-        "targetUrl": "http://easeattendance.sa.ngrok.io/api/webex_requests",
-        "resource": "meetingParticipants",
-        "event": "left",
-        "secret": process.env.webex_clientsecret
-    }
-
     request({
         url: 'https://webexapis.com/v1/webhooks',
         method: 'POST',
@@ -221,143 +199,172 @@ function webexWebhookCreation2(userEmail, accessToken, res, userID) {
         },
         body: webhookMeetingStart
     }, (error, httpResponse, body) => {
-        if (error || (body.errors && !body.message.includes("Duplicate webhooks"))) {
+        if (error || (body.errors)) {
             console.error(body)
-            res.sendFile(path.join(__dirname + '/public/index.html'));
-            return;
+            return false;
         } else {
             const webhookID = body.id
             const status = body.status
-
+            console.log("Meeting Started webhook created")
             console.log(body)
             if ((status && status === "active" || (body.message && body.message.includes("Duplicate webhooks")))) {
                 db.collection("WebexOAuth").doc(userID).set({
                     meetingStartedWebhookID: webhookID
-                }, {merge: true}).then(() => {
-                    request({
-                        url: 'https://webexapis.com/v1/webhooks',
-                        method: 'POST',
-                        json: true,
-                        headers: {
-                            'Authorization': "Bearer " + accessToken
-                        },
-                        body: webhookMeetingEnd
-                    }, (error, httpResponse, body) => {
-                        if (error || (body.errors && !body.message.includes("Duplicate webhooks"))) {
-                            console.error(body)
-                            res.sendFile(path.join(__dirname + '/public/index.html'));
-                            return
-                        } else {
-                            const webhookID = body.id
-                            const status = body.status
-                            console.log(body)
-                            if ((status && status === "active") || (body.message && body.message.includes("Duplicate webhooks"))) {
-                                db.collection("WebexOAuth").doc(userID).set({
-                                    meetingEndedWebhookID: webhookID
-                                }, {merge: true}).then(() => {
-                                    request({
-                                        url: ' https://webexapis.com/v1/webhooks',
-                                        method: 'POST',
-                                        json: true,
-                                        headers: {
-                                            'Authorization': "Bearer " + accessToken
-                                        },
-                                        body: webhookParticipantJoined
-                                    }, (error, httpResponse, body) => {
-                                        if (error || (body.errors && !body.message.includes("Duplicate webhooks"))) {
-                                            console.error(body)
-                                            res.sendFile(path.join(__dirname + '/public/index.html'));
-                                        } else {
-                                            const webhookID = body.id
-                                            const status = body.status
-                                            console.log(body)
-
-                                            if ((status && status === "active") || (body.message && body.message.includes("Duplicate webhooks"))) {
-                                                db.collection("WebexOAuth").doc(userID).set({
-                                                    participantJoinedWebhookID: webhookID
-                                                }, {merge: true}).then(() => {
-                                                    request({
-                                                        url: ' https://webexapis.com/v1/webhooks',
-                                                        method: 'POST',
-                                                        json: true,
-                                                        headers: {
-                                                            'Authorization': "Bearer " + accessToken
-                                                        },
-                                                        body: webhookParticipantLeft
-                                                    }, (error, httpResponse, body) => {
-                                                        if (error || (body.errors && !body.message.includes("Duplicate webhooks"))) {
-                                                            console.error(body)
-                                                            res.sendFile(path.join(__dirname + '/public/index.html'));
-                                                        } else {
-                                                            const webhookID = body.id
-                                                            const status = body.status
-                                                            console.log(body)
-
-                                                            if ((status && status === "active") || (body.message && body.message.includes("Duplicate webhooks"))) {
-                                                                db.collection("WebexOAuth").doc(userID).set({
-                                                                    participantLeftWebhookID: webhookID
-                                                                }, {merge: true}).then(() => {
-                                                                    res.sendFile(path.join(__dirname + '/public/signup-webex.html'));
-                                                                    return
-                                                                }).catch((error) => {
-                                                                    console.error(error.message)
-                                                                    res.sendFile(path.join(__dirname + '/public/index.html'));
-                                                                    return
-                                                                })
-                                                            } else {
-                                                                res.sendFile(path.join(__dirname + '/public/index.html'));
-                                                                return
-                                                            }
-
-                                                        }
-                                                    })
-                                                }).catch((error) => {
-                                                    console.error(error.message)
-                                                    res.sendFile(path.join(__dirname + '/public/index.html'));
-                                                    return
-                                                })
-                                            } else {
-                                                res.sendFile(path.join(__dirname + '/public/index.html'));
-                                                return
-                                            }
-
-                                        }
-                                    })
-                                }).catch((error) => {
-                                    console.error(error.message)
-                                    res.sendFile(path.join(__dirname + '/public/index.html'));
-                                    return
-                                })
-                            } else {
-
-                                res.sendFile(path.join(__dirname + '/public/index.html'));
-                                return
-                            }
-
-                        }
-                    })
-                }).catch((error) => {
-                    console.error(error.message)
-                    res.sendFile(path.join(__dirname + '/public/index.html'));
-                    return
-                })
+                }, {merge: true})
+                return true;
             } else {
                 res.sendFile(path.join(__dirname + '/public/index.html'));
-                return
+                return false;
             }
+        }
+    })
+}
+function webexMeetingEndWebhookCreation(userEmail,accessToken,userID,res){
+    console.log("started webexMeetingEndWebhookCreation")
 
+    webhookMeetingEnd = {
+        "name": "meeting.ended" + " " + userEmail,
+        "targetUrl": "http://easeattendance.sa.ngrok.io/api/webex_requests",
+        "resource": "meetings",
+        "event": "ended",
+        "secret": process.env.webex_clientsecret
+    }
+    request({
+        url: 'https://webexapis.com/v1/webhooks',
+        method: 'POST',
+        json: true,
+        headers: {
+            'Authorization': "Bearer " + accessToken
+        },
+        body: webhookMeetingEnd
+    }, (error, httpResponse, body) => {
+        if (error || (body.errors)) {
+            console.error(body)
+            return false;
+        } else {
+            const webhookID = body.id
+            const status = body.status
+            console.log("Meeting Ended webhook created")
+            console.log(body)
+            if ((status && status === "active" || (body.message && body.message.includes("Duplicate webhooks")))) {
+                db.collection("WebexOAuth").doc(userID).set({
+                    meetingEndedWebhookID: webhookID
+                }, {merge: true})
+                return true;
+            } else {
+                res.sendFile(path.join(__dirname + '/public/index.html'));
+                return false;
+            }
+        }
+    })
+}
+function webexParticipantJoinedWebhookCreation(userEmail,accessToken,userID,res){
+    console.log("started webexParticipantJoinedWebhookCreation")
+
+    webhookParticipantJoined = {
+        "name": "participant.joined" + " " + userEmail,
+        "targetUrl": "http://easeattendance.sa.ngrok.io/api/webex_requests",
+        "resource": "meetingParticipants",
+        "event": "joined",
+        "secret": process.env.webex_clientsecret
+    }
+    request({
+        url: 'https://webexapis.com/v1/webhooks',
+        method: 'POST',
+        json: true,
+        headers: {
+            'Authorization': "Bearer " + accessToken
+        },
+        body: webhookParticipantJoined
+    }, (error, httpResponse, body) => {
+        if (error || (body.errors)) {
+            console.error(body)
+            return false;
+        } else {
+            const webhookID = body.id
+            const status = body.status
+            console.log("Participant Joined webhook created")
+            console.log(body)
+            if ((status && status === "active" || (body.message && body.message.includes("Duplicate webhooks")))) {
+                db.collection("WebexOAuth").doc(userID).set({
+                    participantJoinedWebhookID: webhookID
+                }, {merge: true})
+                return true;
+            } else {
+                res.sendFile(path.join(__dirname + '/public/index.html'));
+                return false;
+            }
         }
     })
 }
 
-function createWebexWebhooks(body, refreshToken, accessToken, res) {
+function webexParticipantLeftWebhookCreation(userEmail,accessToken,userID,res){
+    console.log("started webexParticipantLeftWebhookCreation")
+
+    webhookParticipantLeft = {
+        "name": "participant.left" + " " + userEmail,
+        "targetUrl": "http://easeattendance.sa.ngrok.io/api/webex_requests",
+        "resource": "meetingParticipants",
+        "event": "left",
+        "secret": process.env.webex_clientsecret
+    }
+    request({
+        url: 'https://webexapis.com/v1/webhooks',
+        method: 'POST',
+        json: true,
+        headers: {
+            'Authorization': "Bearer " + accessToken
+        },
+        body: webhookParticipantLeft
+    }, (error, httpResponse, body) => {
+        if (error || (body.errors)) {
+            console.error(body)
+            return false;
+        } else {
+            const webhookID = body.id
+            const status = body.status
+            console.log("Participant Left webhook created")
+            console.log(body)
+            if ((status && status === "active")) {
+                db.collection("WebexOAuth").doc(userID).set({
+                    participantLeftWebhookID: webhookID
+                }, {merge: true})
+                return true;
+            } else {
+                res.sendFile(path.join(__dirname + '/public/index.html'));
+                return false;
+            }
+        }
+    })
+}
+
+
+async function ayncWebhookCreation(userEmail, accessToken, userID, res, doc) {
+    const meetingStart = webexMeetingStartWebhookCreation(userEmail, accessToken, userID, res);
+    const meetingEnd = webexMeetingEndWebhookCreation(userEmail, accessToken, userID, res);
+    const participantJoined = webexParticipantJoinedWebhookCreation(userEmail, accessToken, userID, res);
+    const participantLeft = webexParticipantLeftWebhookCreation(userEmail, accessToken, userID, res);
+
+    if (!doc.meetingStartedWebhookID)
+        await meetingStart;
+    if (!doc.meetingEndedWebhookID)
+        await meetingEnd;
+    if (!doc.participantJoinedWebhookID)
+        await participantJoined;
+    if (!doc.participantLeftWebhookID)
+        await participantLeft;
+    return
+}
+
+async function createWebexWebhooksAndOAuth(body, refreshToken, accessToken, res) {
     console.log(body)
     const userID = body.items[0].personId
     const userName = body.items[0].personDisplayName
     const userEmail = body.items[0].personDisplayName
 
-    const cityRef = db.collection('WebexOAuth').doc(userID);
-    const doc = await cityRef.get();
+    const webexOAuth = db.collection('WebexOAuth').doc(userID);
+    const doc = await webexOAuth.get();
+
     if (!doc.exists) {
         console.log('No such document!');
         if (userID && userID !== "") {
@@ -367,18 +374,22 @@ function createWebexWebhooks(body, refreshToken, accessToken, res) {
                 email: userEmail,
                 refreshToken: refreshToken
             }, {merge: true}).then(() => {
-                webexWebhookCreation2(userEmail, accessToken, res, userID);
+                ayncWebhookCreation(userEmail, accessToken, userID, res, doc);
+
             }).catch((error) => {
                 console.error(error.message)
                 res.sendFile(path.join(__dirname + '/public/index.html'));
                 return
             })
         } else {
+            ayncWebhookCreation(userEmail, accessToken, userID, res, doc);
             res.sendFile(path.join(__dirname + '/public/index.html'));
             return
         }
     } else {
+        ayncWebhookCreation(userEmail, accessToken, userID, res, doc);
         console.log('Document data:', doc.data());
+        res.sendFile(path.join(__dirname + '/public/index.html'));
     }
 
 
@@ -429,7 +440,8 @@ app.get('/authorize_webex', (req, res) => {
                             console.error(body)
                             res.sendFile(path.join(__dirname + '/public/index.html'));
                         } else {
-                            createWebexWebhooks(body, refreshToken, accessToken, res);
+                            createWebexWebhooksAndOAuth(body, refreshToken, accessToken, res);
+
                         }
                     })
                 }
@@ -444,6 +456,8 @@ app.get('/authorize_webex', (req, res) => {
         res.sendFile(path.join(__dirname + '/public/index.html'));
         return
     }
+    res.sendFile(path.join(__dirname + '/public/signup-webex.html'));
+
 })
 
 app.get('/zoomverify/verifyzoom.html', (req, res) => {
