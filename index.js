@@ -563,7 +563,7 @@ function updateStartMeeting(body, host_id) {
 }
 
 function updateStartMeetingWebex(body, host_id) {
-    db.collection("ZoomOAuth").doc(host_id).get().then((doc) => {
+    db.collection("WebexOAuth").doc(host_id).get().then((doc) => {
         let currentDate = new Date()
         let currRecordLog = []
         let currMessageLog = []
@@ -782,8 +782,8 @@ app.post('/api/webex_requests', (req, res) => {
     console.log(req.body)
     if (req && req.headers && (req.body.appId == process.env.WebexIntegrationID)) {
         const body = req.body
-        const host_id = body.id
         if (body.resourse === "meetings" && body.event === "started") {
+            const host_id = body.data.hostUserId
             db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) => {
                 if (!meetingDoc.exists) {
                     updateStartMeetingWebex(body, host_id);
@@ -809,86 +809,9 @@ app.post('/api/webex_requests', (req, res) => {
             }).catch((error) => {
                 console.error(error.message)
             })
-        } else if (body.resource === "meetingParticipants" && body.event === "joined") {
-            const participant = body.payload.object.participant
-            const participantName = participant.user_name
-            let participantEmail = participant.email
-            if (participantEmail === "" || participantEmail == null) {
-                participantEmail = participant.user_name.replace(/\s/g, '#%^()!!');
-            }
-            console.log("Participant " + participantName + " has joined")
-            db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) => {
-                if (meetingDoc.exists && meetingDoc.data().uuid === body.payload.object.uuid) {
-                    let currentDate = new Date()
-                    let recordString = participantName + " has joined" + "  " + currentDate
-                    let messageString = "participant.joined " + participantName + " " + participantEmail
-                    updateParticipants(host_id, messageString, recordString, meetingDoc.data().hostUID)
-                } else {
-                    let tryCounterB = 0
-                    let tryJoinParticipantInterval = setInterval(() => {
-                        db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc2) => {
-                            if (meetingDoc2.exists && meetingDoc2.data().uuid === body.payload.object.uuid) {
-                                let currentDate = new Date()
-                                let recordString = participantName + " has joined" + "  " + currentDate
-                                let messageString = "participant.joined " + participantName + " " + participantEmail
-                                updateParticipants(host_id, messageString, recordString, meetingDoc2.data().hostUID)
-                                clearInterval(tryJoinParticipantInterval)
-                            } else {
-                                tryCounterB += 1
-                            }
-                            if (tryCounterB >= 10) {
-                                clearInterval(tryJoinParticipantInterval)
-                            }
-                        }).catch((error) => {
-                            console.error(error.message)
-                        })
-                    }, 3000)
-                }
-            }).catch((error) => {
-                console.error(error.message)
-            })
-        } else if (body.resource === "meetingParticipants" && body.event === "left") {
-            const participant = body.payload.object.participant
-            const participantID = participant.id
-            const participantName = participant.user_name
-            let participantEmail = participant.email
-            if (participantEmail === "" || participantEmail == null) {
-                participantEmail = participant.user_name.replace(/\s/g, '#%^()!!');
-            }
-            console.log("Participant " + participantName + " has left")
-            db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) => {
-                if (meetingDoc.exists && meetingDoc.data().uuid === body.payload.object.uuid) {
-                    let currentDate = new Date()
-                    let recordString = participantName + " has left" + "  " + currentDate
-                    let messageString = "participant.left " + participantName + " " + participantEmail
-                    updateParticipants(host_id, messageString, recordString, meetingDoc.data().hostUID)
-                } else {
-                    let tryCounterC = 0
-                    let tryLeaveParticipantInterval = setInterval(() => {
-                        db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc2) => {
-                            if (meetingDoc2.exists && meetingDoc2.data().uuid === body.payload.object.uuid) {
-                                clearInterval(tryLeaveParticipantInterval)
-                                let currentDate = new Date()
-                                let recordString = participantName + " has left" + "  " + currentDate
-                                let messageString = "participant.left " + participantName + " " + participantEmail
-                                updateParticipants(host_id, messageString, recordString, meetingDoc2.data().hostUID)
-                                clearInterval(tryLeaveParticipantInterval)
-                            } else {
-                                tryCounterC += 1
-                            }
-                            if (tryCounterC >= 10) {
-                                clearInterval(tryLeaveParticipantInterval)
-                            }
-
-                        }).catch((error) => {
-                            console.error(error.message)
-                        })
-                    }, 3000)
-                }
-            }).catch((error) => {
-                console.error(error.message)
-            })
-        } else if (body.resource === "meetings" && body.event === "ended") {
+        }
+        else if (body.resource === "meetings" && body.event === "ended") {
+            const host_id = body.data.hostUserId
             console.log("Meeting ended: " + body.data.meetingNumber)
             db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) => {
                 if (meetingDoc.exists) {
@@ -949,6 +872,89 @@ app.post('/api/webex_requests', (req, res) => {
                             })
                         }, 3000)
                     }
+                }
+            }).catch((error) => {
+                console.error(error.message)
+            })
+        }
+        else if (body.resource === "meetingParticipants" && body.event === "joined") {
+            const host_id = body.data.hostPersonId
+            const participant = body.payload.object.participant
+            const participantName = participant.user_name
+            let participantEmail = participant.email
+            if (participantEmail === "" || participantEmail == null) {
+                participantEmail = participant.user_name.replace(/\s/g, '#%^()!!');
+            }
+            console.log("Participant " + participantName + " has joined")
+            db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) => {
+                if (meetingDoc.exists && meetingDoc.data().uuid === body.payload.object.uuid) {
+                    let currentDate = new Date()
+                    let recordString = participantName + " has joined" + "  " + currentDate
+                    let messageString = "participant.joined " + participantName + " " + participantEmail
+                    updateParticipants(host_id, messageString, recordString, meetingDoc.data().hostUID)
+                } else {
+                    let tryCounterB = 0
+                    let tryJoinParticipantInterval = setInterval(() => {
+                        db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc2) => {
+                            if (meetingDoc2.exists && meetingDoc2.data().uuid === body.payload.object.uuid) {
+                                let currentDate = new Date()
+                                let recordString = participantName + " has joined" + "  " + currentDate
+                                let messageString = "participant.joined " + participantName + " " + participantEmail
+                                updateParticipants(host_id, messageString, recordString, meetingDoc2.data().hostUID)
+                                clearInterval(tryJoinParticipantInterval)
+                            } else {
+                                tryCounterB += 1
+                            }
+                            if (tryCounterB >= 10) {
+                                clearInterval(tryJoinParticipantInterval)
+                            }
+                        }).catch((error) => {
+                            console.error(error.message)
+                        })
+                    }, 3000)
+                }
+            }).catch((error) => {
+                console.error(error.message)
+            })
+        }
+        else if (body.resource === "meetingParticipants" && body.event === "left") {
+            const host_id = body.data.hostPersonId
+            const participant = body.payload.object.participant
+            const participantID = participant.id
+            const participantName = participant.user_name
+            let participantEmail = participant.email
+            if (participantEmail === "" || participantEmail == null) {
+                participantEmail = participant.user_name.replace(/\s/g, '#%^()!!');
+            }
+            console.log("Participant " + participantName + " has left")
+            db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) => {
+                if (meetingDoc.exists && meetingDoc.data().uuid === body.payload.object.uuid) {
+                    let currentDate = new Date()
+                    let recordString = participantName + " has left" + "  " + currentDate
+                    let messageString = "participant.left " + participantName + " " + participantEmail
+                    updateParticipants(host_id, messageString, recordString, meetingDoc.data().hostUID)
+                } else {
+                    let tryCounterC = 0
+                    let tryLeaveParticipantInterval = setInterval(() => {
+                        db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc2) => {
+                            if (meetingDoc2.exists && meetingDoc2.data().uuid === body.payload.object.uuid) {
+                                clearInterval(tryLeaveParticipantInterval)
+                                let currentDate = new Date()
+                                let recordString = participantName + " has left" + "  " + currentDate
+                                let messageString = "participant.left " + participantName + " " + participantEmail
+                                updateParticipants(host_id, messageString, recordString, meetingDoc2.data().hostUID)
+                                clearInterval(tryLeaveParticipantInterval)
+                            } else {
+                                tryCounterC += 1
+                            }
+                            if (tryCounterC >= 10) {
+                                clearInterval(tryLeaveParticipantInterval)
+                            }
+
+                        }).catch((error) => {
+                            console.error(error.message)
+                        })
+                    }, 3000)
                 }
             }).catch((error) => {
                 console.error(error.message)
