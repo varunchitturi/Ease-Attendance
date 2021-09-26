@@ -1301,20 +1301,51 @@ function download(filename, text) {
 
 
 function exportMeetingRecord(){
+    
     const currentRecord = PastMeetings[currentRecordIndex]
-    const downloadElement = document.createElement('a')
-    let recordDataString = "Event\n"
-    const downloadName = currentRecord["MeetingName"] + " - " + currentRecord["MeetingID"] + " - " + currentRecord["MeetingStart"].toDate().toLocaleString()
+    // const downloadElement = document.createElement('a')
+    // let recordDataString = "Event\n"
+    const downloadName = currentRecord["MeetingName"] + " - " + currentRecord["MeetingID"] + " - " + currentRecord["MeetingStart"].toDate().toLocaleString() +  ".csv"
     const useruid = auth.currentUser.uid
-    for (let i = 0; i < currentRecord["events"].length; i++){
-        const event = CryptoJS.AES.decrypt(currentRecord["events"][i], useruid).toString(CryptoJS.enc.Utf8);
-        recordDataString += event + "\n"
+    // for (let i = 0; i < currentRecord["events"].length; i++){
+    //     const event = CryptoJS.AES.decrypt(currentRecord["events"][i], useruid).toString(CryptoJS.enc.Utf8);
+    //     recordDataString += event + "\n"
+    // }
+    // downloadElement.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(recordDataString))
+    // downloadElement.setAttribute('download', downloadName);
+    // document.body.appendChild(downloadElement);
+    // downloadElement.click();
+    // document.body.removeChild(downloadElement);
+
+    var csvFileData = [];
+    for (var i = 0; i < currentRecord["events"].length; i++) {
+    const event = CryptoJS.AES.decrypt(currentRecord["events"][i], useruid).toString(CryptoJS.enc.Utf8);
+    if(event.includes("Meeting")){
+        csvFileData.push(event.split());
     }
-    downloadElement.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(recordDataString))
-    downloadElement.setAttribute('download', downloadName);
-    document.body.appendChild(downloadElement);
-    downloadElement.click();
-    document.body.removeChild(downloadElement);
+    else{
+        csvFileData.push(event.split(" has").join(",").split("  ").join(",").split(" GMT").join(",").split(",", 3)
+        );
+    }
+    
+    }
+
+      //define the heading for each row of the data
+      var csv = "Person,Event,Time\n";
+
+      //merge the data with CSV
+      csvFileData.forEach(function(row) {
+        csv += row.join(",");
+        csv += "\n";
+      });
+
+      var hiddenElement = document.createElement("a");
+      hiddenElement.href = "data:text/csv;charset=utf-8," + encodeURI(csv);
+      hiddenElement.target = "_blank";
+
+      //provide the name for the CSV file to be downloaded
+      hiddenElement.download = downloadName;
+      hiddenElement.click();
 }
 
 function deleteMeeting(){
