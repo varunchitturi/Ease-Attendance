@@ -569,7 +569,7 @@ function updateStartMeetingWebex(body, host_id) {
         let currMessageLog = []
         let recordString = "Meeting: " + " has started " + "with ID: " + body.data.MeetingNumber + "  " + currentDate
         let messageStringID = "meeting.id " + body.data.meetingNumber
-        let messageStringStart = "meeting.started "
+        let messageStringStart = "meeting.started"
         currRecordLog.push(CryptoJS.AES.encrypt(recordString, doc.data().firebaseID).toString())
         currMessageLog.push(CryptoJS.AES.encrypt(messageStringID, doc.data().firebaseID).toString())
         currMessageLog.push(CryptoJS.AES.encrypt(messageStringStart, doc.data().firebaseID).toString())
@@ -582,7 +582,7 @@ function updateStartMeetingWebex(body, host_id) {
             messageLog: currMessageLog,
             recordLog: currRecordLog,
             meetingStart: currentDate,
-            uuid: body.data.hostUserId
+            uuid: host_id
         }).then(() => {
         }).catch(() => {
             console.error("Error creating doc in CurrentMeetings for meeting start")
@@ -818,19 +818,19 @@ app.post('/api/webex_requests', (req, res) => {
                     let meetingDocData = meetingDoc.data()
                     let currentDate = new Date()
                     let currentMessages = meetingDocData.messageLog
-                    currentMessages.push(CryptoJS.AES.encrypt("meeting.ended", meetingDocData.hostUID).toString())
+                    currentMessages.push(CryptoJS.AES.encrypt("meeting.ended", host_id).toString())
                     let currentRecords = meetingDocData.recordLog
-                    let recordString = "Meeting: " + body.payload.object.topic + " has ended " + "with ID: " + body.payload.object.id + "  " + currentDate
-                    currentRecords.push(CryptoJS.AES.encrypt(recordString, meetingDocData.hostUID).toString())
+                    let recordString = "Meeting: " + " has ended " + "with ID: " + body.data.meetingNumber + "  " + currentDate
+                    currentRecords.push(CryptoJS.AES.encrypt(recordString, host_id).toString())
                     let meetingID = meetingDocData.meetingID
-                    let hostUID = meetingDocData.hostUID
+                    let hostUserId = host_id
                     let meetingName = meetingDocData.meetingName
                     let meetingStart = meetingDocData.meetingStart
-                    let uuid = body.payload.object.uuid
+                    let uuid = hostUserId
                     db.collection("Records").add({
                         'Events': currentRecords,
                         'MeetingID': meetingID,
-                        'useruid': hostUID,
+                        'useruid': hostUserId,
                         'MeetingName': meetingName,
                         'MeetingStart': meetingStart,
                         'MeetingEnd': new Date()
@@ -880,10 +880,12 @@ app.post('/api/webex_requests', (req, res) => {
         else if (body.resource === "meetingParticipants" && body.event === "joined") {
             const host_id = body.data.hostPersonId
             const participantName = body.data.displayName
+            const nameArray = participantName.split(" ")
+            const firstName = nameArray[0]
+            const lastName = nameArray[nameArray.length]
             console.log("Participant " + participantName + " has joined")
             db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) => {
-                console.log("in doc")
-                if (meetingDoc.exists && meetingDoc.data().uuid === body.data.hostUserId) {
+                if (meetingDoc.exists && meetingDoc.data().uuid === host_id) {
                     let currentDate = new Date()
                     let recordString = participantName + " has joined" + "  " + currentDate
                     let messageString = "participant.joined " + participantName
@@ -892,7 +894,7 @@ app.post('/api/webex_requests', (req, res) => {
                     let tryCounterB = 0
                     let tryJoinParticipantInterval = setInterval(() => {
                         db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc2) => {
-                            if (meetingDoc2.exists && meetingDoc2.data().uuid === body.data.hostUserId) {
+                            if (meetingDoc2.exists && meetingDoc2.data().uuid === host_id) {
                                 let currentDate = new Date()
                                 let recordString = participantName + " has joined" + "  " + currentDate
                                 let messageString = "participant.joined " + participantName
@@ -918,7 +920,7 @@ app.post('/api/webex_requests', (req, res) => {
             const participantName = body.data.displayName
             console.log("Participant " + participantName + " has left")
             db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) => {
-                if (meetingDoc.exists && meetingDoc.data().uuid === body.data.hostUserId) {
+                if (meetingDoc.exists && meetingDoc.data().uuid === host_id) {
                     let currentDate = new Date()
                     let recordString = participantName + " has left" + "  " + currentDate
                     let messageString = "participant.left " + participantName
@@ -927,7 +929,7 @@ app.post('/api/webex_requests', (req, res) => {
                     let tryCounterC = 0
                     let tryLeaveParticipantInterval = setInterval(() => {
                         db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc2) => {
-                            if (meetingDoc2.exists && meetingDoc2.data().uuid === body.data.hostUserId) {
+                            if (meetingDoc2.exists && meetingDoc2.data().uuid === host_id) {
                                 clearInterval(tryLeaveParticipantInterval)
                                 let currentDate = new Date()
                                 let recordString = participantName + " has left" + "  " + currentDate
