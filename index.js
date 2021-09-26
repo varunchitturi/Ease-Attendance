@@ -567,27 +567,27 @@ function updateStartMeetingWebex(body, host_id) {
         let currentDate = new Date()
         let currRecordLog = []
         let currMessageLog = []
-        let recordString = "Meeting: " + body.payload.object.topic + " has started " + "with ID: " + body.payload.object.id + "  " + currentDate
+        let recordString = "Meeting: " + " has started " + "with ID: " + body.data.MeetingNumber + "  " + currentDate
         let messageStringID = "meeting.id " + body.data.meetingNumber
-        let messageStringStart = "meeting.started " + body.payload.object.topic
+        let messageStringStart = "meeting.started "
         currRecordLog.push(CryptoJS.AES.encrypt(recordString, doc.data().firebaseID).toString())
         currMessageLog.push(CryptoJS.AES.encrypt(messageStringID, doc.data().firebaseID).toString())
         currMessageLog.push(CryptoJS.AES.encrypt(messageStringStart, doc.data().firebaseID).toString())
         db.collection("CurrentMeetings").doc(host_id).set({
             meetingID: body.data.meetingNumber,
             hostID: host_id,
-            meetingName: body.payload.object.topic,
+            meetingName: "generic meeting name B)",
             hostEmail: doc.data().email,
             hostUID: doc.data().firebaseID,
             messageLog: currMessageLog,
             recordLog: currRecordLog,
             meetingStart: currentDate,
-            uuid: body.payload.object.uuid
+            uuid: body.data.hostUserId
         }).then(() => {
         }).catch(() => {
             console.error("Error creating doc in CurrentMeetings for meeting start")
         })
-        console.log("Meeting started: " + body.payload.object.topic)
+        console.log("Meeting started: " + body.data.hostEmail)
     }).catch((error) => {
         console.error(error.message)
     })
@@ -779,10 +779,10 @@ app.post('/api/webex_requests', (req, res) => {
     res.status(200)
     res.send()
     console.log("post request to /api/webex_requests sent ")
-    console.log(req.body)
     if (req && req.headers && (req.body.appId == process.env.WebexIntegrationID)) {
         const body = req.body
-        if (body.resourse === "meetings" && body.event === "started") {
+        if (body.resource === "meetings" && body.event === "started") {
+            console.log("meeting started: " + body.data.meetingNumber)
             const host_id = body.data.hostUserId
             db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) => {
                 if (!meetingDoc.exists) {
@@ -793,13 +793,13 @@ app.post('/api/webex_requests', (req, res) => {
                         db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc2) => {
                             if (!meetingDoc2.exists) {
                                 clearInterval(tryStartMeetingInterval)
-                                updateStartMeeting(body, host_id);
+                                updateStartMeetingWebex(body, host_id);
                             } else {
                                 tryCounterA += 1
                             }
                             if (tryCounterA >= 10) {
                                 clearInterval(tryStartMeetingInterval)
-                                updateStartMeeting(body, host_id)
+                                updateStartMeetingWebex(body, host_id);
                             }
                         }).catch((error) => {
                             console.error(error.message)
@@ -879,27 +879,23 @@ app.post('/api/webex_requests', (req, res) => {
         }
         else if (body.resource === "meetingParticipants" && body.event === "joined") {
             const host_id = body.data.hostPersonId
-            const participant = body.payload.object.participant
-            const participantName = participant.user_name
-            let participantEmail = participant.email
-            if (participantEmail === "" || participantEmail == null) {
-                participantEmail = participant.user_name.replace(/\s/g, '#%^()!!');
-            }
+            const participantName = body.data.displayName
             console.log("Participant " + participantName + " has joined")
             db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) => {
-                if (meetingDoc.exists && meetingDoc.data().uuid === body.payload.object.uuid) {
+                console.log("in doc")
+                if (meetingDoc.exists && meetingDoc.data().uuid === body.data.hostUserId) {
                     let currentDate = new Date()
                     let recordString = participantName + " has joined" + "  " + currentDate
-                    let messageString = "participant.joined " + participantName + " " + participantEmail
+                    let messageString = "participant.joined " + participantName
                     updateParticipants(host_id, messageString, recordString, meetingDoc.data().hostUID)
                 } else {
                     let tryCounterB = 0
                     let tryJoinParticipantInterval = setInterval(() => {
                         db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc2) => {
-                            if (meetingDoc2.exists && meetingDoc2.data().uuid === body.payload.object.uuid) {
+                            if (meetingDoc2.exists && meetingDoc2.data().uuid === body.data.hostUserId) {
                                 let currentDate = new Date()
                                 let recordString = participantName + " has joined" + "  " + currentDate
-                                let messageString = "participant.joined " + participantName + " " + participantEmail
+                                let messageString = "participant.joined " + participantName
                                 updateParticipants(host_id, messageString, recordString, meetingDoc2.data().hostUID)
                                 clearInterval(tryJoinParticipantInterval)
                             } else {
@@ -919,29 +915,23 @@ app.post('/api/webex_requests', (req, res) => {
         }
         else if (body.resource === "meetingParticipants" && body.event === "left") {
             const host_id = body.data.hostPersonId
-            const participant = body.payload.object.participant
-            const participantID = participant.id
-            const participantName = participant.user_name
-            let participantEmail = participant.email
-            if (participantEmail === "" || participantEmail == null) {
-                participantEmail = participant.user_name.replace(/\s/g, '#%^()!!');
-            }
+            const participantName = body.data.displayName
             console.log("Participant " + participantName + " has left")
             db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) => {
-                if (meetingDoc.exists && meetingDoc.data().uuid === body.payload.object.uuid) {
+                if (meetingDoc.exists && meetingDoc.data().uuid === body.data.hostUserId) {
                     let currentDate = new Date()
                     let recordString = participantName + " has left" + "  " + currentDate
-                    let messageString = "participant.left " + participantName + " " + participantEmail
+                    let messageString = "participant.left " + participantName
                     updateParticipants(host_id, messageString, recordString, meetingDoc.data().hostUID)
                 } else {
                     let tryCounterC = 0
                     let tryLeaveParticipantInterval = setInterval(() => {
                         db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc2) => {
-                            if (meetingDoc2.exists && meetingDoc2.data().uuid === body.payload.object.uuid) {
+                            if (meetingDoc2.exists && meetingDoc2.data().uuid === body.data.hostUserId) {
                                 clearInterval(tryLeaveParticipantInterval)
                                 let currentDate = new Date()
                                 let recordString = participantName + " has left" + "  " + currentDate
-                                let messageString = "participant.left " + participantName + " " + participantEmail
+                                let messageString = "participant.left " + participantName
                                 updateParticipants(host_id, messageString, recordString, meetingDoc2.data().hostUID)
                                 clearInterval(tryLeaveParticipantInterval)
                             } else {
