@@ -814,7 +814,8 @@ app.post('/api/webex_requests', (req, res) => {
             }).catch((error) => {
                 console.error(error.message)
             })
-        } else if (body.resource === "meetings" && body.event === "ended") {
+        }
+        else if (body.resource === "meetings" && body.event === "ended") {
             const host_id = body.data.hostUserId
             console.log("Meeting ended: " + body.data.meetingNumber)
             db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) => {
@@ -880,7 +881,8 @@ app.post('/api/webex_requests', (req, res) => {
             }).catch((error) => {
                 console.error(error.message)
             })
-        } else if (body.resource === "meetingParticipants" && body.event === "joined") {
+        }
+        else if (body.resource === "meetingParticipants" && body.event === "joined") {
             const host_id = body.data.hostPersonId
             const participantName = body.data.displayName.toString()
             console.log("Participant " + participantName + " has joined")
@@ -888,7 +890,7 @@ app.post('/api/webex_requests', (req, res) => {
                 if (meetingDoc.exists && meetingDoc.data().uuid === host_id) {
                     let currentDate = new Date()
                     let recordString = participantName + " has joined" + "  " + currentDate
-                    let messageString = "participant.joined " + participantName
+                    let messageString = "participant.joined " + participantName + " " + "genericemail@gmail.com"
                     updateParticipants(host_id, messageString, recordString, meetingDoc.data().hostUID)
                 } else {
                     let tryCounterB = 0
@@ -897,7 +899,7 @@ app.post('/api/webex_requests', (req, res) => {
                             if (meetingDoc2.exists && meetingDoc2.data().uuid === host_id) {
                                 let currentDate = new Date()
                                 let recordString = participantName + " has joined" + "  " + currentDate
-                                let messageString = "participant.joined " + participantName
+                                let messageString = "participant.joined " + participantName + " " + "genericemail@gmail.com"
                                 updateParticipants(host_id, messageString, recordString, meetingDoc2.data().hostUID)
                                 clearInterval(tryJoinParticipantInterval)
                             } else {
@@ -914,7 +916,8 @@ app.post('/api/webex_requests', (req, res) => {
             }).catch((error) => {
                 console.error(error.message)
             })
-        } else if (body.resource === "meetingParticipants" && body.event === "left") {
+        }
+        else if (body.resource === "meetingParticipants" && body.event === "left") {
             const host_id = body.data.hostPersonId
             const participantName = body.data.displayName.toString()
             console.log("Participant " + participantName + " has left")
@@ -922,7 +925,7 @@ app.post('/api/webex_requests', (req, res) => {
                 if (meetingDoc.exists && meetingDoc.data().uuid === host_id) {
                     let currentDate = new Date()
                     let recordString = participantName + " has left" + "  " + currentDate
-                    let messageString = "participant.left " + participantName
+                    let messageString = "participant.left " + participantName + " " + "genericemail@gmail.com"
                     updateParticipants(host_id, messageString, recordString, meetingDoc.data().hostUID)
                 } else {
                     let tryCounterC = 0
@@ -932,7 +935,7 @@ app.post('/api/webex_requests', (req, res) => {
                                 clearInterval(tryLeaveParticipantInterval)
                                 let currentDate = new Date()
                                 let recordString = participantName + " has left" + "  " + currentDate
-                                let messageString = "participant.left " + participantName
+                                let messageString = "participant.left " + participantName + " " + "genericemail@gmail.com"
                                 updateParticipants(host_id, messageString, recordString, meetingDoc2.data().hostUID)
                                 clearInterval(tryLeaveParticipantInterval)
                             } else {
@@ -951,6 +954,7 @@ app.post('/api/webex_requests', (req, res) => {
                 console.error(error.message)
             })
         }
+
     }
 })
 app.post('/deauthorize', (req, res) => {
