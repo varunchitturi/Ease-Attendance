@@ -131,6 +131,7 @@ app.get('/authorize', (req, res) => {
                     res.sendFile(path.join(__dirname + '/public/index.html'));
                 } else {
                     const accessToken = body.access_token
+                    console.log("accesstoken = "+ accessToken)
                     const refreshToken = body.refresh_token
 
                     request({
@@ -361,36 +362,36 @@ async function ayncWebhookCreation(userEmail, accessToken, userID, res, doc) {
 
 async function createWebexWebhooksAndOAuth(body, refreshToken, accessToken, res) {
     console.log(body)
-    const userID = body.items[0].personId
+    const host_id = body.items[0].personId
     const userName = body.items[0].personDisplayName
-    const userEmail = body.items[0].personDisplayName
+    const userEmail = body.items[0].personEmail
 
-    const webexOAuth = db.collection('WebexOAuth').doc(userID);
+    const webexOAuth = db.collection('WebexOAuth').doc(host_id);
     const doc = await webexOAuth.get();
 
     if (!doc.exists) {
         console.log('No such document!');
-        if (userID && userID !== "") {
-            db.collection("WebexOAuth").doc(userID).set({
-                userID: userID,
+        if (host_id && host_id !== "") {
+            db.collection("WebexOAuth").doc(host_id).set({
+                userID: host_id,
                 name: userName,
                 email: userEmail,
-                refreshToken: refreshToken
+                refreshToken: refreshToken,
+                accessToken: accessToken
             }, {merge: true}).then(() => {
-                ayncWebhookCreation(userEmail, accessToken, userID, res, doc);
-
+                ayncWebhookCreation(userEmail, accessToken, host_id, res, doc);
             }).catch((error) => {
                 console.error(error.message)
                 res.sendFile(path.join(__dirname + '/public/index.html'));
                 return
             })
         } else {
-            ayncWebhookCreation(userEmail, accessToken, userID, res, doc);
+            ayncWebhookCreation(userEmail, accessToken, host_id, res, doc);
             res.sendFile(path.join(__dirname + '/public/index.html'));
             return
         }
     } else {
-        ayncWebhookCreation(userEmail, accessToken, userID, res, doc);
+        ayncWebhookCreation(userEmail, accessToken, host_id, res, doc);
         console.log('Document data:', doc.data());
         res.sendFile(path.join(__dirname + '/public/index.html'));
     }
@@ -569,16 +570,19 @@ function updateStartMeetingWebex(body, host_id) {
         let currentDate = new Date()
         let currRecordLog = []
         let currMessageLog = []
-        let recordString = "Meeting: " + " has started " + "with ID: " + body.data.MeetingNumber + "  " + currentDate
+        let recordString = "Meeting: " + doc.data().email + " has started " + "with ID: " + body.data.MeetingNumber + "  " + currentDate
         let messageStringID = "meeting.id " + body.data.meetingNumber
         let messageStringStart = "meeting.started"
+        const meetingName = doc.data().email
+
+        console.log("meeting name = "+ meetingName )
         currRecordLog.push(CryptoJS.AES.encrypt(recordString, doc.data().firebaseID).toString())
         currMessageLog.push(CryptoJS.AES.encrypt(messageStringID, doc.data().firebaseID).toString())
         currMessageLog.push(CryptoJS.AES.encrypt(messageStringStart, doc.data().firebaseID).toString())
         db.collection("CurrentMeetings").doc(host_id).set({
             meetingID: body.data.meetingNumber,
             hostID: host_id,
-            meetingName: "generic meeting name B)",
+            meetingName: meetingName,
             hostEmail: doc.data().email,
             hostUID: doc.data().firebaseID,
             messageLog: currMessageLog,
@@ -589,7 +593,6 @@ function updateStartMeetingWebex(body, host_id) {
         }).catch(() => {
             console.error("Error creating doc in CurrentMeetings for meeting start")
         })
-        console.log("Meeting started: " + body.data.hostEmail)
     }).catch((error) => {
         console.error(error.message)
     })
