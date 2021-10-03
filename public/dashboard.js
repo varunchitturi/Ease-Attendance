@@ -1317,6 +1317,7 @@ function exportMeetingRecord(){
             csvFileData.push(event.split(" has").join(",").split("  ").join(",").split(" GMT").join(",").split(",", 3)
             );
         }
+
     
     }
 
