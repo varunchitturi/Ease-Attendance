@@ -1303,30 +1303,21 @@ function download(filename, text) {
 function exportMeetingRecord(){
     
     const currentRecord = PastMeetings[currentRecordIndex]
-    // const downloadElement = document.createElement('a')
-    // let recordDataString = "Event\n"
-    const downloadName = currentRecord["MeetingName"] + " - " + currentRecord["MeetingID"] + " - " + currentRecord["MeetingStart"].toDate().toLocaleString() +  ".csv"
+    const downloadName = currentRecord["MeetingName"] + " - " + currentRecord["MeetingStart"].toDate().toLocaleString().replaceAll('/','-').replaceAll(':','.') +  ".csv"
     const useruid = auth.currentUser.uid
-    // for (let i = 0; i < currentRecord["events"].length; i++){
-    //     const event = CryptoJS.AES.decrypt(currentRecord["events"][i], useruid).toString(CryptoJS.enc.Utf8);
-    //     recordDataString += event + "\n"
-    // }
-    // downloadElement.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(recordDataString))
-    // downloadElement.setAttribute('download', downloadName);
-    // document.body.appendChild(downloadElement);
-    // downloadElement.click();
-    // document.body.removeChild(downloadElement);
 
     var csvFileData = [];
     for (var i = 0; i < currentRecord["events"].length; i++) {
-    const event = CryptoJS.AES.decrypt(currentRecord["events"][i], useruid).toString(CryptoJS.enc.Utf8);
-    if(event.includes("Meeting")){
-        csvFileData.push(event.split());
-    }
-    else{
-        csvFileData.push(event.split(" has").join(",").split("  ").join(",").split(" GMT").join(",").split(",", 3)
-        );
-    }
+        const event = CryptoJS.AES.decrypt(currentRecord["events"][i], useruid).toString(CryptoJS.enc.Utf8);
+
+        if(event.includes("Meeting")) {
+            csvFileData.push(event.split(" has").join(",").split(" with").join(",").split(" GMT").join(",").split(",", 3));
+        }
+        else {
+            csvFileData.push(event.split(" has").join(",").split("  ").join(",").split(" GMT").join(",").split(",", 3)
+            );
+        }
+
     
     }
 
