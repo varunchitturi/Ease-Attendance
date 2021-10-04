@@ -391,7 +391,6 @@ async function createWebexWebhooksAndOAuth(body, refreshToken, accessToken, res)
                     }).catch((error) => {
                         console.error(error.message)
                         res.sendFile(path.join(__dirname + '/public/index.html'));
-                        return
                     })
                 } else {
                     console.log(doc.data())
@@ -405,7 +404,6 @@ async function createWebexWebhooksAndOAuth(body, refreshToken, accessToken, res)
                     await participantJoined;
                     await participantLeft;
                     res.sendFile(path.join(__dirname + '/public/index.html'));
-                    return
                 }
             }
             else {
@@ -429,16 +427,10 @@ async function createWebexWebhooksAndOAuth(body, refreshToken, accessToken, res)
                 res.sendFile(path.join(__dirname + '/public/index.html'));
             }
         });
-
-
-
     }catch (error) {
         console.error(error.message)
         res.sendFile(path.join(__dirname + '/public/index.html'));
-        return
     }
-
-
 }
 
 //TODO("Modularize this")
