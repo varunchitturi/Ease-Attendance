@@ -342,23 +342,6 @@ function webexParticipantLeftWebhookCreation(userEmail, accessToken, userID, res
     })
 }
 
-async function ayncWebhookCreation(userEmail, accessToken, userID, res, doc) {
-    console.log(doc)
-    const meetingStart = webexMeetingStartWebhookCreation(userEmail, accessToken, userID, res);
-    const meetingEnd = webexMeetingEndWebhookCreation(userEmail, accessToken, userID, res);
-    const participantJoined = webexParticipantJoinedWebhookCreation(userEmail, accessToken, userID, res);
-    const participantLeft = webexParticipantLeftWebhookCreation(userEmail, accessToken, userID, res);
-
-    if (!doc.meetingStartedWebhookID)
-        await meetingStart;
-    if (!doc.meetingEndedWebhookID)
-        await meetingEnd;
-    if (!doc.participantJoinedWebhookID)
-        await participantJoined;
-    if (!doc.participantLeftWebhookID)
-        await participantLeft;
-    return
-}
 
 async function createWebexWebhooksAndOAuth(body, refreshToken, accessToken, res) {
     try {
@@ -368,7 +351,7 @@ async function createWebexWebhooksAndOAuth(body, refreshToken, accessToken, res)
         const userEmail = body.items[0].personEmail
 
         const webexOAuth = db.collection('WebexOAuth').doc(host_id);
-        webexOAuth.get().then((doc) =>
+        webexOAuth.get().then((doc) => {
             if (!doc.exists) {
             console.log('No such document!');
                 if (host_id && host_id !== "") {
