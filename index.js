@@ -299,6 +299,7 @@ function webexParticipantJoinedWebhookCreation(userEmail, accessToken, userID, r
                 return false;
             }
         }
+
     })
 }
 
@@ -343,77 +344,89 @@ function webexParticipantLeftWebhookCreation(userEmail, accessToken, userID, res
 }
 
 
+async function ayncWebhookCreation(userEmail, accessToken, userID, res, doc) {
+
+    const data = doc.data()
+    console.log(data)
+
+    if (!data.meetingStartedWebhookID){
+        const meetingStart = webexMeetingStartWebhookCreation(userEmail, accessToken, userID, res);
+        await meetingStart;
+    }else{
+        console.log("already has meeting started webhook")
+    }
+    if (!data.meetingEndedWebhookID){
+        const meetingEnd = webexMeetingEndWebhookCreation(userEmail, accessToken, userID, res);
+        await meetingEnd;
+    }else{
+        console.log("already has meeting ended webhook")
+    }
+    if (!data.participantJoinedWebhookID){
+        const participantJoined = webexParticipantJoinedWebhookCreation(userEmail, accessToken, userID, res);
+        await participantJoined;
+    }else{
+        console.log("already has participant joined webhook")
+    }
+
+    if (!data.participantLeftWebhookID){
+        const participantLeft = webexParticipantLeftWebhookCreation(userEmail, accessToken, userID, res);
+        await participantLeft;
+    }else{
+        console.log("already has participant left webhook")
+    }
+    return
+}
+async function ayncWebhookCreationWithoutDoc(userEmail, accessToken, userID, res){
+    const meetingStart = webexMeetingStartWebhookCreation(userEmail, accessToken, userID, res);
+    const meetingEnd = webexMeetingEndWebhookCreation(userEmail, accessToken, userID, res);
+    const participantJoined = webexParticipantJoinedWebhookCreation(userEmail, accessToken, userID, res);
+    const participantLeft = webexParticipantLeftWebhookCreation(userEmail, accessToken, userID, res);
+
+    await meetingStart;
+    await meetingEnd;
+    await participantJoined;
+    await participantLeft;
+    return
+}
+
+
 async function createWebexWebhooksAndOAuth(body, refreshToken, accessToken, res) {
-    try {
-        console.log(body)
-        const host_id = body.items[0].personId
-        const userName = body.items[0].personDisplayName
-        const userEmail = body.items[0].personEmail
+    console.log(body)
+    const host_id = body.items[0].personId
+    const userName = body.items[0].personDisplayName
+    const userEmail = body.items[0].personEmail
 
-        const webexOAuth = db.collection('WebexOAuth').doc(host_id);
-        webexOAuth.get().then((doc) => {
-            if (!doc.exists) {
-            console.log('No such document!');
-                if (host_id && host_id !== "") {
-                    db.collection("WebexOAuth").doc(host_id).set({
-                        userID: host_id,
-                        name: userName,
-                        email: userEmail,
-                        refreshToken: refreshToken,
-                        accessToken: accessToken
-                    }, {merge: true}).then(() => {
-                        const meetingStart = webexMeetingStartWebhookCreation(userEmail, accessToken, userID, res);
-                        const meetingEnd = webexMeetingEndWebhookCreation(userEmail, accessToken, userID, res);
-                        const participantJoined = webexParticipantJoinedWebhookCreation(userEmail, accessToken, userID, res);
-                        const participantLeft = webexParticipantLeftWebhookCreation(userEmail, accessToken, userID, res);
+    const webexOAuth = db.collection('WebexOAuth').doc(host_id);
+    const doc = await webexOAuth.get();
 
-                        await meetingStart;
-                        await meetingEnd;
-                        await participantJoined;
-                        await participantLeft;
-                    }).catch((error) => {
-                        console.error(error.message)
-                        res.sendFile(path.join(__dirname + '/public/index.html'));
-                    })
-                } else {
-                    console.log(doc.data())
-                    const meetingStart = webexMeetingStartWebhookCreation(userEmail, accessToken, userID, res);
-                    const meetingEnd = webexMeetingEndWebhookCreation(userEmail, accessToken, userID, res);
-                    const participantJoined = webexParticipantJoinedWebhookCreation(userEmail, accessToken, userID, res);
-                    const participantLeft = webexParticipantLeftWebhookCreation(userEmail, accessToken, userID, res);
-
-                    await meetingStart;
-                    await meetingEnd;
-                    await participantJoined;
-                    await participantLeft;
-                    res.sendFile(path.join(__dirname + '/public/index.html'));
-                }
-            }
-            else {
-                console.log(doc)
-                const meetingStart = webexMeetingStartWebhookCreation(userEmail, accessToken, userID, res);
-                const meetingEnd = webexMeetingEndWebhookCreation(userEmail, accessToken, userID, res);
-                const participantJoined = webexParticipantJoinedWebhookCreation(userEmail, accessToken, userID, res);
-                const participantLeft = webexParticipantLeftWebhookCreation(userEmail, accessToken, userID, res);
-
-                const data = doc.data()
-
-                if (!data.meetingStartedWebhookID)
-                    await meetingStart;
-                if (!data.meetingEndedWebhookID)
-                    await meetingEnd;
-                if (!data.participantJoinedWebhookID)
-                    await participantJoined;
-                if (!data.participantLeftWebhookID)
-                    await participantLeft;
-                console.log('Document data:', doc.data());
+    if (!doc.exists) {
+        console.log('No such document!');
+        if (host_id && host_id !== "") {
+            db.collection("WebexOAuth").doc(host_id).set({
+                userID: host_id,
+                name: userName,
+                email: userEmail,
+                refreshToken: refreshToken,
+                accessToken: accessToken
+            }, {merge: true}).then(() => {
+                ayncWebhookCreationWithoutDoc(userEmail, accessToken, host_id, res);
+            }).catch((error) => {
+                console.error(error.message)
                 res.sendFile(path.join(__dirname + '/public/index.html'));
-            }
-        });
-    }catch (error) {
-        console.error(error.message)
+                return
+            })
+        } else {
+            ayncWebhookCreationWithoutDoc(userEmail, accessToken, host_id, res);
+            res.sendFile(path.join(__dirname + '/public/index.html'));
+            return
+        }
+    } else {
+        console.log('Document data:', doc.data());
+        ayncWebhookCreation(userEmail, accessToken, host_id, res, doc);
         res.sendFile(path.join(__dirname + '/public/index.html'));
     }
+
+
 }
 
 //TODO("Modularize this")
@@ -460,7 +473,6 @@ app.get('/authorize_webex', (req, res) => {
                             console.error(body)
                             res.sendFile(path.join(__dirname + '/public/index.html'));
                         } else {
-                            console.log(body)
                             createWebexWebhooksAndOAuth(body, refreshToken, accessToken, res);
 
                         }
