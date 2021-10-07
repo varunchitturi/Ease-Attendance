@@ -184,7 +184,6 @@ app.get('/authorize', (req, res) => {
 })
 
 function webexMeetingStartWebhookCreation(userEmail, accessToken, userID, res) {
-    console.log("started webexMeetingStartWebhookCreation")
     webhookMeetingStart = {
         "name": "meeting.started" + " " + userEmail,
         "targetUrl": "http://easeattendance.sa.ngrok.io/api/webex_requests",
@@ -207,8 +206,6 @@ function webexMeetingStartWebhookCreation(userEmail, accessToken, userID, res) {
         } else {
             const webhookID = body.id
             const status = body.status
-            console.log("Meeting Started webhook created")
-            console.log(body)
             if ((status && status === "active" || (body.message && body.message.includes("Duplicate webhooks")))) {
                 db.collection("WebexOAuth").doc(userID).set({
                     meetingStartedWebhookID: webhookID
@@ -223,8 +220,6 @@ function webexMeetingStartWebhookCreation(userEmail, accessToken, userID, res) {
 }
 
 function webexMeetingEndWebhookCreation(userEmail, accessToken, userID, res) {
-    console.log("started webexMeetingEndWebhookCreation")
-
     webhookMeetingEnd = {
         "name": "meeting.ended" + " " + userEmail,
         "targetUrl": "http://easeattendance.sa.ngrok.io/api/webex_requests",
@@ -247,8 +242,6 @@ function webexMeetingEndWebhookCreation(userEmail, accessToken, userID, res) {
         } else {
             const webhookID = body.id
             const status = body.status
-            console.log("Meeting Ended webhook created")
-            console.log(body)
             if ((status && status === "active" || (body.message && body.message.includes("Duplicate webhooks")))) {
                 db.collection("WebexOAuth").doc(userID).set({
                     meetingEndedWebhookID: webhookID
@@ -263,8 +256,6 @@ function webexMeetingEndWebhookCreation(userEmail, accessToken, userID, res) {
 }
 
 function webexParticipantJoinedWebhookCreation(userEmail, accessToken, userID, res) {
-    console.log("started webexParticipantJoinedWebhookCreation")
-
     webhookParticipantJoined = {
         "name": "participant.joined" + " " + userEmail,
         "targetUrl": "http://easeattendance.sa.ngrok.io/api/webex_requests",
@@ -287,8 +278,6 @@ function webexParticipantJoinedWebhookCreation(userEmail, accessToken, userID, r
         } else {
             const webhookID = body.id
             const status = body.status
-            console.log("Participant Joined webhook created")
-            console.log(body)
             if ((status && status === "active" || (body.message && body.message.includes("Duplicate webhooks")))) {
                 db.collection("WebexOAuth").doc(userID).set({
                     participantJoinedWebhookID: webhookID
@@ -304,8 +293,6 @@ function webexParticipantJoinedWebhookCreation(userEmail, accessToken, userID, r
 }
 
 function webexParticipantLeftWebhookCreation(userEmail, accessToken, userID, res) {
-    console.log("started webexParticipantLeftWebhookCreation")
-
     webhookParticipantLeft = {
         "name": "participant.left" + " " + userEmail,
         "targetUrl": "http://easeattendance.sa.ngrok.io/api/webex_requests",
@@ -328,8 +315,6 @@ function webexParticipantLeftWebhookCreation(userEmail, accessToken, userID, res
         } else {
             const webhookID = body.id
             const status = body.status
-            console.log("Participant Left webhook created")
-            console.log(body)
             if ((status && status === "active")) {
                 db.collection("WebexOAuth").doc(userID).set({
                     participantLeftWebhookID: webhookID
@@ -347,32 +332,23 @@ function webexParticipantLeftWebhookCreation(userEmail, accessToken, userID, res
 async function ayncWebhookCreation(userEmail, accessToken, userID, res, doc) {
 
     const data = doc.data()
-    console.log(data)
 
     if (!data.meetingStartedWebhookID){
         const meetingStart = webexMeetingStartWebhookCreation(userEmail, accessToken, userID, res);
         await meetingStart;
-    }else{
-        console.log("already has meeting started webhook")
     }
     if (!data.meetingEndedWebhookID){
         const meetingEnd = webexMeetingEndWebhookCreation(userEmail, accessToken, userID, res);
         await meetingEnd;
-    }else{
-        console.log("already has meeting ended webhook")
     }
     if (!data.participantJoinedWebhookID){
         const participantJoined = webexParticipantJoinedWebhookCreation(userEmail, accessToken, userID, res);
         await participantJoined;
-    }else{
-        console.log("already has participant joined webhook")
     }
 
     if (!data.participantLeftWebhookID){
         const participantLeft = webexParticipantLeftWebhookCreation(userEmail, accessToken, userID, res);
         await participantLeft;
-    }else{
-        console.log("already has participant left webhook")
     }
     return
 }
@@ -392,7 +368,6 @@ async function ayncWebhookCreationWithoutDoc(userEmail, accessToken, userID, res
 
 async function createWebexWebhooksAndOAuth(body, refreshToken, accessToken, res) {
     try{
-        console.log(body)
         const host_id = body.items[0].personId
         const userName = body.items[0].personDisplayName
         const userEmail = body.items[0].personEmail
@@ -401,7 +376,6 @@ async function createWebexWebhooksAndOAuth(body, refreshToken, accessToken, res)
         const doc = await webexOAuth.get();
 
         if (!doc.exists) {
-            console.log('No such document!');
             if (host_id && host_id !== "") {
                 db.collection("WebexOAuth").doc(host_id).set({
                     userID: host_id,
@@ -422,7 +396,6 @@ async function createWebexWebhooksAndOAuth(body, refreshToken, accessToken, res)
                 return
             }
         } else {
-            console.log('Document data:', doc.data());
             ayncWebhookCreation(userEmail, accessToken, host_id, res, doc);
             res.sendFile(path.join(__dirname + '/public/index.html'));
         }
@@ -437,11 +410,8 @@ async function createWebexWebhooksAndOAuth(body, refreshToken, accessToken, res)
 
 //TODO("Modularize this")
 app.get('/authorize_webex', (req, res) => {
-    console.log(req.query)
     const authorizationCode = req.query.code
     if (authorizationCode && authorizationCode !== "") {
-        console.log("Got authorization code. Trying to send request to get accesstoken.")
-        console.log("authorization code = " + authorizationCode)
         try {
             request({
                 url: 'https://webexapis.com/v1/access_token',
@@ -463,9 +433,6 @@ app.get('/authorize_webex', (req, res) => {
                 } else {
                     const accessToken = body.access_token
                     const refreshToken = body.refresh_token
-                    console.log("Got accesstoken")
-                    console.log(body)
-                    console.log("Recieved accesstoken = " + accessToken)
                     request({
                         url: 'https://webexapis.com/v1/memberships',
                         method: 'GET',
