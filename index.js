@@ -131,9 +131,7 @@ app.get('/authorize', (req, res) => {
                     res.sendFile(path.join(__dirname + '/public/index.html'));
                 } else {
                     const accessToken = body.access_token
-                    console.log("accesstoken = " + accessToken)
                     const refreshToken = body.refresh_token
-
                     request({
                         url: 'https://api.zoom.us/v2/users/me',
                         method: 'GET',
