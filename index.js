@@ -131,7 +131,7 @@ app.get('/authorize', (req, res) => {
                     res.sendFile(path.join(__dirname + '/public/index.html'));
                 } else {
                     const accessToken = body.access_token
-                    console.log("accesstoken = "+ accessToken)
+                    console.log("accesstoken = " + accessToken)
                     const refreshToken = body.refresh_token
 
                     request({
@@ -333,26 +333,27 @@ async function ayncWebhookCreation(userEmail, accessToken, userID, res, doc) {
 
     const data = doc.data()
 
-    if (!data.meetingStartedWebhookID){
+    if (!data.meetingStartedWebhookID) {
         const meetingStart = webexMeetingStartWebhookCreation(userEmail, accessToken, userID, res);
         await meetingStart;
     }
-    if (!data.meetingEndedWebhookID){
+    if (!data.meetingEndedWebhookID) {
         const meetingEnd = webexMeetingEndWebhookCreation(userEmail, accessToken, userID, res);
         await meetingEnd;
     }
-    if (!data.participantJoinedWebhookID){
+    if (!data.participantJoinedWebhookID) {
         const participantJoined = webexParticipantJoinedWebhookCreation(userEmail, accessToken, userID, res);
         await participantJoined;
     }
 
-    if (!data.participantLeftWebhookID){
+    if (!data.participantLeftWebhookID) {
         const participantLeft = webexParticipantLeftWebhookCreation(userEmail, accessToken, userID, res);
         await participantLeft;
     }
     return
 }
-async function ayncWebhookCreationWithoutDoc(userEmail, accessToken, userID, res){
+
+async function ayncWebhookCreationWithoutDoc(userEmail, accessToken, userID, res) {
     const meetingStart = webexMeetingStartWebhookCreation(userEmail, accessToken, userID, res);
     const meetingEnd = webexMeetingEndWebhookCreation(userEmail, accessToken, userID, res);
     const participantJoined = webexParticipantJoinedWebhookCreation(userEmail, accessToken, userID, res);
@@ -367,7 +368,7 @@ async function ayncWebhookCreationWithoutDoc(userEmail, accessToken, userID, res
 
 
 async function createWebexWebhooksAndOAuth(body, refreshToken, accessToken, res) {
-    try{
+    try {
         const host_id = body.items[0].personId
         const userName = body.items[0].personDisplayName
         const userEmail = body.items[0].personEmail
@@ -399,13 +400,9 @@ async function createWebexWebhooksAndOAuth(body, refreshToken, accessToken, res)
             ayncWebhookCreation(userEmail, accessToken, host_id, res, doc);
             res.sendFile(path.join(__dirname + '/public/index.html'));
         }
-    }
-    catch (error){
+    } catch (error) {
         console.log(error)
     }
-
-
-
 }
 
 //TODO("Modularize this")
@@ -577,7 +574,7 @@ function updateStartMeetingWebex(body, host_id) {
         let messageStringStart = "meeting.started"
         const meetingName = doc.data().email
 
-        console.log("meeting name = "+ meetingName )
+        console.log("meeting name = " + meetingName)
         currRecordLog.push(CryptoJS.AES.encrypt(recordString, doc.data().firebaseID).toString())
         currMessageLog.push(CryptoJS.AES.encrypt(messageStringID, doc.data().firebaseID).toString())
         currMessageLog.push(CryptoJS.AES.encrypt(messageStringStart, doc.data().firebaseID).toString())
@@ -816,8 +813,7 @@ app.post('/api/webex_requests', (req, res) => {
             }).catch((error) => {
                 console.error(error.message)
             })
-        }
-        else if (body.resource === "meetings" && body.event === "ended") {
+        } else if (body.resource === "meetings" && body.event === "ended") {
             const host_id = body.data.hostUserId
             console.log("Meeting ended: " + body.data.meetingNumber)
             db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc) => {
@@ -883,8 +879,7 @@ app.post('/api/webex_requests', (req, res) => {
             }).catch((error) => {
                 console.error(error.message)
             })
-        }
-        else if (body.resource === "meetingParticipants" && body.event === "joined") {
+        } else if (body.resource === "meetingParticipants" && body.event === "joined") {
             const host_id = body.data.hostPersonId
             const participantName = body.data.displayName.toString()
             console.log("Participant " + participantName + " has joined")
@@ -918,8 +913,7 @@ app.post('/api/webex_requests', (req, res) => {
             }).catch((error) => {
                 console.error(error.message)
             })
-        }
-        else if (body.resource === "meetingParticipants" && body.event === "left") {
+        } else if (body.resource === "meetingParticipants" && body.event === "left") {
             const host_id = body.data.hostPersonId
             const participantName = body.data.displayName.toString()
             console.log("Participant " + participantName + " has left")
