@@ -391,40 +391,46 @@ async function ayncWebhookCreationWithoutDoc(userEmail, accessToken, userID, res
 
 
 async function createWebexWebhooksAndOAuth(body, refreshToken, accessToken, res) {
-    console.log(body)
-    const host_id = body.items[0].personId
-    const userName = body.items[0].personDisplayName
-    const userEmail = body.items[0].personEmail
+    try{
+        console.log(body)
+        const host_id = body.items[0].personId
+        const userName = body.items[0].personDisplayName
+        const userEmail = body.items[0].personEmail
 
-    const webexOAuth = db.collection('WebexOAuth').doc(host_id);
-    const doc = await webexOAuth.get();
+        const webexOAuth = db.collection('WebexOAuth').doc(host_id);
+        const doc = await webexOAuth.get();
 
-    if (!doc.exists) {
-        console.log('No such document!');
-        if (host_id && host_id !== "") {
-            db.collection("WebexOAuth").doc(host_id).set({
-                userID: host_id,
-                name: userName,
-                email: userEmail,
-                refreshToken: refreshToken,
-                accessToken: accessToken
-            }, {merge: true}).then(() => {
+        if (!doc.exists) {
+            console.log('No such document!');
+            if (host_id && host_id !== "") {
+                db.collection("WebexOAuth").doc(host_id).set({
+                    userID: host_id,
+                    name: userName,
+                    email: userEmail,
+                    refreshToken: refreshToken,
+                    accessToken: accessToken
+                }, {merge: true}).then(() => {
+                    ayncWebhookCreationWithoutDoc(userEmail, accessToken, host_id, res);
+                }).catch((error) => {
+                    console.error(error.message)
+                    res.sendFile(path.join(__dirname + '/public/index.html'));
+                    return
+                })
+            } else {
                 ayncWebhookCreationWithoutDoc(userEmail, accessToken, host_id, res);
-            }).catch((error) => {
-                console.error(error.message)
                 res.sendFile(path.join(__dirname + '/public/index.html'));
                 return
-            })
+            }
         } else {
-            ayncWebhookCreationWithoutDoc(userEmail, accessToken, host_id, res);
+            console.log('Document data:', doc.data());
+            ayncWebhookCreation(userEmail, accessToken, host_id, res, doc);
             res.sendFile(path.join(__dirname + '/public/index.html'));
-            return
         }
-    } else {
-        console.log('Document data:', doc.data());
-        ayncWebhookCreation(userEmail, accessToken, host_id, res, doc);
-        res.sendFile(path.join(__dirname + '/public/index.html'));
     }
+    catch (error){
+        console.log(error)
+    }
+
 
 
 }
@@ -474,7 +480,6 @@ app.get('/authorize_webex', (req, res) => {
                             res.sendFile(path.join(__dirname + '/public/index.html'));
                         } else {
                             createWebexWebhooksAndOAuth(body, refreshToken, accessToken, res);
-
                         }
                     })
                 }
