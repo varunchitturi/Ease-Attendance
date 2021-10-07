@@ -186,7 +186,7 @@ app.get('/authorize', (req, res) => {
 function webexMeetingStartWebhookCreation(userEmail, accessToken, userID, res) {
     webhookMeetingStart = {
         "name": "meeting.started" + " " + userEmail,
-        "targetUrl": "http://easeattendance.sa.ngrok.io/api/webex_requests",
+        "targetUrl": "http://easeattendance.com/api/webex_requests",
         "resource": "meetings",
         "event": "started",
         "secret": process.env.webex_clientsecret
@@ -222,7 +222,7 @@ function webexMeetingStartWebhookCreation(userEmail, accessToken, userID, res) {
 function webexMeetingEndWebhookCreation(userEmail, accessToken, userID, res) {
     webhookMeetingEnd = {
         "name": "meeting.ended" + " " + userEmail,
-        "targetUrl": "http://easeattendance.sa.ngrok.io/api/webex_requests",
+        "targetUrl": "http://easeattendance.com/api/webex_requests",
         "resource": "meetings",
         "event": "ended",
         "secret": process.env.webex_clientsecret
@@ -258,7 +258,7 @@ function webexMeetingEndWebhookCreation(userEmail, accessToken, userID, res) {
 function webexParticipantJoinedWebhookCreation(userEmail, accessToken, userID, res) {
     webhookParticipantJoined = {
         "name": "participant.joined" + " " + userEmail,
-        "targetUrl": "http://easeattendance.sa.ngrok.io/api/webex_requests",
+        "targetUrl": "http://easeattendance.com/api/webex_requests",
         "resource": "meetingParticipants",
         "event": "joined",
         "secret": process.env.webex_clientsecret
@@ -295,7 +295,7 @@ function webexParticipantJoinedWebhookCreation(userEmail, accessToken, userID, r
 function webexParticipantLeftWebhookCreation(userEmail, accessToken, userID, res) {
     webhookParticipantLeft = {
         "name": "participant.left" + " " + userEmail,
-        "targetUrl": "http://easeattendance.sa.ngrok.io/api/webex_requests",
+        "targetUrl": "http://easeattendance.com/api/webex_requests",
         "resource": "meetingParticipants",
         "event": "left",
         "secret": process.env.webex_clientsecret
@@ -419,7 +419,7 @@ app.get('/authorize_webex', (req, res) => {
                     "client_id": process.env.webex_clientid,
                     "client_secret": process.env.webex_clientsecret,
                     "code": authorizationCode,
-                    "redirect_uri": "https://easeattendance.sa.ngrok.io/authorize_webex"
+                    "redirect_uri": "https://easeattendance.com/authorize_webex"
                 }
             }, (error, httpResponse, body) => {
                 if (error) {
