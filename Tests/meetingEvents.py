@@ -4,16 +4,18 @@
 import requests
 from time import sleep
 import names
-
-
+import os
+import localDONOTCOMMIT
+print(localDONOTCOMMIT.zoomVeri)
 def startMeeting(meetingName, meetingID, hostID, url):
     payload = "{\r\n  \"event\": \"meeting.started\",\r\n  \"event_ts\": 1234566789900,\r\n  \"payload\": {\r\n    \"account_id\": \"o8KK_AAACq6BBEyA70CA\",\r\n    \"object\": {\r\n      \"uuid\": \"czLF6FFFoQOKgAB99DlDb9g==\",\r\n      \"id\": \"" + meetingID + "\",\r\n      \"host_id\": \"" + hostID + "\",\r\n      \"topic\": \"" + meetingName + "\",\r\n      \"type\": 2,\r\n      \"start_time\": \"2019-07-09T17:00:00Z\",\r\n      \"duration\": 60,\r\n      \"timezone\": \"America/Los_Angeles\"\r\n    }\r\n  }\r\n}"
     headers = {
-        'authorization': process.env.zoom_verification_token,
+        'authorization':localDONOTCOMMIT.zoomVeri,
         'Content-Type': 'application/json'
     }
 
     response = requests.request("POST", url, headers=headers, data=payload)
+    print(response)
 
     print(meetingName + " started")
 
@@ -21,11 +23,12 @@ def startMeeting(meetingName, meetingID, hostID, url):
 def endMeeting(meetingName, meetingID, hostID, url):
     payload = "{\n  \"event\": \"meeting.ended\",\n  \"event_ts\": 1234566789900,\n  \"payload\": {\n    \"account_id\": \"o8KK_AAACq6BBEyA70CA\",\n    \"object\": {\n      \"uuid\": \"czLF6FFFoQOKgAB99DlDb9g==\",\n      \"id\": \"" + meetingID + "\",\n      \"host_id\": \"" + hostID + "\",\n      \"topic\": \"" + meetingName + "\",\n      \"type\": 2,\n      \"start_time\": \"2019-07-09T17:00:00Z\",\n      \"duration\": 60,\n      \"timezone\": \"America/Los_Angeles\"\n    }\n  }\n}"
     headers = {
-        'authorization': process.env.zoom_verification_token,
+        'authorization':localDONOTCOMMIT.zoomVeri,
         'Content-Type': 'application/json'
     }
 
     response = requests.request("POST", url, headers=headers, data=payload)
+    print(response)
 
     print(meetingName + " ended")
 
@@ -33,11 +36,12 @@ def endMeeting(meetingName, meetingID, hostID, url):
 def addParticipant(participantName, meetingName, meetingID, hostID, email, url):
     payload = "{\n  \"event\": \"meeting.participant_joined\",\n  \"event_ts\": \"long\",\n  \"payload\": {\n    \"account_id\": \"string\",\n    \"object\": {\n      \"id\": \"" + meetingID + "\",\n      \"uuid\": \"czLF6FFFoQOKgAB99DlDb9g==\",\n      \"host_id\": \"" + hostID + "\",\n      \"topic\": \"" + meetingName + "\",\n      \"type\": \"2\",\n      \"start_time\": \"string [date-time]\",\n      \"timezone\": \"string\",\n      \"duration\": \"integer\",\n      \"participant\": {\n        \"user_id\": \"11111111\",\n        \"user_name\": \"" + participantName + "\",\n        \"email\": \"" + email + "\",\n        \"id\": \"string\",\n        \"join_time\": \"string [date-time]\"\n      }\n    }\n  }\n}"
     headers = {
-        'authorization': process.env.zoom_verification_token,
+        'authorization': localDONOTCOMMIT.zoomVeri,
         'Content-Type': 'application/json'
     }
 
     response = requests.request("POST", url, headers=headers, data=payload)
+    print(response)
 
     print(participantName + " added")
 
@@ -45,12 +49,12 @@ def addParticipant(participantName, meetingName, meetingID, hostID, email, url):
 def removeParticipant(participantName, meetingName, meetingID, hostID, email, url):
     payload = "{\n    \"event\": \"meeting.participant_left\",\n    \"event_ts\": \"long\",\n    \"payload\": {\n        \"account_id\": \"string\",\n        \"object\": {\n            \"id\": \"" + meetingID + "\",\n            \"uuid\": \"czLF6FFFoQOKgAB99DlDb9g==\",\n            \"host_id\": \"" + hostID + "\",\n            \"topic\": \"" + meetingName + "\",\n            \"type\": \"2\",\n            \"start_time\": \"string [date-time]\",\n            \"timezone\": \"string\",\n            \"duration\": \"integer\",\n            \"participant\": {\n                \"user_id\": \"11111111\",\n                \"user_name\": \"" + participantName + "\",\n                \"email\": \"" + email + "\",\n                \"id\": \"string\",\n                \"join_time\": \"string [date-time]\"\n            }\n        }\n    }\n}"
     headers = {
-        'authorization': process.env.zoom_verification_token,
+        'authorization': localDONOTCOMMIT.zoomVeri,
         'Content-Type': 'application/json'
     }
 
     response = requests.request("POST", url, headers=headers, data=payload)
-
+    print(response)
     print(participantName + " removed")
 
 
@@ -67,7 +71,9 @@ HostID = ''
 meetingID = "7378583629"
 meetingName = "Period 3"
 
-participants = []
+
+participants = ['Dorothy Brown', 'Mercedes Holmes', 'Charles Monk', 'Leo Brown', 'Sterling Marra', 'Jeffrey Hakes', 'Paul Smith', 'Hope Harnden', 'Dwight Lundy', 'Luke Brown', 'Bette Johnson', 'Rosario Dyer', 'John Ming', 'Robert Chandler', 'Christine Parrish', 'Ricky Burton', 'Irene Mercure', 'Lawrence Collins', 'Martha Anderson', 'Maria Parker', 'Ben Lopez', 'Daniel Mingione', 'James Hallmark', 'Julie Harris', 'Linda Cao', 'Clarence Vernon', 'Michael Olivarez', 'Robert Rivers', 'Minnie Tang', 'Charles Hall']
+participants = ['Jane Perez', 'Howard Sharum', 'Brent Honeycutt', 'Jason Wright', 'Nancy Patterson', 'Ethyl Reed', 'Lino Nichols', 'Mary Wheatley', 'Alisa Alston', 'Edith Corum', 'Tiffany Britt', 'Laura Wonders', 'Heather Roberts', 'Erica Branson', 'Tequila Mazur', 'Steven Zelkin', 'Addie Frizzell', 'Lois Cornelius', 'Kevin Wells', 'Dustin Vail', 'Joyce Christman', 'Jeffrey Melton', 'William Collins', 'Daniel Boschert', 'Jerry Trinkle', 'Shirley Ayala', 'Donald Dunkerson', 'Joan Cuellar', 'Barbara Botti', 'Frank Lowe', 'Justin Dailey', 'Neal Lyons']
 
 if input("who dis?(v/a) ") == "v":
     HostID = VarunHostID
@@ -141,11 +147,11 @@ for x in OrderOperationsArray:
         endMeeting(meetingName, meetingID, HostID, url)
     if x == "pj":
         for name in participants:
-            addParticipant(name, meetingName, meetingID, HostID, name + '@gmail.com', url)
+            addParticipant(name, meetingName, meetingID, HostID, 'generic@gmail.com', url)
             sleep(sleepTimeParts)
     if x == 'pl':
         for name in participants:
-            removeParticipant(name, meetingName, meetingID, HostID, name + '@gmail.com', url)
+            removeParticipant(name, meetingName, meetingID, HostID, 'generic@gmail.com', url)
             sleep(sleepTimeParts)
     print()
     print()

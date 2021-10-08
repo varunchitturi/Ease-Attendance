@@ -29,8 +29,8 @@ function authenticate() {
             if (pass === repass && pass.length >= 8) {
                 document.getElementById("signin-cover").classList.add("running")
                 var emailRegistered = false
-                firestore.collection("ZoomOAuth").where("email", "==", email).get().then((querySnapshot) => {
-                    querySnapshot.forEach((Authdoc) => {
+                firestore.collection("WebexOAuth").where("email", "==", email).get().then((querySnapshot) => {
+                    querySnapshot.forEach((WebexOAuthdoc) => {
                         emailRegistered = true
                         auth.createUserWithEmailAndPassword(email, pass).then(cred => {
                             auth.currentUser.updateProfile({
@@ -45,7 +45,7 @@ function authenticate() {
                                 if (userEmail == null) {
                                     userEmail = ""
                                 }
-                                firestore.collection("ZoomOAuth").doc(Authdoc.id).update({
+                                firestore.collection("WebexOAuth").doc(WebexOAuthdoc.id).update({
                                     firebaseID: cred.user.uid
                                 }).then(() => {
                                     const user = cred.user
@@ -66,15 +66,18 @@ function authenticate() {
                                 })
                             }).catch((e) => {
                                 errorMessage(e.message)
+
                             })
                         }).catch(err => {
                             errorMessage(err.message)
+
                         })
                     })
                     if (emailRegistered === false) {
-                        // TODO: Register here
-                        document.getElementById("zoomButton").style.display = "inline-block";
-                        errorMessage("Make sure you downloaded the zoom or webex app and your email is the same as your zoom email")
+                        document.getElementById("signin-cover").classList.remove("running")
+                        document.getElementById("signUpMessage").innerHTML = "Make sure you downloaded the webex app and your email is the same as your webex email"
+                        document.getElementById("webexButton").style.display = "inline-block";
+                        document.getElementById("signup").disabled = false
                     }
                 }).catch((error) => {
                     errorMessage(error.message)
@@ -88,13 +91,13 @@ function authenticate() {
             errorMessage(err.message)
         }
     }
+
 }
 function errorMessage(message){
     document.getElementById("signin-cover").classList.remove("running")
     document.getElementById("signUpMessage").innerHTML = message;
     document.getElementById("signup").disabled = false
 }
-
 function validateEmail(email) {
     var re = /\S+@\S+\.\S+/;
     return re.test(email);

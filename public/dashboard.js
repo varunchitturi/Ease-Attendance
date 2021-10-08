@@ -49,12 +49,15 @@ let ParticipantTableSortBy = "first" // can be "first" or "last" or "time" or "t
 let listNamesShown = []
 let shouldRefresh = false
 let zoomID = -1
+let webexID = -1
 let rosterParticipantCount = 0
 let rosterCreateButton = $("#add-on-registered-create")
 let rosterUpdateButton = $("#add-on-registered-update")
 let exportMeetingButton = $("#export-button")
 let chooseRoster = $("#dropdown-roster")
 let chooseRosterMenu = $("#dropdown-roster-menu")
+let zoomUser = false
+let webexUser = false
 const filterUpHTML = "<span id=\"filter-caret\" class=\"iconify\" data-icon=\"ion-caret-up\" data-inline=\"false\" style=\"margin-right: -3px\"></span>\n" +
     "                            <span id=\"filter-button-icon\" class=\"iconify\" style=\"font-size: 30px\" data-icon=\"bx:bx-filter-alt\" data-inline=\"false\"></span>"
 const filterDownHTML = "<span id=\"filter-caret\" class=\"iconify\" data-icon=\"ion-caret-down\" data-inline=\"false\" style=\"margin-right: -3px\"></span>\n" +
@@ -169,133 +172,167 @@ auth.onAuthStateChanged((user) => {
                 window.location.href = "/";
             }
         })
+
         firestore.collection("ZoomOAuth").where("firebaseID","==",user.uid).get().then((querySnapshot)=> {
             querySnapshot.forEach((doc) => {
                 zoomID = doc.data().userID;
+                zoomUser = true
             })
+            firestore.collection("WebexOAuth").where("firebaseID","==",user.uid).get().then((querySnapshot)=> {
+                querySnapshot.forEach((doc) => {
+                    webexID = doc.data().userID;
+                    webexUser = true
+                })
 
-            document.getElementById("myTabContent").hidden = false
+                document.getElementById("myTabContent").hidden = false
 
-            document.getElementById("user-name").innerHTML = "Welcome " + user.displayName
-            firestore.collection("Periods").where("useruid", "==", user.uid)
-                .onSnapshot((querySnapshot) => {
-                    MeetingsdidLoad = false
-                    Meetings = []
-                    querySnapshot.forEach((doc) => {
-                        const currData = doc.data()
-                        Meetings.push(new Meeting(currData.periodName, currData.meetingId, currData.studentsNames))
-                    })
-                    const meetingTable = document.getElementById("my-meetings-table")
-                    Meetings.sort(compareMeetings)
-                    while (meetingTable.rows.length > 1) {
-                        meetingTable.deleteRow(1)
-                    }
-                    const studentInputTable = document.getElementById("student-input-table")
-                    for (let i = Meetings.length - 1; i >= 0; i--) {
-                        let currentRow = meetingTable.insertRow(1)
-                        currentRow.classList.add("meeting-row")
-                        currentRow.addEventListener("click", function () {
-                            let index = this.rowIndex
-                            currentRecordIndex = index - 1
-                            document.getElementById("meeting-modal-title").innerHTML = "Edit Roster"
-                            editingIndex = index
-                            $('#add-edit-meeting-modal').modal('show');
-                            const currentMeeting = Meetings[index - 1]
-                            $("#meeting-id-input-field").val(currentMeeting.id)
-                            $("#meeting-name-input-field").val(currentMeeting.name)
-                            isEditingMeeting = true
-                            $("#delete-meeting-button").prop('disabled', false)
-                            $("#delete-meeting-button").show()
-                            while (studentInputTable.rows.length !== 0) {
-                                studentInputTable.deleteRow(0)
-                            }
-                            rosterParticipantCount = 0
-                            for (let j = 0; j < currentMeeting.arr.length; j++) {
-                                addStudent(CryptoJS.AES.decrypt(currentMeeting.arr[j], user.uid).toString(CryptoJS.enc.Utf8))
-                            }
+                document.getElementById("user-name").innerHTML = "Welcome " + user.displayName
+                firestore.collection("Periods").where("useruid", "==", user.uid)
+                    .onSnapshot((querySnapshot) => {
+                        MeetingsdidLoad = false
+                        Meetings = []
+                        querySnapshot.forEach((doc) => {
+                            const currData = doc.data()
+                            Meetings.push(new Meeting(currData.periodName, currData.meetingId, currData.studentsNames))
                         })
-                        let cell1 = currentRow.insertCell(0)
-                        let cell2 = currentRow.insertCell(1)
-                        cell1.innerHTML = Meetings[i].name
-                        cell2.innerHTML = Meetings[i].id
-                        cell2.classList.add("meeting-id-text")
-                    }
-                    MeetingsdidLoad = true
-                    refreshTable()
-                });
-            firestore.collection("Records").where("useruid", "==", user.uid)
-                .onSnapshot((querySnapshot) => {
-                    document.getElementById("records-search-input-field").value = ""
-                    PastMeetings = []
-                    querySnapshot.forEach((doc) => {
-                        const currData = doc.data()
-                        PastMeetings.push(new PastMeeting(currData.MeetingName, currData.MeetingID, currData.MeetingStart, currData.MeetingEnd, currData.Events, doc.id))
-                    })
-                    const recordTable = document.getElementById("records-table")
-                    PastMeetings.sort(comparePastMeetings)
-                    while (recordTable.rows.length > 1) {
-                        recordTable.deleteRow(1)
-                    }
-                    const currentRecordTable = document.getElementById("current-record-table")
-                    for (let i = PastMeetings.length - 1; i >= 0; i--) {
-                        let currentRow = recordTable.insertRow(1)
-                        currentRow.classList.add("record-row");
-                        currentRow.addEventListener("click", function () {
-                            let index = this.rowIndex
-                            currentRecordIndex = index - 1
-                            const currentMeeting = PastMeetings[index - 1]
-                            document.getElementById("current-record-name").innerHTML = "Meeting Name: " + currentMeeting.MeetingName
-                            document.getElementById("current-record-id").innerHTML = "Meeting ID: " + currentMeeting.MeetingID
-                            document.getElementById("current-record-date").innerHTML = "Date: " + currentMeeting.MeetingStart.toDate().toLocaleString() + " - " + currentMeeting.MeetingEnd.toDate().toLocaleString()
-                            $('#meeting-record-modal').modal('show');
-                            while (currentRecordTable.rows.length !== 0) {
-                                currentRecordTable.deleteRow(0)
-                            }
-                            for (let j = 0; j < currentMeeting.events.length; j++) {
-                                let row = currentRecordTable.insertRow(currentRecordTable.rows.length)
-                                let cell1 = row.insertCell(0);
-                                let currentRecord = CryptoJS.AES.decrypt(currentMeeting.events[j], user.uid).toString(CryptoJS.enc.Utf8);
-                                currentRecord = currentRecord.split(" ")
-                                let currentRecordDate = ""
-                                for (let k = currentRecord.length - 9; k < currentRecord.length; k++) {
-                                    currentRecordDate += currentRecord[k];
-                                    if (k !== currentRecord.length - 1) {
-                                        currentRecordDate += " ";
-                                    }
+                        const meetingTable = document.getElementById("my-meetings-table")
+                        Meetings.sort(compareMeetings)
+                        while (meetingTable.rows.length > 1) {
+                            meetingTable.deleteRow(1)
+                        }
+                        const studentInputTable = document.getElementById("student-input-table")
+                        for (let i = Meetings.length - 1; i >= 0; i--) {
+                            let currentRow = meetingTable.insertRow(1)
+                            currentRow.classList.add("meeting-row")
+                            currentRow.addEventListener("click", function () {
+                                let index = this.rowIndex
+                                currentRecordIndex = index - 1
+                                document.getElementById("meeting-modal-title").innerHTML = "Edit Roster"
+                                editingIndex = index
+                                $('#add-edit-meeting-modal').modal('show');
+                                const currentMeeting = Meetings[index - 1]
+                                $("#meeting-id-input-field").val(currentMeeting.id)
+                                $("#meeting-name-input-field").val(currentMeeting.name)
+                                isEditingMeeting = true
+                                $("#delete-meeting-button").prop('disabled', false)
+                                $("#delete-meeting-button").show()
+                                while (studentInputTable.rows.length !== 0) {
+                                    studentInputTable.deleteRow(0)
                                 }
-                                currentRecord.splice(currentRecord.length - 9, 9)
-                                currentRecord = currentRecord.join(" ")
-                                const currentRecordLocaleDate = new Date(currentRecordDate)
-                                currentRecord += " at: " + currentRecordLocaleDate.toLocaleString()
-                                cell1.innerHTML = currentRecord
-                            }
+                                rosterParticipantCount = 0
+                                for (let j = 0; j < currentMeeting.arr.length; j++) {
+                                    addStudent(CryptoJS.AES.decrypt(currentMeeting.arr[j], user.uid).toString(CryptoJS.enc.Utf8))
+                                }
+                            })
+                            let cell1 = currentRow.insertCell(0)
+                            let cell2 = currentRow.insertCell(1)
+                            cell1.innerHTML = Meetings[i].name
+                            cell2.innerHTML = Meetings[i].id
+                            cell2.classList.add("meeting-id-text")
+                        }
+                        MeetingsdidLoad = true
+                        refreshTable()
+                    });
+                firestore.collection("Records").where("useruid", "==", user.uid)
+                    .onSnapshot((querySnapshot) => {
+                        document.getElementById("records-search-input-field").value = ""
+                        PastMeetings = []
+                        querySnapshot.forEach((doc) => {
+                            const currData = doc.data()
+                            PastMeetings.push(new PastMeeting(currData.MeetingName, currData.MeetingID, currData.MeetingStart, currData.MeetingEnd, currData.Events, doc.id))
                         })
-                        let cell1 = currentRow.insertCell(0)
-                        let cell2 = currentRow.insertCell(1)
-                        let cell3 = currentRow.insertCell(2)
-                        currentRow.style.backgroundColor = "#ffffff"
-                        cell1.innerHTML = PastMeetings[i].MeetingName
-                        cell2.innerHTML = PastMeetings[i].MeetingID
-                        cell3.innerHTML = PastMeetings[i].MeetingStart.toDate().toLocaleString()
-                        cell2.classList.add("meeting-id-text")
-                    }
+                        const recordTable = document.getElementById("records-table")
+                        PastMeetings.sort(comparePastMeetings)
+                        while (recordTable.rows.length > 1) {
+                            recordTable.deleteRow(1)
+                        }
+                        const currentRecordTable = document.getElementById("current-record-table")
+                        for (let i = PastMeetings.length - 1; i >= 0; i--) {
+                            let currentRow = recordTable.insertRow(1)
+                            currentRow.classList.add("record-row");
+                            currentRow.addEventListener("click", function () {
+                                let index = this.rowIndex
+                                currentRecordIndex = index - 1
+                                const currentMeeting = PastMeetings[index - 1]
+                                document.getElementById("current-record-name").innerHTML = "Meeting Name: " + currentMeeting.MeetingName
+                                document.getElementById("current-record-id").innerHTML = "Meeting ID: " + currentMeeting.MeetingID
+                                document.getElementById("current-record-date").innerHTML = "Date: " + currentMeeting.MeetingStart.toDate().toLocaleString() + " - " + currentMeeting.MeetingEnd.toDate().toLocaleString()
+                                $('#meeting-record-modal').modal('show');
+                                while (currentRecordTable.rows.length !== 0) {
+                                    currentRecordTable.deleteRow(0)
+                                }
+                                for (let j = 0; j < currentMeeting.events.length; j++) {
+                                    let row = currentRecordTable.insertRow(currentRecordTable.rows.length)
+                                    let cell1 = row.insertCell(0);
+                                    let currentRecord = CryptoJS.AES.decrypt(currentMeeting.events[j], user.uid).toString(CryptoJS.enc.Utf8);
+                                    currentRecord = currentRecord.split(" ")
+                                    let currentRecordDate = ""
+                                    for (let k = currentRecord.length - 9; k < currentRecord.length; k++) {
+                                        currentRecordDate += currentRecord[k];
+                                        if (k !== currentRecord.length - 1) {
+                                            currentRecordDate += " ";
+                                        }
+                                    }
+                                    currentRecord.splice(currentRecord.length - 9, 9)
+                                    currentRecord = currentRecord.join(" ")
+                                    const currentRecordLocaleDate = new Date(currentRecordDate)
+                                    currentRecord += " at: " + currentRecordLocaleDate.toLocaleString()
+                                    cell1.innerHTML = currentRecord
+                                }
+                            })
+                            let cell1 = currentRow.insertCell(0)
+                            let cell2 = currentRow.insertCell(1)
+                            let cell3 = currentRow.insertCell(2)
+                            currentRow.style.backgroundColor = "#ffffff"
+                            cell1.innerHTML = PastMeetings[i].MeetingName
+                            cell2.innerHTML = PastMeetings[i].MeetingID
+                            cell3.innerHTML = PastMeetings[i].MeetingStart.toDate().toLocaleString()
+                            cell2.classList.add("meeting-id-text")
+                        }
 
-                });
-            firestore.collection("CurrentMeetings").doc(zoomID).onSnapshot((doc) => {
-                if (MeetingsdidLoad) {
-                    evaluateParticipantTable(doc)
-                } else {
-                    let getMeetingInterval = setInterval(() => {
+                    });
+                if(zoomUser && !webexUser){
+                    firestore.collection("CurrentMeetings").doc(zoomID).onSnapshot((doc) => {
                         if (MeetingsdidLoad) {
                             evaluateParticipantTable(doc)
-                            clearInterval(getMeetingInterval)
+                        } else {
+                            let getMeetingInterval = setInterval(() => {
+                                if (MeetingsdidLoad) {
+                                    evaluateParticipantTable(doc)
+                                    clearInterval(getMeetingInterval)
+                                }
+                            }, 500)
                         }
-                    }, 500)
+                    }, (error) => {
+                        redNotification("Problem connecting to server")
+                        console.error(error.message)
+                    })
                 }
-            }, (error) => {
-                redNotification("Problem connecting to server")
-                console.error(error.message)
+                else if(webexUser && !zoomUser){
+                    firestore.collection("CurrentMeetings").doc(webexID).onSnapshot((doc) => {
+                        if (MeetingsdidLoad) {
+                            evaluateParticipantTable(doc)
+                        } else {
+                            let getMeetingInterval = setInterval(() => {
+                                if (MeetingsdidLoad) {
+                                    evaluateParticipantTable(doc)
+                                    clearInterval(getMeetingInterval)
+                                }
+                            }, 500)
+                        }
+                    }, (error) => {
+                        redNotification("Problem connecting to server")
+                        console.error(error.message)
+                    })
+                }
+
+
+            }).catch((err)=>{
+                window.location.href = "/";
             })
+
+        }).catch((err)=>{
+            window.location.href = "/";
         })
     } else {
         //user not signed in
@@ -352,18 +389,35 @@ function refreshTable(){
         }
     }
     setTimeout(()=>{
-        firestore.collection("CurrentMeetings").doc(zoomID).get().then((doc)=>{
-            evaluateParticipantTable(doc)
-        }).catch((error)=>{
-            redNotification(error.message)
+        if(zoomUser && !webexUser){
+            firestore.collection("CurrentMeetings").doc(zoomID).get().then((doc)=>{
+                evaluateParticipantTable(doc)
+            }).catch((error)=>{
+                redNotification(error.message)
+                document.getElementById("ld-spin").style.display = "none"
+                document.getElementById("refresh").disabled = false
+                document.getElementById("refresh-cover").classList.remove("running")
+                updateParticipantTable()
+            })
             document.getElementById("ld-spin").style.display = "none"
             document.getElementById("refresh").disabled = false
             document.getElementById("refresh-cover").classList.remove("running")
-            updateParticipantTable()
-        })
-        document.getElementById("ld-spin").style.display = "none"
-        document.getElementById("refresh").disabled = false
-        document.getElementById("refresh-cover").classList.remove("running")
+        }
+        else if(!zoomUser && webexUser){
+            firestore.collection("CurrentMeetings").doc(webexID).get().then((doc)=>{
+                evaluateParticipantTable(doc)
+            }).catch((error)=>{
+                redNotification(error.message)
+                document.getElementById("ld-spin").style.display = "none"
+                document.getElementById("refresh").disabled = false
+                document.getElementById("refresh-cover").classList.remove("running")
+                updateParticipantTable()
+            })
+            document.getElementById("ld-spin").style.display = "none"
+            document.getElementById("refresh").disabled = false
+            document.getElementById("refresh-cover").classList.remove("running")
+        }
+
     },1000)
 }
 

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta property="og:title" content="Ease Attendance" />
-    <meta property="og:description" content="A Zoom app plugin that allows for a better way to take attendance on Zoom" />
+    <meta property="og:description" content="A Zoom and Webex app plugin that allows for a better way to take attendance on online" />
     <meta property="og:url" content="https://easeattendance.com" />
     <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/easeattendance-c68ed.appspot.com/o/Ease%20Attendance%20Landing%20Page.png?alt=media&token=a767f217-4125-4b00-ac4d-51ef65ce9072" />
     <meta property="og:type" content="website" />
@@ -19,17 +19,12 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-    <!-- Bootstrap core CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Design Bootstrap -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
     <!-- JQuery -->
     <!-- Bootstrap tooltips -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
     <!-- Bootstrap core JavaScript -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
-    <!-- MDB core JavaScript -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
     <link rel="stylesheet" href="modules/all.min.css">
     <link rel="stylesheet" type="text/css" href="modules/font-awesome.css">
 
@@ -57,10 +52,11 @@
             <div class="col-4 text-left landing-page-text">
                 <h3 class="title-text">Simplify the Process</h3>
                 <h5 class="secondary-text">
-                    We know that teaching through Zoom can be tough so let us help you with your attendance.
+                    We know that teaching online can be tough so let us give you a hand.
                 </h5>
                 <div class="row">
                     <a class="text-center nav-link zoom-button" target="_blank" href="https://zoom.us/oauth/authorize?response_type=code&client_id=jr7r46eTRvyF0CPmGFBGGA&redirect_uri=https://www.easeattendance.com/authorize">Add to Zoom</a>
+                    <a class="text-center nav-link webex-button" target="_blank" href="https://webexapis.com/v1/authorize?client_id=Ca4738645486f4fc4d5834a81421851f4646cb935e396356e808b590d8412941b&response_type=code&redirect_uri=https%3A%2F%2Fwww.easeattendance.com%2Fauthorize_webex&scope=spark%3Amemberships_read%20spark%3Akms%20meeting%3Aschedules_read%20meeting%3Aparticipants_read&state=set_state_here">Add to Webex</a>
                     <a class="nav-link learn-more-page-link" href="/features">Learn More</a>
                 </div>
 
@@ -71,10 +67,6 @@
 <div id="footer">
 
 </div>
-<script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.2.5/firebase-analytics.js"></script>
 
 <script>
     LottieInteractivity.create({
@@ -91,23 +83,7 @@
         ],
     });
 </script>
-<script>
-    var firebaseConfig = {
-        apiKey: "AIzaSyArNouw56zZhTG5zuwFAYuev3zlK02VMok",
-        authDomain: "easeattendance-c68ed.firebaseapp.com",
-        projectId: "easeattendance-c68ed",
-        storageBucket: "easeattendance-c68ed.appspot.com",
-        messagingSenderId: "200365032412",
-        appId: "1:200365032412:web:4935cf8c68760d25818519",
-        measurementId: "G-HW6X22SK2H"
-    };
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    firebase.analytics();
-
-</script>
-<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
-<script type="text/javascript"  charset="UTF-8"  src="main.js"></script>
 <script src="nav-footer.js"></script>
+<script type="text/javascript"  charset="UTF-8"  src="main.js"></script>
+
 </html>
