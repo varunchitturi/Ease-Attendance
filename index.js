@@ -421,7 +421,7 @@ app.get('/authorize_webex', (req, res) => {
                     "client_id": process.env.webex_clientid,
                     "client_secret": process.env.webex_clientsecret,
                     "code": authorizationCode,
-                    "redirect_uri": "https://easeattendance.com/authorize_webex"
+                    "redirect_uri": "https://www.easeattendance.com/authorize_webex"
                 }
             }, (error, httpResponse, body) => {
                 if (error) {
