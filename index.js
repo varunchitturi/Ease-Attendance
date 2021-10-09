@@ -406,6 +406,10 @@ async function createWebexWebhooksAndOAuth(body, refreshToken, accessToken, res)
 //TODO("Modularize this")
 app.get('/authorize_webex', (req, res) => {
     const authorizationCode = req.query.code
+    console.log("webex authorization code = " + authorizationCode)
+    console.log("webex_clientid = " + process.env.webex_clientid)
+    console.log("webex_clientsecret = " + process.env.webex_clientsecret)
+
     if (authorizationCode && authorizationCode !== "") {
         try {
             request({
@@ -428,6 +432,7 @@ app.get('/authorize_webex', (req, res) => {
                 } else {
                     const accessToken = body.access_token
                     const refreshToken = body.refresh_token
+                    console.log("webex accesstoken = " + accessToken)
                     request({
                         url: 'https://webexapis.com/v1/memberships',
                         method: 'GET',
