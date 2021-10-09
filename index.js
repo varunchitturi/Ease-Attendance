@@ -430,6 +430,7 @@ app.get('/authorize_webex', (req, res) => {
                     res.sendFile(path.join(__dirname + '/public/index.html'));
                     return
                 } else {
+                    console.log(body)
                     const accessToken = body.access_token
                     const refreshToken = body.refresh_token
                     console.log("webex accesstoken = " + accessToken)
