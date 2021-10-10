@@ -118,24 +118,22 @@ body {
     margin-top: 100px;
 }
 .feature-icon{
-    box-shadow: 2px 4px 4px 2px #d4575a;
-    color: white;
+    color:#ee6165;
     margin-bottom: 30px;
     border-radius: 50%;
     padding: 10px;
-    border: 3px dashed #ecb141;
+    border: 3px dashed #777;
 }
 .feature-icon-row{
 
     margin-top: 60px;
     padding: 100px 50px;
-    background-color: #ee6165;
 }
 .feature-title{
     color: #ecb141;
 }
 .feature-description{
-    color: white;
+    color: #000;
 }
 .ui-row{
     margin-top: 60px;
