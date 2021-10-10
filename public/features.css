@@ -6,6 +6,23 @@ html{
     background-color: white;
     visibility: hidden;
 }
+
+
+.webex-button{
+    margin: auto;
+    width: 133px;
+  
+    background-color: white;
+    border: 1px solid #44bef3;
+    padding-right: 10px !important;
+    padding-left: 10px !important;
+    border-radius: 20px;
+    box-shadow: 0 4px 4px rgba(177, 177, 177, 0.25) !important;
+  }
+  .webex-button:hover{
+    background-color: #44bef3;
+    color: white;
+  }
 .fadeBody{
     animation-name: fade;
     --animate-delay: 1s;
