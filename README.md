@@ -14,11 +14,9 @@
 
 #### Public Relations: Sunny Chadha
 
-#### Legal: Devan Velji
+#### Marketing: Devan Velji and Sunny Chadha
 
-#### Finance: Devan Velji and Sunny Chadha
-
-An integration with Zoom to allow teachers to be able to take attendance faster and easier. This Zoom Marketplace app connects to Zoom and allows teachers to easily and automatically track the attendance of their students. Later, detailed records are produced and stored for reference. This app connects to easeattendance.com to take attendance.
+An integration with Zoom and Webex to allow teachers to be able to take attendance faster and easier. This Webex App Hub and Zoom Marketplace and app connects to your online meeting and allows teachers to easily and automatically track the attendance of their students. Later, detailed records are produced and stored for reference. This app connects to easeattendance.com to take attendance.
 
 Go to [Ease Attendance](https://www.easeattendance.com/) to find more info about features, documentation, support from developers, more about us and our goals, and to ***start easily taking attendance***!
 
@@ -50,7 +48,7 @@ Go to [Ease Attendance](https://www.easeattendance.com/) to find more info about
 2. If you see a "Not Registered" next to someone's name, either 
 * click the "Update Participants" button to create a meeting with current participants during the meeting. Ease Attendance will automatically fill out the Meeting ID, Meeting Name, and Participant names from your current meeting.
 
-<p align="center">
+<p style="text-align:center;">
 OR
 </p>
 

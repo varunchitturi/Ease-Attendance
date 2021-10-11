@@ -146,6 +146,22 @@ h1{
     display: flex;
     justify-content: center;
 }
+.webex-button{
+    margin-left: 10px;
+    margin-top: 15px;
+    width: 133px;
+  
+    background-color: white;
+    border: 1px solid #44bef3;
+    padding-right: 10px !important;
+    padding-left: 10px !important;
+    border-radius: 20px;
+    box-shadow: 0 4px 4px rgba(177, 177, 177, 0.25) !important;
+  }
+  .webex-button:hover{
+    background-color: #44bef3;
+    color: white;
+  }
 
 @media (max-width: 1330px) {
     .guide-img{
@@ -183,6 +199,9 @@ h1{
         padding-left: 0;
     }
     .zoom-button-doc{
+        margin-left: 0!important;
+    }
+    .webex-button-doc{
         margin-left: 0!important;
     }
     #sign-up{
