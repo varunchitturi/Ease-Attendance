@@ -427,7 +427,7 @@ function decryptMessages(messages){
         console.log(currentMessage)
     }
 }
-function exportMeeting(){ //TO UPDATE ROSTER
+function exportMeeting(){
     if(MeetingIsOccurring){
         const downloadElement = document.createElement('a')
         const now = new Date()
@@ -1362,20 +1362,14 @@ function exportMeetingRecord(){
 
     var csvFileData = [];
     for (var i = 0; i < currentRecord["events"].length; i++) {
-        
         const event = CryptoJS.AES.decrypt(currentRecord["events"][i], useruid).toString(CryptoJS.enc.Utf8);
 
         if(event.includes("Meeting")) {
-            var cells = event.split(" has").join(",").split("  ").join(",").split(" GMT").join(",").split(",", 3);
-            var d = new Date(cells[2])
-            cells[2] = d.toLocaleString().replace(',',' ')
-            csvFileData.push(cells);
+            csvFileData.push(event.split(" has").join(",").split(" with").join(",").split(" GMT").join(",").split(",", 3));
         }
         else {
-            var cells = event.split(" has").join(",").split("  ").join(",").split(" GMT").join(",").split(",", 3);
-            var d = new Date(cells[2])
-            cells[2] = d.toLocaleString().replace(',',' ')
-            csvFileData.push(cells);
+            csvFileData.push(event.split(" has").join(",").split("  ").join(",").split(" GMT").join(",").split(",", 3)
+            );
         }
 
     
