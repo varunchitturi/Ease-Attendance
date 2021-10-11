@@ -339,6 +339,7 @@ app.post('/api/requests', (req, res) => {
                         db.collection("CurrentMeetings").doc(host_id).get().then((meetingDoc2)=>{
                             if(meetingDoc2.exists && meetingDoc2.data().uuid === body.payload.object.uuid){
                                 let currentDate = new Date()
+                                console.log(currentDate)
                                 let recordString = participantName +  " has joined" + "  " + currentDate
                                 let messageString = "participant.joined " + participantName + " " + participantEmail
                                 updateParticipants(host_id, messageString, recordString,meetingDoc2.data().hostUID)
