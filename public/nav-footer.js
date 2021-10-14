@@ -47,20 +47,21 @@ const footerBlock = "<footer>\n" +
     "    <div class=\"text-center container-fluid justify-content-center footer-container\">\n" +
     "        <div class=\"text-center footer-link-row row justify-content-center\">\n" +
     "            <div class=\"text-center justify-content-center col-md-4  mr-auto my-md-4 my-0 mt-4 mb-1 footer-col\">\n" +
-    "                <h5 class=\"footer-title\">Pages</h5>\n" +
+    "                <h5 class=\"footer-title\">Links</h5>\n" +
     "                <a href=\"/\" class=\"footer-link\"><h6>Home</h6></a>\n" +
-    "                <a href=\"documentation\" class=\"footer-link\"><h6>Documentation</h6></a>\n" +
-    "                <a href=\"https://www.buymeacoffee.com/easeattendance\" target=\"_blank\" class=\"footer-link\"><h6>Donate</h6></a>\n" +
     "                <a href=\"features\" class=\"footer-link\"><h6>Features</h6></a>\n" +
-    "                <a href=\"about-us\" class=\"footer-link\"><h6>About Us</h6></a>\n" +
-    "                <a href=\"support\" class=\"footer-link\"><h6>Support</h6></a>\n" +
-    "                <a href=\"login\" class=\"footer-link\"><h6>Log In</h6></a>\n" +
-    "                <a href=\"signup-zoom\" class=\"footer-link\"><h6>Sign Up | Zoom</h6></a>\n" +
-    "                <a href=\"signup-webex\" class=\"footer-link\"><h6>Sign Up | Webex</h6></a>\n" +
+    // "                <a href=\"documentation\" class=\"footer-link\"><h6>Documentation</h6></a>\n" +
+    "                <a href=\"https://www.buymeacoffee.com/easeattendance\" target=\"_blank\" class=\"footer-link\"><h6>Donate</h6></a>\n" +
+    // "                <a href=\"about-us\" class=\"footer-link\"><h6>About Us</h6></a>\n" +
+    // "                <a href=\"support\" class=\"footer-link\"><h6>Support</h6></a>\n" +
+    // "                <a href=\"login\" class=\"footer-link\"><h6>Log In</h6></a>\n" +
+    // "                <a href=\"signup-zoom\" class=\"footer-link\"><h6>Sign Up | Zoom</h6></a>\n" +
+    // "                <a href=\"signup-webex\" class=\"footer-link\"><h6>Sign Up | Webex</h6></a>\n" +
     "\n" +
     "            </div>\n" +
     "            <div class=\"text-center justify-content-center col-md-4  mr-auto my-md-4 my-0 mt-4 mb-1 footer-col\">\n" +
     "                <h5 class=\"footer-title\">Contact</h5>\n" +
+    "                <a href=\"support\" class=\"footer-link\"><h6>Support</h6></a>\n" +
     "                <a href=\"mailto:contact@easeattendance.com\" class=\"footer-link\"><h6 ><i class=\"fa fa-envelope\"></i>&nbsp;&nbsp;contact@easeattendance.com</h6></a>\n" +
     "                <a href=\"tel:4086809552\" class=\"footer-link\"> <h6 class=\"q\"><i class=\"fa fa-phone\"></i>&nbsp;&nbsp;408-680-9552</h6></a>\n" +
     "            </div>\n" +
@@ -73,7 +74,7 @@ const footerBlock = "<footer>\n" +
     "        </div>\n" +
     "        <div class=\"row justify-content-center text-center copyright-row\">\n" +
     "            <div class=\"col\">\n" +
-    "                <h6 class=\"copyright-test\">© 2021 Ease Attendance</h6>\n" +
+    "                <h6 class=\"copyright-test\">© 2021 Ease Attendance. All Rights Reserved</h6>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
