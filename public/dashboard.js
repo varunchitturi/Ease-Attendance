@@ -168,6 +168,10 @@ firestore.collection("UpdateBrowser").doc("updateDate").onSnapshot((doc) => {
 auth.onAuthStateChanged((user) => {
     if (user) {
         firestore.collection("Users").doc(user.uid).onSnapshot((doc) => {
+            if (doc.data().breakoutroom){
+                var showBreakoutRoom = document.getElementById("breakout-rooms-tab");
+                showBreakoutRoom.style.display = "block"
+            }
             if(!doc.exists || !doc){
                 window.location.href = "/";
             }
@@ -1610,3 +1614,6 @@ function yellowNotification(message){
         document.getElementById("notifyType").innerHTML = ""
     },2000);
 }
+// BREAKOUT ROOM MANAGER SECTION
+
+
