@@ -189,9 +189,12 @@ hr{
 }
 #participant-table-head{
     background-color: #ee6165 !important;
-
 }
-.table-head-title{
+#participant-table-head-breakout_rooms{
+    background-color: #ee6165 !important;
+    padding-top: 30px;
+}
+.table-head-title , #table-head-title-breakout_rooms{
     color: white;
 }
 .badge{
@@ -234,7 +237,11 @@ hr{
     color: black;
     margin-bottom: 10px;
 }
-#status{
+#currentMeeting-name-breakout_rooms{
+    color: black;
+    margin-bottom: 10px;
+}
+#status,#status-breakout_rooms{
     color: black;
     margin-top: 10px;
     margin-bottom: 20px;
@@ -300,6 +307,9 @@ hr{
 #timeLeftBtn:hover{
     color: #F5B364 !important;
 }
+#teacher-name-breakout_rooms:hover{
+    color: #F5B364 !important;
+}
 .filter-button{
     -webkit-appearance: none!important;
     margin-bottom: 10px;
@@ -334,6 +344,11 @@ hr{
     width: 225px;
     margin-top: -5px;
 }
+#person-search-breakout_rooms{
+    width: 225px;
+    margin-top: -5px;
+    margin-bottom: 15px;
+}
 .input-group-text{
     background-color: #ffffff !important;
 
@@ -366,19 +381,20 @@ hr{
     border-color: #F5B364;
 }
 
-#dropdown-roster{
+#dropdown-roster, #dropdown-roster-breakout_rooms{
     color: black;
     margin-left: 0!important;
     margin-bottom: 20px;
 }
-#add-on-registered-update, #add-on-registered-create,#dropdown-roster, #add-on-registered-create{
+#add-on-registered-update,#add-on-registered-update-breakout_rooms, #add-on-registered-create,#dropdown-roster,#dropdown-roster-breakout_rooms, #add-on-registered-create-breakout_rooms{
     margin-top: -5px;
     margin-left: 20px;
     background: none;
     outline: none;
     border-color: #F5B364;
 }
-#add-on-registered-update:hover, #add-on-registered-create:hover,#dropdown-roster:hover,#add-on-registered-create:hover {
+
+#add-on-registered-update:hover,#add-on-registered-update-breakout_rooms:hover, #add-on-registered-create:hover,#dropdown-roster:hover,#dropdown-roster-breakout_rooms:hover,#add-on-registered-create-breakout_rooms:hover {
     background: #F5B364;
     color: white;
     outline: none;
@@ -420,7 +436,6 @@ hr{
 }
 #meeting-id, #meeting-name{
     margin-left: 15px!important;
-
 }
 #meeting-id{
     width: 230px;
@@ -541,7 +556,7 @@ hr{
 .failureServer:before{
     Content:"Sorry, we had some trouble connecting to the server";
 }
-#meeting-id-attendance{
+#meeting-id-attendance,#meeting-id-attendance-breakout_rooms{
     color: #bababa;
 }
 #past-meeting-title{
@@ -669,7 +684,7 @@ hr{
     outline: none;
     border: none
 }
-#current-participants{
+#current-participants, #current-participants-breakout_rooms{
     color: black;
     display: inline!important;
 }

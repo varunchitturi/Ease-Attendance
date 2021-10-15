@@ -383,10 +383,6 @@
                            aria-label="Student Name" aria-describedby="addon-wrapping">
                 </div>
                 <div class="dropdown show">
-                    <button class="float-left btn dropdown-toggle" href="#" role="button" id="add-on-registered-create-breakout_rooms"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Create New Roster
-                    </button>
                     <div class="dropdown-menu" id="dropdown-create-roster-with-all-participants-breakout_rooms"
                          aria-labelledby="dropdown-roster">
                         <a class="dropdown-item btn new-roster-drop" data-toggle="modal"
@@ -397,73 +393,24 @@
                            onclick="addNotRegisteredCreateOnlyNotRegistered()">With Unregistered Participants</a>
                     </div>
                 </div>
-                <button onclick="addNotRegisteredUpdate()" class="float-left btn" data-toggle="modal"
-                        data-target="#add-edit-meeting-modal" type="button" id="add-on-registered-update-breakout_rooms">Update Current
-                    Roster
-                </button>
-                <div id="export-button-breakout_rooms" class="btn-group float-right" role="group" aria-label="Export Button">
-                    <a title="Export meeting" id="export-meeting-breakout_rooms" onclick="exportMeeting()" type="button"
-                       class="btn btn-secondary filter-button"><span class="iconify export-icon"
-                                                                     data-icon="mdi:export-variant" data-inline="false"
-                                                                     style="font-size: 28px;"></span></a>
-                </div>
-                <div id="filter-group-breakout_rooms" class="btn-group float-right" role="group" aria-label="Choose Filter">
-                    <div id="filter-dropdown-group-breakout_rooms" class="dropdown">
-                        <a role="button" id="filter-button-breakout_rooms" data-toggle="dropdown" aria-haspopup="true"
-                           aria-expanded="false" data-offset="0,10" title="Filters">
-                            <span id="filter-caret-breakout_rooms" class="iconify" data-icon="ion-caret-down" data-inline="false"
-                                  style="margin-right: -3px"></span>
-                            <span id="filter-button-icon-breakout_rooms" class="iconify" style="font-size: 30px"
-                                  data-icon="bx:bx-filter-alt" data-inline="false"></span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" id="filter-drop-menu-breakout_rooms">
-                            <a id="all-filter-breakout_rooms" onclick="filterClick(this.id)" type="button"
-                               class="btn btn-secondary filter-button filter-active dropdown-item">All</a>
-                            <a id="present-filter-breakout_rooms" onclick="filterClick(this.id)" type="button"
-                               class="btn btn-secondary filter-button dropdown-item">Present</a>
-                            <a id="absent-filter-breakout_rooms" onclick="filterClick(this.id)" type="button"
-                               class="btn btn-secondary filter-button dropdown-item">Absent</a>
-                            <a id="left-meeting-filter-breakout_rooms" onclick="filterClick(this.id)" type="button"
-                               class="btn btn-secondary filter-button dropdown-item">Left Meeting</a>
-                            <a id="not-registered-filter-breakout_rooms" onclick="filterClick(this.id)" type="button"
-                               class="btn btn-secondary filter-button dropdown-item">Not Registered</a>
-                        </div>
-                    </div>
-                    <div id="refresh-cover-breakout_rooms" class="ld ld-over-full">
-                        <a title="Refresh table" id="refresh-breakout_rooms" onclick="refreshTable()" type="button"
-                           class="btn btn-secondary filter-button"><span class="iconify restart-icon"
-                                                                         data-inline="false"
-                                                                         data-icon="ic:round-restart-alt"
-                                                                         style="font-size: 30px;"></span></a>
-                        <div id="ld-spin-breakout_rooms" class="ld ld-ring ld-spin"></div>
-                    </div>
-
-                </div>
                 <table class="table" id="participant-table-breakout_rooms">
                     <thead id="participant-table-head-breakout_rooms">
                     <tr>
                         <th class="table-head-title" scope="col">
-                            <a id="firstNameBtn-breakout_rooms" onclick="sortByFirst()" class="sort-buttons" style="color : #F5B364">First
-                                Name</a>
+                            <a id="inputed-room-number-breakout_rooms" onclick="sortByFirst()" class="sort-buttons" style="color : #F5B364">Room number</a>
                         </th>
 
                         <th class="table-head-title" scope="col">
-                            <a id="lastNameBtn-breakout_rooms" onclick="sortByLast()" class="sort-buttons" style="color: white">Last
-                                Name</a>
+                            <a id="teacher-name-breakout_rooms" onclick="sortByLast()" class="sort-buttons" style="color: white">Teacher Name</a>
                         </th>
 
                         <th class="table-head-title" scope="col">
-                            <a id="timeJoinedBtn-breakout_rooms" onclick="sortByTimeJoined()" class="sort-buttons"
-                               style="color: white">Time First Joined</a>
+                            <a id="student-name-breakout_rooms" onclick="sortByTimeJoined()" class="sort-buttons"
+                               style="color: white">Student Name</a>
                         </th>
 
                         <th class="table-head-title" scope="col">
-                            <a id="timeLeftBtn-breakout_rooms" onclick="sortByTimeLeft()" class="sort-buttons" style="color: white">Time
-                                Last Left </a>
-                            <a id="popover-info-breakout_rooms" tabindex="0" data-trigger="hover" data-container="body"
-                               data-toggle="popover" data-placement="top"
-                               data-content="When a participant transitions to or from a breakout room, they actually leave and rejoin the meeting"><span
-                                    id="time-last-left-info-breakout_rooms" class="iconify" data-icon="akar-icons:info"></span></a>
+                            <a id="timeLeftBtn-breakout_rooms" onclick="sortByTimeLeft()" class="sort-buttons" style="color: white">Breakout Room to Switch to</a>
                         </th>
 
                         <th class="table-head-title" scope="col">Status</th>
