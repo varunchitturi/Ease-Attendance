@@ -104,9 +104,6 @@ app.get('/forgotpass', (req, res) => {
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname + '/public/login.html'));
 })
-app.get('/signup', (req, res) => {
-    res.sendFile(path.join(__dirname + '/public/signup-zoom.html'));
-
 app.get('/signup-webex', (req, res) => {
     res.sendFile(path.join(__dirname + '/public/signup-webex.html'));
 })
