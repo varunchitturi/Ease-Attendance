@@ -58,6 +58,7 @@ let chooseRoster = $("#dropdown-roster")
 let chooseRosterMenu = $("#dropdown-roster-menu")
 let zoomUser = false
 let webexUser = false
+let breakoutRoomUser = false
 const filterUpHTML = "<span id=\"filter-caret\" class=\"iconify\" data-icon=\"ion-caret-up\" data-inline=\"false\" style=\"margin-right: -3px\"></span>\n" +
     "                            <span id=\"filter-button-icon\" class=\"iconify\" style=\"font-size: 30px\" data-icon=\"bx:bx-filter-alt\" data-inline=\"false\"></span>"
 const filterDownHTML = "<span id=\"filter-caret\" class=\"iconify\" data-icon=\"ion-caret-down\" data-inline=\"false\" style=\"margin-right: -3px\"></span>\n" +
@@ -169,12 +170,13 @@ auth.onAuthStateChanged((user) => {
     if (user) {
         //breakout room extention
         firestore.collection("Users").doc(user.uid).onSnapshot((doc) => {
+            if(!doc.exists || !doc){
+                window.location.href = "/";
+            }
             if (doc.data().breakoutroom){
                 var showBreakoutRoom = document.getElementById("breakout-rooms-tab");
                 showBreakoutRoom.style.display = "block"
-            }
-            if(!doc.exists || !doc){
-                window.location.href = "/";
+                breakoutRoomUser = true
             }
         })
         //need to update to async
@@ -1073,7 +1075,7 @@ function sortByTimeLeft(){
     updateParticipantTable()
 }
 
-function findIndexOfRow( i){
+function findIndexOfRow(i){
 
     let searchFor;
     if(ParticipantTableSortBy === "first"){
@@ -1220,7 +1222,6 @@ function addNotRegisteredCreate(filter){
     }
 }
 
-
 function compareMeetings(a, b) {
     if (a.name > b.name) return 1;
     if (b.name > a.name) return -1;
@@ -1232,8 +1233,6 @@ function comparePastMeetings(a, b) {
     if (a.MeetingStart > b.MeetingEnd) return -1
     return 1;
 }
-
-
 
 $("#records-search-input-field").on('keyup', function (e) {
     const recordTable = document.getElementById("records-table")
