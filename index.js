@@ -159,7 +159,7 @@ app.get('/authorize', (req, res) => {
                                     refreshToken: refreshToken
                                 }, {merge: true}).then(() => {
                                     console.info("User " + userFirstName + " " + userLastName + " with email " + userEmail + " has downloaded the Ease Attendance app")
-                                    res.sendFile(path.join(__dirname + '/public/signup.html'));
+                                    res.sendFile(path.join(__dirname + '/public/signup-zoom.html'));
                                 }).catch((error) => {
                                     console.error(error.message)
                                     res.sendFile(path.join(__dirname + '/public/index.html'));
