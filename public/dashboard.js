@@ -167,6 +167,7 @@ firestore.collection("UpdateBrowser").doc("updateDate").onSnapshot((doc) => {
 
 auth.onAuthStateChanged((user) => {
     if (user) {
+        //breakout room extention
         firestore.collection("Users").doc(user.uid).onSnapshot((doc) => {
             if (doc.data().breakoutroom){
                 var showBreakoutRoom = document.getElementById("breakout-rooms-tab");
@@ -176,7 +177,7 @@ auth.onAuthStateChanged((user) => {
                 window.location.href = "/";
             }
         })
-
+        //need to update to async
         firestore.collection("ZoomOAuth").where("firebaseID","==",user.uid).get().then((querySnapshot)=> {
             querySnapshot.forEach((doc) => {
                 zoomID = doc.data().userID;
@@ -187,10 +188,9 @@ auth.onAuthStateChanged((user) => {
                     webexID = doc.data().userID;
                     webexUser = true
                 })
-
                 document.getElementById("myTabContent").hidden = false
-
                 document.getElementById("user-name").innerHTML = "Welcome " + user.displayName
+                //gets periods and displays them in Meeting Rosters tab
                 firestore.collection("Periods").where("useruid", "==", user.uid)
                     .onSnapshot((querySnapshot) => {
                         MeetingsdidLoad = false
@@ -329,12 +329,9 @@ auth.onAuthStateChanged((user) => {
                         console.error(error.message)
                     })
                 }
-
-
             }).catch((err)=>{
                 window.location.href = "/";
             })
-
         }).catch((err)=>{
             window.location.href = "/";
         })
@@ -541,7 +538,6 @@ function evaluateParticipantTable(doc){
                         let currParticipant = new Participant(participantFirst, participantLast, "Absent", true, " "," ")// blank time joined and time left if participant hasnt joined yet
                         currParticipant.bufferCount = 0
                         Participants.unshift(currParticipant)
-
                     }
                 }
                 else{
