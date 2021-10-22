@@ -1638,6 +1638,3 @@ function yellowNotification(message){
         document.getElementById("notifyType").innerHTML = ""
     },2000);
 }
-// BREAKOUT ROOM MANAGER SECTION
-
-
