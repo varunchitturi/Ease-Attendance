@@ -364,7 +364,7 @@ function reorganizeStudents(){
 
 function addedCSV(){
     if (!breakoutRoomUser) return;
-    let breakoutRoomCSV = document.getElementById("enter-csv-file-breakout_rooms").value;
+    let breakoutRoomCSV = document.getElementById("input-roster-breakout_rooms").value;
     console.log(breakoutRoomCSV.toString())
 
 }
