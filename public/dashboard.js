@@ -365,7 +365,7 @@ function reorganizeStudents(){
 function addedCSV(){
     if (!breakoutRoomUser) return;
     let breakoutRoomCSV = document.getElementById("input-roster-breakout_rooms").value;
-
+    Papa.parse()
     console.log(breakoutRoomCSV.toString())
 
 }
