@@ -246,7 +246,15 @@ hr{
     margin-top: 10px;
     margin-bottom: 20px;
 }
-
+#enter-csv-file-breakout_rooms {
+    color: black;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+#input-roster-breakout_rooms {
+    color:black;
+    padding-bottom: 15px;
+}
 .dots {
     margin: 40px auto;
 }

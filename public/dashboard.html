@@ -364,15 +364,17 @@
                 <h5 id="status-breakout_rooms">Status:
                     <span id="status-dot-breakout_rooms" class='dot dot-danger'></span>
                 </h5>
+                <h5 id="enter-csv-file-breakout_rooms">Enter CSV File:
+                    <input type="file" accept=".csv" id="input-roster-breakout_rooms" onchange="addedCSV()">
+                </h5>
                 <div class="dropdown show">
-                    <button class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdown-roster-breakout_rooms"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Choose Roster
+                    <button class="btn btn-secondary" onclick="reorganizeStudents()" role="button" id="dropdown-roster-breakout_rooms"
+                             aria-haspopup="true" aria-expanded="false">
+                        Reorganize Students
                     </button>
                     <div class="dropdown-menu" id="dropdown-roster-menu-breakout_rooms" aria-labelledby="dropdown-roster">
                     </div>
-                </div>
-                <div id="person-search-breakout_rooms" class="input-group flex-nowrap float-left">
+                </div>                <div id="person-search-breakout_rooms" class="input-group flex-nowrap float-left">
                     <div id="search-prepend-breakout_rooms" class="input-group-prepend">
                         <span class="input-group-text" id="addon-wrapping-breakout_rooms"><span class="iconify" data-inline="false"
                                                                                  data-icon="ant-design:search-outlined"

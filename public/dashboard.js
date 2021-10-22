@@ -58,7 +58,10 @@ let chooseRoster = $("#dropdown-roster")
 let chooseRosterMenu = $("#dropdown-roster-menu")
 let zoomUser = false
 let webexUser = false
+
 let breakoutRoomUser = false
+
+
 const filterUpHTML = "<span id=\"filter-caret\" class=\"iconify\" data-icon=\"ion-caret-up\" data-inline=\"false\" style=\"margin-right: -3px\"></span>\n" +
     "                            <span id=\"filter-button-icon\" class=\"iconify\" style=\"font-size: 30px\" data-icon=\"bx:bx-filter-alt\" data-inline=\"false\"></span>"
 const filterDownHTML = "<span id=\"filter-caret\" class=\"iconify\" data-icon=\"ion-caret-down\" data-inline=\"false\" style=\"margin-right: -3px\"></span>\n" +
@@ -298,6 +301,7 @@ auth.onAuthStateChanged((user) => {
 
                     });
                 if(zoomUser && !webexUser){
+                    //STARTS WEBSOCKET ON SNAPCHAT ADI
                     firestore.collection("CurrentMeetings").doc(zoomID).onSnapshot((doc) => {
                         if (MeetingsdidLoad) {
                             evaluateParticipantTable(doc)
@@ -305,6 +309,9 @@ auth.onAuthStateChanged((user) => {
                             let getMeetingInterval = setInterval(() => {
                                 if (MeetingsdidLoad) {
                                     evaluateParticipantTable(doc)
+                                    if (breakoutRoomUser) {
+
+                                    }
                                     clearInterval(getMeetingInterval)
                                 }
                             }, 500)
@@ -342,6 +349,28 @@ auth.onAuthStateChanged((user) => {
         window.location.href = "/";
     }
 });
+
+//BREAKOUT ROOM RESEARCH PROJECT SECTION START
+//--------------------------------------------
+function evaluateBreakoutRoomTable(doc){
+    if (!breakoutRoomUser) return;
+
+}
+
+function reorganizeStudents(){
+    if (!breakoutRoomUser) return;
+
+}
+
+function addedCSV(){
+    if (!breakoutRoomUser) return;
+    let breakoutRoomCSV = document.getElementById("enter-csv-file-breakout_rooms").value;
+    console.log(breakoutRoomCSV.toString())
+
+}
+//BREAKOUT ROOM RESEARCH PROJECT SECTION END
+//--------------------------------------------
+
 document.getElementById("meeting-id-attendance").hidden = true
 $("input").on("click", function(){
     $(this).removeClass('is-invalid')
