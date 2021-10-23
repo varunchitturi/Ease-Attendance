@@ -9,10 +9,10 @@ class Meeting{
     }
 }
 class Participant{
-    constructor(first,last,attendance, roster, timeJoined , timeLeft) {
+    constructor(first,last,state, roster, timeJoined , timeLeft) {
         this.firstName = first
         this.lastName = last
-        this.state = attendance
+        this.state = state
         this.partOfRoster = roster
         this.timeJoined = timeJoined // stores ISO time joined, only changed once when participant joins for first time
         this.timeLeft = timeLeft // stores ISO time joined, only changed once when participant joins for first time
@@ -365,8 +365,16 @@ function reorganizeStudents(){
 }
 
 function evaluateBRTable() {
+    document.getElementById("refresh-cover-breakout_rooms").classList.add("running")
+    document.getElementById("ld-spin-breakout_rooms").style.display = "block"
     const table = document.getElementById("table-breakout_rooms")
     clearBRTable(table)
+/*    let presentParticipantsSet = Set()
+    for(let i = 0; i < Participants.length; i++){
+        if(Participants[i].state === "Present"){
+            presentParticipantsSet.add(Participants[i].firstName+" "+Participants[i].lastName)
+        }
+    }*/
     for (let i = BRPartipantsArray.length - 1; i >= 0; i--) {
         let array = BRPartipantsArray[i]
         let row = table.insertRow(1)
@@ -375,7 +383,7 @@ function evaluateBRTable() {
 
         let cell1RoomNumber = row.insertCell()
         cell1RoomNumber.rowSpan = array.length - 1
-        cell1RoomNumber.innerHTML = i;
+        cell1RoomNumber.innerHTML = i+1;
 
         let cell2TeacherName = row.insertCell()
         cell2TeacherName.rowSpan = array.length - 1
@@ -386,17 +394,19 @@ function evaluateBRTable() {
         if (array[1]) {
             cell3StudentNames.innerHTML = array[1]
         }
-        for (let i = 2; i < array.length; i++) {
-            let rowSplit = table.insertRow(i)
+        for (let j = 2; j < array.length; j++) {
+            let rowSplit = table.insertRow(j)
             rowSplit.style.backgroundColor = "#ffffff"
             rowSplit.style.color = "#000000"
 
             let cellStudentName = rowSplit.insertCell()
-            cellStudentName.innerHTML = array[i]
+            cellStudentName.innerHTML = array[j]
 
             let cellBreakoutRoomSwitch = rowSplit.insertCell()
         }
     }
+    document.getElementById("refresh-cover-breakout_rooms").classList.remove("running")
+    document.getElementById("ld-spin-breakout_rooms").style.display = "none"
 }
 
 /**
