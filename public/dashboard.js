@@ -420,7 +420,6 @@ function addedCSV(data){
 function clearBRTable(table){
     let tableRows = table.getElementsByTagName("tr")
     let rowCount = tableRows.length
-
     for (var x=rowCount-1; x>0; x--) {
         table.deleteRow(x);
     }
