@@ -48,21 +48,16 @@
     <script src="./modules/papaparse.min.js"></script>
     <script>
         var data;
-
         function handleFileSelect(evt) {
             var file = evt.target.files[0];
-
             Papa.parse(file, {
-                header: true,
                 dynamicTyping: true,
                 complete: function(results) {
                     data = results;
-                    console.log(data)
                     addedCSV(data)
                 }
             });
         }
-
         $(document).ready(function(){
             $("#enter-csv-file-breakout_rooms").change(handleFileSelect);
         });
@@ -421,7 +416,7 @@
                            onclick="addNotRegisteredCreateOnlyNotRegistered()">With Unregistered Participants</a>
                     </div>
                 </div>
-                <table class="table" id="participant-table-breakout_rooms">
+                <table class="table" id="table-breakout_rooms">
                     <thead id="participant-table-head-breakout_rooms">
                     <tr>
                         <th class="table-head-title" scope="col">

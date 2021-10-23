@@ -58,7 +58,10 @@ let chooseRoster = $("#dropdown-roster")
 let chooseRosterMenu = $("#dropdown-roster-menu")
 let zoomUser = false
 let webexUser = false
+
+//BREAKOUT ROOM VARS
 let breakoutRoomUser = false
+let BRPartipantsArray = {};
 
 
 const filterUpHTML = "<span id=\"filter-caret\" class=\"iconify\" data-icon=\"ion-caret-up\" data-inline=\"false\" style=\"margin-right: -3px\"></span>\n" +
@@ -360,19 +363,57 @@ function reorganizeStudents(){
     if (!breakoutRoomUser) return;
 
 }
-
+/**
+ * data is stored in following format object:<br>
+ * {                                                                  <br>
+ *     data : [                                                       <br>
+ *         [instructor 1, student one, student two, ect],             <br>
+ *         [instructor 2, student three, student four, ect]           <br>
+ *     ],                                                             <br>
+ *     errors : [should be empty lmao],                               <br>
+ *     meta : { delimiter: ",", linebreak: "\r\n", aborted: false, … }<br>
+ *     ...                                                            <br>
+ * }
+ *
+ */
 function addedCSV(data){
     if (!breakoutRoomUser) return;
-    let breakoutRoomCSV = document.getElementById("input-roster-breakout_rooms").files[0];
+    //data is the json object with teachers and participants
+    //format as done by papa parse:
+    BRPartipantsArray = data.data
+    const table = document.getElementById("table-breakout_rooms")
+    for (let i = BRPartipantsArray.length-1 ; i >= 0; i--) {
+        let array = BRPartipantsArray[i]
+        let row = table.insertRow(1)
+        row.style.backgroundColor = "#ffffff"
+        row.style.color = "#000000"
 
+        let cell1RoomNumber = row.insertCell()
+        cell1RoomNumber.rowSpan = array.length-1
+        cell1RoomNumber.innerHTML = i;
 
-    papa.parse(breakoutRoomCSV, {
-        complete: function(results) {
-            console.log("Finished:", results.data);
+        let cell2TeacherName = row.insertCell()
+        cell2TeacherName.rowSpan = array.length-1
+        cell2TeacherName.innerHTML = array[0];
+
+        let cell3StudentNames = row.insertCell()
+        let cell4BreakoutRoomSwitch = row.insertCell()
+        let cell5Status = row.insertCell()
+        if(array[1]){
+            cell3StudentNames.innerHTML = array[1]
         }
-    });
+        for(let i = 2; i < array.length; i++){
+            let rowSplit = table.insertRow(i)
+            rowSplit.style.backgroundColor = "#ffffff"
+            rowSplit.style.color = "#000000"
 
-    console.log(breakoutRoomCSV.toString())
+            let cellStudentName = rowSplit.insertCell()
+            cellStudentName.innerHTML = array[i]
+
+            let cellBreakoutRoomSwitch = rowSplit.insertCell()
+            let cellStatus = rowSplit.insertCell()
+        }
+    }
 
 }
 //BREAKOUT ROOM RESEARCH PROJECT SECTION END
