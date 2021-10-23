@@ -382,6 +382,7 @@ function addedCSV(data){
     //format as done by papa parse:
     BRPartipantsArray = data.data
     const table = document.getElementById("table-breakout_rooms")
+    clearBRTable(table)
     for (let i = BRPartipantsArray.length-1 ; i >= 0; i--) {
         let array = BRPartipantsArray[i]
         let row = table.insertRow(1)
@@ -415,6 +416,14 @@ function addedCSV(data){
         }
     }
 
+}
+function clearBRTable(table){
+    let tableRows = table.getElementsByTagName("tr")
+    let rowCount = tableRows.length
+
+    for (var x=rowCount-1; x>0; x--) {
+        table.deleteRow(x);
+    }
 }
 //BREAKOUT ROOM RESEARCH PROJECT SECTION END
 //--------------------------------------------
