@@ -58,7 +58,6 @@ let chooseRoster = $("#dropdown-roster")
 let chooseRosterMenu = $("#dropdown-roster-menu")
 let zoomUser = false
 let webexUser = false
-
 let breakoutRoomUser = false
 
 
@@ -362,10 +361,17 @@ function reorganizeStudents(){
 
 }
 
-function addedCSV(){
+function addedCSV(data){
     if (!breakoutRoomUser) return;
-    let breakoutRoomCSV = document.getElementById("input-roster-breakout_rooms").value;
-    Papa.parse()
+    let breakoutRoomCSV = document.getElementById("input-roster-breakout_rooms").files[0];
+
+
+    papa.parse(breakoutRoomCSV, {
+        complete: function(results) {
+            console.log("Finished:", results.data);
+        }
+    });
+
     console.log(breakoutRoomCSV.toString())
 
 }
