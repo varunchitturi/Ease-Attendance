@@ -363,6 +363,42 @@ function reorganizeStudents(){
     if (!breakoutRoomUser) return;
 
 }
+
+function evaluateBRTable() {
+    const table = document.getElementById("table-breakout_rooms")
+    clearBRTable(table)
+    for (let i = BRPartipantsArray.length - 1; i >= 0; i--) {
+        let array = BRPartipantsArray[i]
+        let row = table.insertRow(1)
+        row.style.backgroundColor = "#ffffff"
+        row.style.color = "#000000"
+
+        let cell1RoomNumber = row.insertCell()
+        cell1RoomNumber.rowSpan = array.length - 1
+        cell1RoomNumber.innerHTML = i;
+
+        let cell2TeacherName = row.insertCell()
+        cell2TeacherName.rowSpan = array.length - 1
+        cell2TeacherName.innerHTML = array[0];
+
+        let cell3StudentNames = row.insertCell()
+        let cell4BreakoutRoomSwitch = row.insertCell()
+        if (array[1]) {
+            cell3StudentNames.innerHTML = array[1]
+        }
+        for (let i = 2; i < array.length; i++) {
+            let rowSplit = table.insertRow(i)
+            rowSplit.style.backgroundColor = "#ffffff"
+            rowSplit.style.color = "#000000"
+
+            let cellStudentName = rowSplit.insertCell()
+            cellStudentName.innerHTML = array[i]
+
+            let cellBreakoutRoomSwitch = rowSplit.insertCell()
+        }
+    }
+}
+
 /**
  * data is stored in following format object:<br>
  * {                                                                  <br>
@@ -381,41 +417,7 @@ function addedCSV(data){
     //data is the json object with teachers and participants
     //format as done by papa parse:
     BRPartipantsArray = data.data
-    const table = document.getElementById("table-breakout_rooms")
-    clearBRTable(table)
-    for (let i = BRPartipantsArray.length-1 ; i >= 0; i--) {
-        let array = BRPartipantsArray[i]
-        let row = table.insertRow(1)
-        row.style.backgroundColor = "#ffffff"
-        row.style.color = "#000000"
-
-        let cell1RoomNumber = row.insertCell()
-        cell1RoomNumber.rowSpan = array.length-1
-        cell1RoomNumber.innerHTML = i;
-
-        let cell2TeacherName = row.insertCell()
-        cell2TeacherName.rowSpan = array.length-1
-        cell2TeacherName.innerHTML = array[0];
-
-        let cell3StudentNames = row.insertCell()
-        let cell4BreakoutRoomSwitch = row.insertCell()
-        let cell5Status = row.insertCell()
-        if(array[1]){
-            cell3StudentNames.innerHTML = array[1]
-        }
-        for(let i = 2; i < array.length; i++){
-            let rowSplit = table.insertRow(i)
-            rowSplit.style.backgroundColor = "#ffffff"
-            rowSplit.style.color = "#000000"
-
-            let cellStudentName = rowSplit.insertCell()
-            cellStudentName.innerHTML = array[i]
-
-            let cellBreakoutRoomSwitch = rowSplit.insertCell()
-            let cellStatus = rowSplit.insertCell()
-        }
-    }
-
+    evaluateBRTable();
 }
 function clearBRTable(table){
     let tableRows = table.getElementsByTagName("tr")
