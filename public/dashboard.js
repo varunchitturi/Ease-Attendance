@@ -301,7 +301,7 @@ auth.onAuthStateChanged((user) => {
                             let cell1 = currentRow.insertCell(0)
                             let cell2 = currentRow.insertCell(1)
                             let cell3 = currentRow.insertCell(2)
-                            currentRow.style.backgroundColor = "#ffffff"
+                            currentRow.style.backgroundColor = WHITE
                             cell1.innerHTML = PastMeetings[i].MeetingName
                             cell2.innerHTML = PastMeetings[i].MeetingID
                             cell3.innerHTML = PastMeetings[i].MeetingStart.toDate().toLocaleString()
@@ -401,8 +401,8 @@ function evaluateBRTable() {
     for (let i = BRPartipantsArray.length - 1; i >= 0; i--) {
         let array = BRPartipantsArray[i]
         let row = table.insertRow(1)
-        row.style.backgroundColor = "#ffffff"
-        row.style.color = "#000000"
+        row.style.backgroundColor = WHITE
+        row.style.color = BLACK
 
         let cell1RoomNumber = row.insertCell()
         cell1RoomNumber.rowSpan = array.length - 1
@@ -422,8 +422,8 @@ function evaluateBRTable() {
         }
         for (let j = 2; j < array.length; j++) {
             let rowSplit = table.insertRow(j)
-            rowSplit.style.backgroundColor = "#ffffff"
-            rowSplit.style.color = "#000000"
+            rowSplit.style.backgroundColor = WHITE
+            rowSplit.style.color = BLACK
 
             let cellStudentName = rowSplit.insertCell()
             cellStudentName.innerHTML = array[j]
@@ -890,8 +890,8 @@ $("#student-search-input-field").on('keyup', function (e) {
         const fullName = Participants[i].firstName + " " + Participants[i].lastName
         if(fullName.toLowerCase().includes(currValue.toLowerCase().trim())){
             let row = participantTable.insertRow(1+findIndexOfRow(i));
-            row.style.backgroundColor = "#ffffff"
-            row.style.color = "#000000"
+            row.style.backgroundColor = WHITE
+            row.style.color = BLACK
             let cell1 = row.insertCell(0)
             let cell2 = row.insertCell(1)
             let cell3 = row.insertCell(2)
@@ -899,16 +899,16 @@ $("#student-search-input-field").on('keyup', function (e) {
             let cell5State = row.insertCell(4)
             if(Participants[i].state === "Not Registered"){
                 row.style.backgroundColor = "#b8b8b8"
-                cell5State.style.color = "#000000"
+                cell5State.style.color = BLACK
             }
             else if(Participants[i].state === "Absent"){
-                cell5State.style.color = "#dd174d"
+                cell5State.style.color = ABSENT_RED
             }
             else if(Participants[i].state === "Left Meeting"){
-                cell5State.style.color = "#ddb217"
+                cell5State.style.color = LEFT_MEETING_YELLOW
             }
             else if(Participants[i].state === "Present"){
-                cell5State.style.color = "#00bc50"
+                cell5State.style.color = PRESENT_GREEN
             }
             cell5State.innerHTML = Participants[i].state
             cell1.innerHTML = Participants[i].firstName
@@ -942,9 +942,9 @@ function filterClick(clicked_id){
                 presentParticipantCount += 1
             }
             else{
-                row.style.backgroundColor = "#ffffff"
+                row.style.backgroundColor = WHITE
             }
-            row.style.color = "#000000"
+            row.style.color = BLACK
             let cell1 = row.insertCell(0)
             let cell2 = row.insertCell(1)
             let cell3 = row.insertCell(2)
@@ -952,16 +952,16 @@ function filterClick(clicked_id){
             let cell5Status = row.insertCell(4)
             cell5Status.innerHTML = Participants[i].state
             if(Participants[i].state === "Present"){
-                cell5Status.style.color = "#00bc50"
+                cell5Status.style.color = PRESENT_GREEN
                 presentParticipantCount += 1
                 totalParticipants += 1
             }
             if(Participants[i].state === "Absent"){
-                cell5Status.style.color = "#dd174d"
+                cell5Status.style.color = ABSENT_RED
                 totalParticipants += 1
             }
             if(Participants[i].state === "Left Meeting"){
-                cell5Status.style.color = "#ddb217"
+                cell5Status.style.color = LEFT_MEETING_YELLOW
                 totalParticipants += 1
             }
             cell1.innerHTML = Participants[i].firstName
@@ -979,15 +979,15 @@ function filterClick(clicked_id){
             if(Participants[i].state === "Present"){
                 presentParticipantCount += 1
                 let row = participantTable.insertRow(1+ findIndexOfRow(i));
-                row.style.backgroundColor = "#ffffff"
-                row.style.color = "#000000"
+                row.style.backgroundColor = WHITE
+                row.style.color = BLACK
                 let cell1 = row.insertCell(0)
                 let cell2 = row.insertCell(1)
                 let cell3 = row.insertCell(2)// cell 3 contains time now
                 let cell4TimeLeft = row.insertCell(3)
                 let cell5State = row.insertCell(4) // changed cell3 to cell4
                 cell5State.innerHTML = Participants[i].state
-                cell5State.style.color = "#00bc50"
+                cell5State.style.color = PRESENT_GREEN
                 cell1.innerHTML = Participants[i].firstName
                 cell2.innerHTML = Participants[i].lastName
                 cell3.innerHTML = isoToLocalString(Participants[i].timeJoined)
@@ -1014,15 +1014,15 @@ function filterClick(clicked_id){
         for(let i = Participants.length-1; i >= 0; i--){
             if(Participants[i].state === "Absent"){
                 let row = participantTable.insertRow(1+ findIndexOfRow(i));
-                row.style.backgroundColor = "#ffffff"
-                row.style.color = "#000000"
+                row.style.backgroundColor = WHITE
+                row.style.color = BLACK
                 let cell1 = row.insertCell(0)
                 let cell2 = row.insertCell(1)
                 let cell3 = row.insertCell(2)// cell 3 contains time now
                 let cell4TimeLeft = row.insertCell(3)
                 let cell5State = row.insertCell(4) // changed cell3 to cell4
                 cell5State.innerHTML = Participants[i].state
-                cell5State.style.color = "#dd174d"
+                cell5State.style.color = ABSENT_RED
                 cell1.innerHTML = Participants[i].firstName
                 cell2.innerHTML = Participants[i].lastName
                 cell3.innerHTML = ""
@@ -1052,7 +1052,7 @@ function filterClick(clicked_id){
                 notRegisteredCount += 1
                 let row = participantTable.insertRow(1+ findIndexOfRow(i));
                 row.style.backgroundColor = "#b8b8b8"
-                row.style.color = "#000000"
+                row.style.color = BLACK
                 let cell1 = row.insertCell(0)
                 let cell2 = row.insertCell(1)
                 let cell3 = row.insertCell(2)// cell 3 contains time now
@@ -1085,14 +1085,14 @@ function filterClick(clicked_id){
         for(let i = Participants.length-1; i >= 0; i--){
             if(Participants[i].state === "Left Meeting"){
                 let row = participantTable.insertRow(1+ findIndexOfRow(i));
-                row.style.backgroundColor = "#ffffff"
+                row.style.backgroundColor = WHITE
                 let cell1 = row.insertCell(0)
                 let cell2 = row.insertCell(1)
                 let cell3 = row.insertCell(2)// cell 3 contains time now
                 let cell4TimeLeft = row.insertCell(3)
                 let cell5State = row.insertCell(4) // changed cell3 to cell4
                 cell5State.innerHTML = Participants[i].state
-                cell5State.style.color = "#ddb217"
+                cell5State.style.color = LEFT_MEETING_YELLOW
                 cell1.innerHTML = Participants[i].firstName
                 cell2.innerHTML = Participants[i].lastName
                 cell3.innerHTML = isoToLocalString(Participants[i].timeJoined)
@@ -1393,7 +1393,7 @@ $("#records-search-input-field").on('keyup', function (e) {
             let cell1 = currentRow.insertCell(0)
             let cell2 = currentRow.insertCell(1)
             let cell3 = currentRow.insertCell(2)
-            currentRow.style.backgroundColor = "#ffffff"
+            currentRow.style.backgroundColor = WHITE
             cell1.innerHTML = PastMeetings[i].MeetingName
             cell2.innerHTML = PastMeetings[i].MeetingID
             cell3.innerHTML = PastMeetings[i].MeetingStart.toDate().toLocaleString()
@@ -1417,8 +1417,8 @@ $("#current-record-search-input-field").on('keyup', function (e) {
         const currString = CryptoJS.AES.decrypt(PastMeetings[currentRecordIndex].events[i],auth.currentUser.uid).toString(CryptoJS.enc.Utf8);
         if(currString.toLowerCase().includes(currValue.toLowerCase().trim())){
             let row = currentRecordTable.insertRow(0);
-            row.style.backgroundColor = "#ffffff"
-            row.style.color = "#000000"
+            row.style.backgroundColor = WHITE
+            row.style.color = BLACK
             let cell1 = row.insertCell(0)
             cell1.innerHTML = CryptoJS.AES.decrypt(PastMeetings[currentRecordIndex].events[i],auth.currentUser.uid).toString(CryptoJS.enc.Utf8);
 
