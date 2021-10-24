@@ -72,6 +72,7 @@ let BRPartipantsArray = {};
 let instructorCountBR = 0
 let studentCountBR = 0
 let presentParticipantsSet = new Set()
+let rowToMoveTo = []
 
 const filterUpHTML = "<span id=\"filter-caret\" class=\"iconify\" data-icon=\"ion-caret-up\" data-inline=\"false\" style=\"margin-right: -3px\"></span>\n" +
     "                            <span id=\"filter-button-icon\" class=\"iconify\" style=\"font-size: 30px\" data-icon=\"bx:bx-filter-alt\" data-inline=\"false\"></span>"
@@ -380,13 +381,22 @@ function reorganizeStudents(){
     }
     //finds optimal number of studnets per room
     let averageStudentCount = studentCountBR/instructorCountBR
+
+    if(studentCountBR==0){
+        redNotification("You have no students!")
+        return;
+    }
+    if(instructorCountBR==0){
+        redNotification("You have no teachers!")
+        return;
+    }
+
     averageStudentCount = Math.ceil(averageStudentCount)
     console.log("average student count = "+averageStudentCount)
     const table = document.getElementById("table-breakout_rooms")
 
 
     let maxStudentLength = BRPartipantsArray[0].length
-    let needsMovingRow = []
     let rowCount = table.getElementsByTagName("tr").length
     let arrAreInstructorsPresent = []
     let arrTeacherNumStudnets = []
@@ -406,19 +416,52 @@ function reorganizeStudents(){
             if(presentParticipantsSet.has(toFirstAndLast(BRPartipantsArray[i][j]))){
                 arrTeacherNumStudnets[i]++;
             }
-
-
         }
     }
-    console.log(arrAreInstructorsPresent)
-    console.log(arrTeacherNumStudnets)
+    rowNumber = 1
+    rowToMoveTo = []
+    for(let i = 0; i < BRPartipantsArray.length ; i++){
+        for(let j = 1; j < maxStudentLength; j++,rowNumber++){
+            console.log("row number "+rowNumber+" is "+BRPartipantsArray[i][j])
+            if(presentParticipantsSet.has(toFirstAndLast(BRPartipantsArray[i][j])) &&
+                (!arrAreInstructorsPresent[i] || arrTeacherNumStudnets[i] > averageStudentCount)){
+                let loc = findOpenRoom(arrAreInstructorsPresent, arrTeacherNumStudnets, averageStudentCount)
+                rowToMoveTo.push(loc)
+                arrTeacherNumStudnets[i]--;
+                arrTeacherNumStudnets[loc]++;
+            }else{
+                rowToMoveTo.push(-2)
+            }
+        }
+    }
+    console.log("arrAreInstructorsPresent = "+arrAreInstructorsPresent)
+    console.log("arrTeacherNumStudnets = "+arrTeacherNumStudnets)
+    console.log("rowToMoveTo = "+rowToMoveTo)
+    rowNumber = 0;
+    for(let i = 0; i < BRPartipantsArray.length ; i++){
+        for(let j = 1; j < maxStudentLength; j++,rowNumber++){
+            rowToMoveTo[rowNumber]++;
+        }
+    }
+    rowNumber = 0
+    for(let i = 0; i < BRPartipantsArray.length ; i++){
+        for(let j = 1; j < maxStudentLength; j++,rowNumber++){
+            console.log(BRPartipantsArray[i][j]+"  "+rowToMoveTo[rowNumber])
+        }
+    }
+    evaluateBRTable()
 }
 function findOpenRoom(arrAreInstructorsPresent, arrTeacherNumStudnets, averageStudentCount){
     for(let k = 0;k < arrAreInstructorsPresent.length; k++){
-        if(arrAreInstructorsPresent && arrTeacherNumStudnets[k]<=averageStudentCount){
+        if(arrAreInstructorsPresent[k] && arrTeacherNumStudnets[k]<(averageStudentCount-1)){
             return k;
         }
-    }
+    }// loop once looking for unfilled rooms
+    for(let k = 0;k < arrAreInstructorsPresent.length; k++){
+        if(arrAreInstructorsPresent[k] && arrTeacherNumStudnets[k]<averageStudentCount){
+            return k;
+        }
+    }//then fill up filled rooms
 }
 
 function evaluateBRTable() {
@@ -497,6 +540,13 @@ function evaluateBRTable() {
             }
             let cellBreakoutRoomSwitch = rowSplit.insertCell()
         }
+    }
+    for(let i = 1 ; i <= rowToMoveTo.length; i++){
+        let rows = table.rows
+        let myRow = rows[i]
+        let cells = myRow.cells
+        let cell = cells[cells.length-1]
+        cell.innerHTML = rowToMoveTo[i]
     }
     document.getElementById("refresh-cover-breakout_rooms").classList.remove("running")
     document.getElementById("ld-spin-breakout_rooms").style.display = "none"
