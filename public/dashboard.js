@@ -541,11 +541,15 @@ function evaluateBRTable() {
             let cellBreakoutRoomSwitch = rowSplit.insertCell()
         }
     }
-    for(let i = 1 ; i <= rowToMoveTo.length; i++){
+    for(let i = 0 ; i < rowToMoveTo.length; i++){
         let rows = table.rows
-        let myRow = rows[i]
+        if (!rows) break;
+        let myRow = rows[i+1]
+        if (!myRow) break;
         let cells = myRow.cells
+        if (!cells) break;
         let cell = cells[cells.length-1]
+        if (!cell) break;
         cell.innerHTML = rowToMoveTo[i]
     }
     document.getElementById("refresh-cover-breakout_rooms").classList.remove("running")
