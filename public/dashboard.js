@@ -550,7 +550,9 @@ function evaluateBRTable() {
         if (!cells) break;
         let cell = cells[cells.length-1]
         if (!cell) break;
-        cell.innerHTML = rowToMoveTo[i]
+        if(rowToMoveTo[i]!= -1){
+            cell.innerHTML = rowToMoveTo[i]
+        }
     }
     document.getElementById("refresh-cover-breakout_rooms").classList.remove("running")
     document.getElementById("ld-spin-breakout_rooms").style.display = "none"
