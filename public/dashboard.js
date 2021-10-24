@@ -69,7 +69,9 @@ const PRESENT_GREEN = "#00bc50"
 //BREAKOUT ROOM VARS
 let breakoutRoomUser = false
 let BRPartipantsArray = {};
-
+let instructorCountBR = 0
+let studentCountBR = 0
+let presentParticipantsSet = new Set()
 
 const filterUpHTML = "<span id=\"filter-caret\" class=\"iconify\" data-icon=\"ion-caret-up\" data-inline=\"false\" style=\"margin-right: -3px\"></span>\n" +
     "                            <span id=\"filter-button-icon\" class=\"iconify\" style=\"font-size: 30px\" data-icon=\"bx:bx-filter-alt\" data-inline=\"false\"></span>"
@@ -365,10 +367,48 @@ function evaluateBreakoutRoomTable(doc){
     if (!breakoutRoomUser) return;
 
 }
-
+//look at documentation in whimsical
 function reorganizeStudents(){
     if (!breakoutRoomUser) return;
+    if (!MeetingIsOccurring){
+        redNotification("There is no meeting occuring!")
+        return;
+    }
+    if (!BRPartipantsArray){
+        redNotification("The CSV file is unreadable")
+        return;
+    }
+    //finds optimal number of studnets per room
+    let averageStudentCount = studentCountBR/instructorCountBR
+    console.log("average student count = "+averageStudentCount)
+    const table = document.getElementById("table-breakout_rooms")
 
+
+    let maxStudentLength = BRPartipantsArray[0].length
+    let needsMovingRow = []
+    let rowCount = table.getElementsByTagName("tr").length
+    let arrAreInstructorsPresent = []
+    let arrTeacherNumStudnets = []
+
+    let rowNumber=1;
+
+    //Finds who needs moving by row number
+    for(let i = 0; i < BRPartipantsArray.length ; i++){
+        if(presentParticipantsSet.has(toFirstAndLast(BRPartipantsArray[i][0]))){
+            arrAreInstructorsPresent.push(true)
+        }else{
+            arrAreInstructorsPresent.push(false)
+        }
+        arrTeacherNumStudnets.push(0)
+        for(let j = 1; j < maxStudentLength; j++,rowNumber++){
+            console.log("row number "+rowNumber+" is "+BRPartipantsArray[i][j])
+            if(presentParticipantsSet.has(toFirstAndLast(BRPartipantsArray[i][j]))){
+                arrTeacherNumStudnets[i]++;
+            }
+        }
+    }
+    console.log(arrAreInstructorsPresent)
+    console.log(arrTeacherNumStudnets)
 }
 
 function evaluateBRTable() {
@@ -376,7 +416,7 @@ function evaluateBRTable() {
     document.getElementById("refresh-cover-breakout_rooms").classList.add("running")
     document.getElementById("ld-spin-breakout_rooms").style.display = "block"
 
-    let presentParticipantsSet = new Set()
+    presentParticipantsSet = new Set()
     if(MeetingIsOccurring){
         document.getElementById("status-dot-breakout_rooms").classList.remove("dot-danger")
         document.getElementById("status-dot-breakout_rooms").classList.add("dot-success")
@@ -398,6 +438,8 @@ function evaluateBRTable() {
 
     const table = document.getElementById("table-breakout_rooms")
     clearBRTable(table)
+    instructorCountBR = 0;
+    studentCountBR = 0;
 
     for (let i = BRPartipantsArray.length - 1; i >= 0; i--) {
         let array = BRPartipantsArray[i]
@@ -412,8 +454,9 @@ function evaluateBRTable() {
         let cell2TeacherName = row.insertCell()
         cell2TeacherName.rowSpan = array.length - 1
         cell2TeacherName.innerHTML = array[0];
-        if(MeetingIsOccurring && presentParticipantsSet.has(array[0])){
+        if(MeetingIsOccurring && presentParticipantsSet.has(toFirstAndLast(array[0]))){
             cell2TeacherName.style.color = PRESENT_GREEN
+            instructorCountBR++;
         }else if (MeetingIsOccurring){
             cell2TeacherName.style.color = ABSENT_RED
         }
@@ -422,8 +465,9 @@ function evaluateBRTable() {
         let cell4BreakoutRoomSwitch = row.insertCell()
         if (array[1]) {
             cell3StudentNames.innerHTML = array[1]
-            if(MeetingIsOccurring && presentParticipantsSet.has(array[1])){
+            if(MeetingIsOccurring && presentParticipantsSet.has(toFirstAndLast(array[1]))){
                 cell3StudentNames.style.color = PRESENT_GREEN
+                studentCountBR++;
             }else if (MeetingIsOccurring){
                 cell3StudentNames.style.color = ABSENT_RED
             }
@@ -435,8 +479,9 @@ function evaluateBRTable() {
 
             let cellStudentName = rowSplit.insertCell()
             cellStudentName.innerHTML = array[j]
-            if (MeetingIsOccurring && presentParticipantsSet.has(array[j])){
+            if (MeetingIsOccurring && presentParticipantsSet.has(toFirstAndLast(array[j]))){
                 cellStudentName.style.color = PRESENT_GREEN
+                studentCountBR++;
             }else if (MeetingIsOccurring){
                 cellStudentName.style.color = ABSENT_RED
             }
@@ -445,6 +490,16 @@ function evaluateBRTable() {
     }
     document.getElementById("refresh-cover-breakout_rooms").classList.remove("running")
     document.getElementById("ld-spin-breakout_rooms").style.display = "none"
+}
+function toFirstAndLast(fullName){
+    try{
+        if (fullName){
+            let name = fullName.split(" ")
+            return name[0] +" "+ name[name.length-1]
+        }
+    }catch (e){
+        console.error(e)
+    }
 }
 
 /**

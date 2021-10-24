@@ -64,7 +64,8 @@ urltest = "http://localhost:4000/api/requests"
 ulr = ''
 
 VarunHostID = "hIk5FOWfR-SFE9DgN-2N2w"
-AdityaHostID = "TbQ_nGjpR9aMPQnS-IkQPQ"
+AdityaHostID = "5Zmdjr_RSFG1nXI32v2jsQ"
+#old adi was TbQ_nGjpR9aMPQnS-IkQPQ
 
 HostID = ''
 
@@ -73,8 +74,8 @@ meetingName = "Period 3"
 
 
 participants = ['Dorothy Brown', 'Mercedes Holmes', 'Charles Monk', 'Leo Brown', 'Sterling Marra', 'Jeffrey Hakes', 'Paul Smith', 'Hope Harnden', 'Dwight Lundy', 'Luke Brown', 'Bette Johnson', 'Rosario Dyer', 'John Ming', 'Robert Chandler', 'Christine Parrish', 'Ricky Burton', 'Irene Mercure', 'Lawrence Collins', 'Martha Anderson', 'Maria Parker', 'Ben Lopez', 'Daniel Mingione', 'James Hallmark', 'Julie Harris', 'Linda Cao', 'Clarence Vernon', 'Michael Olivarez', 'Robert Rivers', 'Minnie Tang', 'Charles Hall']
-participants = ['Jane Perez', 'Howard Sharum', 'Brent Honeycutt', 'Jason Wright', 'Nancy Patterson', 'Ethyl Reed', 'Lino Nichols', 'Mary Wheatley', 'Alisa Alston', 'Edith Corum', 'Tiffany Britt', 'Laura Wonders', 'Heather Roberts', 'Erica Branson', 'Tequila Mazur', 'Steven Zelkin', 'Addie Frizzell', 'Lois Cornelius', 'Kevin Wells', 'Dustin Vail', 'Joyce Christman', 'Jeffrey Melton', 'William Collins', 'Daniel Boschert', 'Jerry Trinkle', 'Shirley Ayala', 'Donald Dunkerson', 'Joan Cuellar', 'Barbara Botti', 'Frank Lowe', 'Justin Dailey', 'Neal Lyons']
-
+participants = ['Aditya Patel', 'devan velji', 'vasu vinod', 'jeffrey evans', 'rupin kumar', 'varun chitturi', 'sunny chad', 'deshpande aditya', 'rithwik lnk', 'sanidhya singggg', 'tanmay lake tahoe', 'rishab pandeyyyy', 'mr spencer', 'beterson sir', 'left for hawaii', 'Darsh Trivedi', 'Adi Aneja', 'mr ashwin konda', 'Abhik Mullick', 'homie from', 'the same mother']
+participants = ['Aditya Patel', 'devan velji',  'jeffrey evans', 'rupin kumar', 'varun chitturi', 'sunny chad',  'rithwik lnk', 'sanidhya singggg', 'tanmay lake tahoe',  'mr spencer', 'beterson sir', 'left for hawaii', 'Darsh Trivedi', 'Adi Aneja', 'mr ashwin konda', 'Abhik Mullick', 'homie from', 'the same mother']
 if input("who dis?(v/a) ") == "v":
     HostID = VarunHostID
     print("Hello Varun")
@@ -124,23 +125,24 @@ print("the order of operations is the order in which meeting will start/end, or 
 print("ms stands for meeting started. me for meeting ended. pj for participants join, and pl for leave")
 print("for example, entering \"ms pj pl pj me\" will cause a meeting start webhook, then all participants join, "
       "then leave, then rejoin, then the meeting will end")
-orderOperations = input("what order of operations would you like(enter space-separated format)? ")
-print()
-sleepTimeBetweenOperations = float(input("enter the time this test should wait in between operations, for example "
-                                         "between starting a meeting and beginning to add participants, or between "
-                                         "finishing adding participants and removing them: "))
-print()
-sleepTimeParts = float(input("would you like a sleep time between each participant join or left? enter the length of "
-                             "the sleep between each participant join/left in seconds here: "))
-print()
-print("starting...")
-print()
-
-OrderOperationsArray = orderOperations.split()
-
-print(OrderOperationsArray)
-
-for x in OrderOperationsArray:
+# orderOperations = input("what order of operations would you like(enter space-separated format)? ")
+# print()
+# sleepTimeBetweenOperations = float(input("enter the time this test should wait in between operations, for example "
+#                                          "between starting a meeting and beginning to add participants, or between "
+#                                          "finishing adding participants and removing them: "))
+# print()
+# sleepTimeParts = float(input("would you like a sleep time between each participant join or left? enter the length of "
+#                              "the sleep between each participant join/left in seconds here: "))
+# print()
+# print("starting...")
+# print()
+#
+# OrderOperationsArray = orderOperations.split()
+#
+# print(OrderOperationsArray)
+print("\n\n")
+while True:
+    x = input("enter an action : ")
     if x == "ms":
         startMeeting(meetingName, meetingID, HostID, url)
     if x == "me":
@@ -148,14 +150,9 @@ for x in OrderOperationsArray:
     if x == "pj":
         for name in participants:
             addParticipant(name, meetingName, meetingID, HostID, 'generic@gmail.com', url)
-            sleep(sleepTimeParts)
     if x == 'pl':
         for name in participants:
             removeParticipant(name, meetingName, meetingID, HostID, 'generic@gmail.com', url)
-            sleep(sleepTimeParts)
-    print()
-    print()
+    if x == "break":
+        break
     print(x + " operation completed")
-    print()
-    print()
-    sleep(sleepTimeBetweenOperations)
