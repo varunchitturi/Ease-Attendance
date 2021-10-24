@@ -383,7 +383,7 @@ function evaluateBRTable() {
         document.getElementById("currentMeeting-name-breakout_rooms").innerHTML = "Meeting: " + CurrentMeeting
         document.getElementById("meeting-id-attendance-breakout_rooms").innerHTML = "ID: " + CurrentMeetingID
         for(let i = 0; i < Participants.length; i++){
-            if(Participants[i].state === "Present"){
+            if(Participants[i].state === "Present" || Participants[i].state === "Not Registered"){
                 presentParticipantsSet.add(Participants[i].firstName+" "+Participants[i].lastName)
             }
         }
