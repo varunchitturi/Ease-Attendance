@@ -380,6 +380,7 @@ function reorganizeStudents(){
     }
     //finds optimal number of studnets per room
     let averageStudentCount = studentCountBR/instructorCountBR
+    averageStudentCount = Math.ceil(averageStudentCount)
     console.log("average student count = "+averageStudentCount)
     const table = document.getElementById("table-breakout_rooms")
 
@@ -405,10 +406,19 @@ function reorganizeStudents(){
             if(presentParticipantsSet.has(toFirstAndLast(BRPartipantsArray[i][j]))){
                 arrTeacherNumStudnets[i]++;
             }
+
+
         }
     }
     console.log(arrAreInstructorsPresent)
     console.log(arrTeacherNumStudnets)
+}
+function findOpenRoom(arrAreInstructorsPresent, arrTeacherNumStudnets, averageStudentCount){
+    for(let k = 0;k < arrAreInstructorsPresent.length; k++){
+        if(arrAreInstructorsPresent && arrTeacherNumStudnets[k]<=averageStudentCount){
+            return k;
+        }
+    }
 }
 
 function evaluateBRTable() {
