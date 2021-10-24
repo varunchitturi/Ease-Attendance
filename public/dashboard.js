@@ -59,6 +59,13 @@ let chooseRosterMenu = $("#dropdown-roster-menu")
 let zoomUser = false
 let webexUser = false
 
+//COLORS
+const BLACK = "#000000"
+const WHITE = "#ffffff"
+const ABSENT_RED = "#dd174d"
+const LEFT_MEETING_YELLOW = "#ddb217"
+const PRESENT_GREEN = "#00bc50"
+
 //BREAKOUT ROOM VARS
 let breakoutRoomUser = false
 let BRPartipantsArray = {};
@@ -409,6 +416,9 @@ function evaluateBRTable() {
         let cell4BreakoutRoomSwitch = row.insertCell()
         if (array[1]) {
             cell3StudentNames.innerHTML = array[1]
+            if(presentParticipantsSet.has(array[1])){
+                cell3StudentNames.style.color = ""
+            }
         }
         for (let j = 2; j < array.length; j++) {
             let rowSplit = table.insertRow(j)
