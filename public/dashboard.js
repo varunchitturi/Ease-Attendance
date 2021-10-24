@@ -367,14 +367,30 @@ function reorganizeStudents(){
 function evaluateBRTable() {
     document.getElementById("refresh-cover-breakout_rooms").classList.add("running")
     document.getElementById("ld-spin-breakout_rooms").style.display = "block"
+
+    let presentParticipantsSet = new Set()
+    if(MeetingIsOccurring){
+        document.getElementById("status-dot-breakout_rooms").classList.remove("dot-danger")
+        document.getElementById("status-dot-breakout_rooms").classList.add("dot-success")
+
+        document.getElementById("currentMeeting-name-breakout_rooms").innerHTML = "Meeting: " + CurrentMeeting
+        document.getElementById("meeting-id-attendance-breakout_rooms").innerHTML = "ID: " + CurrentMeetingID
+        for(let i = 0; i < Participants.length; i++){
+            if(Participants[i].state === "Present"){
+                presentParticipantsSet.add(Participants[i].firstName+" "+Participants[i].lastName)
+            }
+        }
+    }else{ // no meeting currently.
+        document.getElementById("status-dot-breakout_rooms").classList.remove("dot-success")
+        document.getElementById("status-dot-breakout_rooms").classList.add("dot-danger")
+
+        document.getElementById("currentMeeting-name-breakout_rooms").innerHTML = "No Meeting Has Started"
+        document.getElementById("meeting-id-attendance-breakout_rooms").innerHTML = "ID: "
+    }
+
     const table = document.getElementById("table-breakout_rooms")
     clearBRTable(table)
-/*    let presentParticipantsSet = Set()
-    for(let i = 0; i < Participants.length; i++){
-        if(Participants[i].state === "Present"){
-            presentParticipantsSet.add(Participants[i].firstName+" "+Participants[i].lastName)
-        }
-    }*/
+
     for (let i = BRPartipantsArray.length - 1; i >= 0; i--) {
         let array = BRPartipantsArray[i]
         let row = table.insertRow(1)
@@ -767,6 +783,7 @@ function evaluateParticipantTable(doc){
         document.getElementById("ld-spin").style.display = "none"
         document.getElementById("refresh").disabled = false
         document.getElementById("refresh-cover").classList.remove("running")
+        evaluateBRTable()
     }
     else{
         if(MeetingIsOccurring){
