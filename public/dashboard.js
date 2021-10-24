@@ -411,13 +411,20 @@ function evaluateBRTable() {
         let cell2TeacherName = row.insertCell()
         cell2TeacherName.rowSpan = array.length - 1
         cell2TeacherName.innerHTML = array[0];
+        if(MeetingIsOccurring && presentParticipantsSet.has(array[0])){
+            cell2TeacherName.style.color = PRESENT_GREEN
+        }else {
+            cell2TeacherName.style.color = ABSENT_RED
+        }
 
         let cell3StudentNames = row.insertCell()
         let cell4BreakoutRoomSwitch = row.insertCell()
         if (array[1]) {
             cell3StudentNames.innerHTML = array[1]
-            if(presentParticipantsSet.has(array[1])){
-                cell3StudentNames.style.color = ""
+            if(MeetingIsOccurring && presentParticipantsSet.has(array[1])){
+                cell3StudentNames.style.color = PRESENT_GREEN
+            }else{
+                cell3StudentNames.style.color = ABSENT_RED
             }
         }
         for (let j = 2; j < array.length; j++) {
@@ -427,7 +434,11 @@ function evaluateBRTable() {
 
             let cellStudentName = rowSplit.insertCell()
             cellStudentName.innerHTML = array[j]
-
+            if (MeetingIsOccurring && presentParticipantsSet.has(array[j])){
+                cellStudentName.style.color = PRESENT_GREEN
+            }else{
+                cellStudentName.style.color = ABSENT_RED
+            }
             let cellBreakoutRoomSwitch = rowSplit.insertCell()
         }
     }
