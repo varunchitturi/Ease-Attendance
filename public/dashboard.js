@@ -783,7 +783,6 @@ function evaluateParticipantTable(doc){
         document.getElementById("ld-spin").style.display = "none"
         document.getElementById("refresh").disabled = false
         document.getElementById("refresh-cover").classList.remove("running")
-        evaluateBRTable()
     }
     else{
         if(MeetingIsOccurring){
@@ -854,6 +853,7 @@ function evaluateParticipantTable(doc){
             hideRegisterRosterButtons()
         }
     }
+    evaluateBRTable()
 }
 function clearTable(){
     const participantTable = document.getElementById("participant-table")
