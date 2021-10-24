@@ -372,6 +372,7 @@ function reorganizeStudents(){
 }
 
 function evaluateBRTable() {
+    if(!breakoutRoomUser) return
     document.getElementById("refresh-cover-breakout_rooms").classList.add("running")
     document.getElementById("ld-spin-breakout_rooms").style.display = "block"
 
@@ -413,7 +414,7 @@ function evaluateBRTable() {
         cell2TeacherName.innerHTML = array[0];
         if(MeetingIsOccurring && presentParticipantsSet.has(array[0])){
             cell2TeacherName.style.color = PRESENT_GREEN
-        }else {
+        }else if (MeetingIsOccurring){
             cell2TeacherName.style.color = ABSENT_RED
         }
 
@@ -423,7 +424,7 @@ function evaluateBRTable() {
             cell3StudentNames.innerHTML = array[1]
             if(MeetingIsOccurring && presentParticipantsSet.has(array[1])){
                 cell3StudentNames.style.color = PRESENT_GREEN
-            }else{
+            }else if (MeetingIsOccurring){
                 cell3StudentNames.style.color = ABSENT_RED
             }
         }
@@ -436,7 +437,7 @@ function evaluateBRTable() {
             cellStudentName.innerHTML = array[j]
             if (MeetingIsOccurring && presentParticipantsSet.has(array[j])){
                 cellStudentName.style.color = PRESENT_GREEN
-            }else{
+            }else if (MeetingIsOccurring){
                 cellStudentName.style.color = ABSENT_RED
             }
             let cellBreakoutRoomSwitch = rowSplit.insertCell()
