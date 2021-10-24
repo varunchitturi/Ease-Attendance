@@ -9,10 +9,10 @@ class Meeting{
     }
 }
 class Participant{
-    constructor(first,last,attendance, roster, timeJoined , timeLeft) {
+    constructor(first,last,state, roster, timeJoined , timeLeft) {
         this.firstName = first
         this.lastName = last
-        this.state = attendance
+        this.state = state
         this.partOfRoster = roster
         this.timeJoined = timeJoined // stores ISO time joined, only changed once when participant joins for first time
         this.timeLeft = timeLeft // stores ISO time joined, only changed once when participant joins for first time
@@ -58,6 +58,22 @@ let chooseRoster = $("#dropdown-roster")
 let chooseRosterMenu = $("#dropdown-roster-menu")
 let zoomUser = false
 let webexUser = false
+
+//COLORS
+const BLACK = "#000000"
+const WHITE = "#ffffff"
+const ABSENT_RED = "#dd174d"
+const LEFT_MEETING_YELLOW = "#ddb217"
+const PRESENT_GREEN = "#00bc50"
+
+//BREAKOUT ROOM VARS
+let breakoutRoomUser = false
+let BRPartipantsArray = {};
+let instructorCountBR = 0
+let studentCountBR = 0
+let presentParticipantsSet = new Set()
+let rowToMoveTo = []
+
 const filterUpHTML = "<span id=\"filter-caret\" class=\"iconify\" data-icon=\"ion-caret-up\" data-inline=\"false\" style=\"margin-right: -3px\"></span>\n" +
     "                            <span id=\"filter-button-icon\" class=\"iconify\" style=\"font-size: 30px\" data-icon=\"bx:bx-filter-alt\" data-inline=\"false\"></span>"
 const filterDownHTML = "<span id=\"filter-caret\" class=\"iconify\" data-icon=\"ion-caret-down\" data-inline=\"false\" style=\"margin-right: -3px\"></span>\n" +
@@ -167,12 +183,18 @@ firestore.collection("UpdateBrowser").doc("updateDate").onSnapshot((doc) => {
 
 auth.onAuthStateChanged((user) => {
     if (user) {
+        //breakout room extention
         firestore.collection("Users").doc(user.uid).onSnapshot((doc) => {
             if(!doc.exists || !doc){
                 window.location.href = "/";
             }
+            if (doc.data().breakoutroom){
+                var showBreakoutRoom = document.getElementById("breakout-rooms-tab");
+                showBreakoutRoom.style.display = "block"
+                breakoutRoomUser = true
+            }
         })
-
+        //need to update to async
         firestore.collection("ZoomOAuth").where("firebaseID","==",user.uid).get().then((querySnapshot)=> {
             querySnapshot.forEach((doc) => {
                 zoomID = doc.data().userID;
@@ -183,10 +205,9 @@ auth.onAuthStateChanged((user) => {
                     webexID = doc.data().userID;
                     webexUser = true
                 })
-
                 document.getElementById("myTabContent").hidden = false
-
                 document.getElementById("user-name").innerHTML = "Welcome " + user.displayName
+                //gets periods and displays them in Meeting Rosters tab
                 firestore.collection("Periods").where("useruid", "==", user.uid)
                     .onSnapshot((querySnapshot) => {
                         MeetingsdidLoad = false
@@ -283,7 +304,7 @@ auth.onAuthStateChanged((user) => {
                             let cell1 = currentRow.insertCell(0)
                             let cell2 = currentRow.insertCell(1)
                             let cell3 = currentRow.insertCell(2)
-                            currentRow.style.backgroundColor = "#ffffff"
+                            currentRow.style.backgroundColor = WHITE
                             cell1.innerHTML = PastMeetings[i].MeetingName
                             cell2.innerHTML = PastMeetings[i].MeetingID
                             cell3.innerHTML = PastMeetings[i].MeetingStart.toDate().toLocaleString()
@@ -292,6 +313,7 @@ auth.onAuthStateChanged((user) => {
 
                     });
                 if(zoomUser && !webexUser){
+                    //STARTS WEBSOCKET ON SNAPCHAT ADI
                     firestore.collection("CurrentMeetings").doc(zoomID).onSnapshot((doc) => {
                         if (MeetingsdidLoad) {
                             evaluateParticipantTable(doc)
@@ -299,6 +321,9 @@ auth.onAuthStateChanged((user) => {
                             let getMeetingInterval = setInterval(() => {
                                 if (MeetingsdidLoad) {
                                     evaluateParticipantTable(doc)
+                                    if (breakoutRoomUser) {
+
+                                    }
                                     clearInterval(getMeetingInterval)
                                 }
                             }, 500)
@@ -325,12 +350,9 @@ auth.onAuthStateChanged((user) => {
                         console.error(error.message)
                     })
                 }
-
-
             }).catch((err)=>{
                 window.location.href = "/";
             })
-
         }).catch((err)=>{
             window.location.href = "/";
         })
@@ -339,6 +361,241 @@ auth.onAuthStateChanged((user) => {
         window.location.href = "/";
     }
 });
+
+//BREAKOUT ROOM RESEARCH PROJECT SECTION START
+//--------------------------------------------
+function evaluateBreakoutRoomTable(doc){
+    if (!breakoutRoomUser) return;
+
+}
+//look at documentation in whimsical
+function reorganizeStudents(){
+    if (!breakoutRoomUser) return;
+    if (!MeetingIsOccurring){
+        redNotification("There is no meeting occuring!")
+        return;
+    }
+    if (!BRPartipantsArray){
+        redNotification("The CSV file is unreadable")
+        return;
+    }
+    //finds optimal number of studnets per room
+    let averageStudentCount = studentCountBR/instructorCountBR
+
+    if(studentCountBR==0){
+        redNotification("You have no students!")
+        return;
+    }
+    if(instructorCountBR==0){
+        redNotification("You have no teachers!")
+        return;
+    }
+
+    averageStudentCount = Math.ceil(averageStudentCount)
+    console.log("average student count = "+averageStudentCount)
+    const table = document.getElementById("table-breakout_rooms")
+
+
+    let maxStudentLength = BRPartipantsArray[0].length
+    let rowCount = table.getElementsByTagName("tr").length
+    let arrAreInstructorsPresent = []
+    let arrTeacherNumStudnets = []
+
+    let rowNumber=1;
+
+    //Finds who needs moving by row number
+    for(let i = 0; i < BRPartipantsArray.length ; i++){
+        if(presentParticipantsSet.has(toFirstAndLast(BRPartipantsArray[i][0]))){
+            arrAreInstructorsPresent.push(true)
+        }else{
+            arrAreInstructorsPresent.push(false)
+        }
+        arrTeacherNumStudnets.push(0)
+        for(let j = 1; j < maxStudentLength; j++,rowNumber++){
+            console.log("row number "+rowNumber+" is "+BRPartipantsArray[i][j])
+            if(presentParticipantsSet.has(toFirstAndLast(BRPartipantsArray[i][j]))){
+                arrTeacherNumStudnets[i]++;
+            }
+        }
+    }
+    rowNumber = 1
+    rowToMoveTo = []
+    for(let i = 0; i < BRPartipantsArray.length ; i++){
+        for(let j = 1; j < maxStudentLength; j++,rowNumber++){
+            console.log("row number "+rowNumber+" is "+BRPartipantsArray[i][j])
+            if(presentParticipantsSet.has(toFirstAndLast(BRPartipantsArray[i][j])) &&
+                (!arrAreInstructorsPresent[i] || arrTeacherNumStudnets[i] > averageStudentCount)){
+                let loc = findOpenRoom(arrAreInstructorsPresent, arrTeacherNumStudnets, averageStudentCount)
+                rowToMoveTo.push(loc)
+                arrTeacherNumStudnets[i]--;
+                arrTeacherNumStudnets[loc]++;
+            }else{
+                rowToMoveTo.push(-2)
+            }
+        }
+    }
+    console.log("arrAreInstructorsPresent = "+arrAreInstructorsPresent)
+    console.log("arrTeacherNumStudnets = "+arrTeacherNumStudnets)
+    console.log("rowToMoveTo = "+rowToMoveTo)
+    rowNumber = 0;
+    for(let i = 0; i < BRPartipantsArray.length ; i++){
+        for(let j = 1; j < maxStudentLength; j++,rowNumber++){
+            rowToMoveTo[rowNumber]++;
+        }
+    }
+    rowNumber = 0
+    for(let i = 0; i < BRPartipantsArray.length ; i++){
+        for(let j = 1; j < maxStudentLength; j++,rowNumber++){
+            console.log(BRPartipantsArray[i][j]+"  "+rowToMoveTo[rowNumber])
+        }
+    }
+    evaluateBRTable()
+}
+function findOpenRoom(arrAreInstructorsPresent, arrTeacherNumStudnets, averageStudentCount){
+    for(let k = 0;k < arrAreInstructorsPresent.length; k++){
+        if(arrAreInstructorsPresent[k] && arrTeacherNumStudnets[k]<(averageStudentCount-1)){
+            return k;
+        }
+    }// loop once looking for unfilled rooms
+    for(let k = 0;k < arrAreInstructorsPresent.length; k++){
+        if(arrAreInstructorsPresent[k] && arrTeacherNumStudnets[k]<averageStudentCount){
+            return k;
+        }
+    }//then fill up filled rooms
+}
+
+function evaluateBRTable() {
+    if(!breakoutRoomUser) return
+    document.getElementById("refresh-cover-breakout_rooms").classList.add("running")
+    document.getElementById("ld-spin-breakout_rooms").style.display = "block"
+
+    presentParticipantsSet = new Set()
+    if(MeetingIsOccurring){
+        document.getElementById("status-dot-breakout_rooms").classList.remove("dot-danger")
+        document.getElementById("status-dot-breakout_rooms").classList.add("dot-success")
+
+        document.getElementById("currentMeeting-name-breakout_rooms").innerHTML = "Meeting: " + CurrentMeeting
+        document.getElementById("meeting-id-attendance-breakout_rooms").innerHTML = "ID: " + CurrentMeetingID
+        for(let i = 0; i < Participants.length; i++){
+            if(Participants[i].state === "Present" || Participants[i].state === "Not Registered"){
+                presentParticipantsSet.add(Participants[i].firstName+" "+Participants[i].lastName)
+            }
+        }
+    }else{ // no meeting currently.
+        document.getElementById("status-dot-breakout_rooms").classList.remove("dot-success")
+        document.getElementById("status-dot-breakout_rooms").classList.add("dot-danger")
+
+        document.getElementById("currentMeeting-name-breakout_rooms").innerHTML = "No Meeting Has Started"
+        document.getElementById("meeting-id-attendance-breakout_rooms").innerHTML = "ID: "
+    }
+
+    const table = document.getElementById("table-breakout_rooms")
+    clearBRTable(table)
+    instructorCountBR = 0;
+    studentCountBR = 0;
+
+    for (let i = BRPartipantsArray.length - 1; i >= 0; i--) {
+        let array = BRPartipantsArray[i]
+        let row = table.insertRow(1)
+        row.style.backgroundColor = WHITE
+        row.style.color = BLACK
+
+        let cell1RoomNumber = row.insertCell()
+        cell1RoomNumber.rowSpan = array.length - 1
+        cell1RoomNumber.innerHTML = i+1;
+
+        let cell2TeacherName = row.insertCell()
+        cell2TeacherName.rowSpan = array.length - 1
+        cell2TeacherName.innerHTML = array[0];
+        if(MeetingIsOccurring && presentParticipantsSet.has(toFirstAndLast(array[0]))){
+            cell2TeacherName.style.color = PRESENT_GREEN
+            instructorCountBR++;
+        }else if (MeetingIsOccurring){
+            cell2TeacherName.style.color = ABSENT_RED
+        }
+
+        let cell3StudentNames = row.insertCell()
+        let cell4BreakoutRoomSwitch = row.insertCell()
+        if (array[1]) {
+            cell3StudentNames.innerHTML = array[1]
+            if(MeetingIsOccurring && presentParticipantsSet.has(toFirstAndLast(array[1]))){
+                cell3StudentNames.style.color = PRESENT_GREEN
+                studentCountBR++;
+            }else if (MeetingIsOccurring){
+                cell3StudentNames.style.color = ABSENT_RED
+            }
+        }
+        for (let j = 2; j < array.length; j++) {
+            let rowSplit = table.insertRow(j)
+            rowSplit.style.backgroundColor = WHITE
+            rowSplit.style.color = BLACK
+
+            let cellStudentName = rowSplit.insertCell()
+            cellStudentName.innerHTML = array[j]
+            if (MeetingIsOccurring && presentParticipantsSet.has(toFirstAndLast(array[j]))){
+                cellStudentName.style.color = PRESENT_GREEN
+                studentCountBR++;
+            }else if (MeetingIsOccurring){
+                cellStudentName.style.color = ABSENT_RED
+            }
+            let cellBreakoutRoomSwitch = rowSplit.insertCell()
+        }
+    }
+    for(let i = 0 ; i < rowToMoveTo.length; i++){
+        let rows = table.rows
+        if (!rows) break;
+        let myRow = rows[i+1]
+        if (!myRow) break;
+        let cells = myRow.cells
+        if (!cells) break;
+        let cell = cells[cells.length-1]
+        if (!cell) break;
+        cell.innerHTML = rowToMoveTo[i]
+    }
+    document.getElementById("refresh-cover-breakout_rooms").classList.remove("running")
+    document.getElementById("ld-spin-breakout_rooms").style.display = "none"
+}
+function toFirstAndLast(fullName){
+    try{
+        if (fullName){
+            let name = fullName.split(" ")
+            return name[0] +" "+ name[name.length-1]
+        }
+    }catch (e){
+        console.error(e)
+    }
+}
+
+/**
+ * data is stored in following format object:<br>
+ * {                                                                  <br>
+ *     data : [                                                       <br>
+ *         [instructor 1, student one, student two, ect],             <br>
+ *         [instructor 2, student three, student four, ect]           <br>
+ *     ],                                                             <br>
+ *     errors : [should be empty lmao],                               <br>
+ *     meta : { delimiter: ",", linebreak: "\r\n", aborted: false, … }<br>
+ *     ...                                                            <br>
+ * }
+ *
+ */
+function addedCSV(data){
+    if (!breakoutRoomUser) return;
+    //data is the json object with teachers and participants
+    //format as done by papa parse:
+    BRPartipantsArray = data.data
+    evaluateBRTable();
+}
+function clearBRTable(table){
+    let tableRows = table.getElementsByTagName("tr")
+    let rowCount = tableRows.length
+    for (var x=rowCount-1; x>0; x--) {
+        table.deleteRow(x);
+    }
+}
+//BREAKOUT ROOM RESEARCH PROJECT SECTION END
+//--------------------------------------------
+
 document.getElementById("meeting-id-attendance").hidden = true
 $("input").on("click", function(){
     $(this).removeClass('is-invalid')
@@ -537,7 +794,6 @@ function evaluateParticipantTable(doc){
                         let currParticipant = new Participant(participantFirst, participantLast, "Absent", true, " "," ")// blank time joined and time left if participant hasnt joined yet
                         currParticipant.bufferCount = 0
                         Participants.unshift(currParticipant)
-
                     }
                 }
                 else{
@@ -738,6 +994,7 @@ function evaluateParticipantTable(doc){
             hideRegisterRosterButtons()
         }
     }
+    evaluateBRTable()
 }
 function clearTable(){
     const participantTable = document.getElementById("participant-table")
@@ -764,8 +1021,8 @@ $("#student-search-input-field").on('keyup', function (e) {
         const fullName = Participants[i].firstName + " " + Participants[i].lastName
         if(fullName.toLowerCase().includes(currValue.toLowerCase().trim())){
             let row = participantTable.insertRow(1+findIndexOfRow(i));
-            row.style.backgroundColor = "#ffffff"
-            row.style.color = "#000000"
+            row.style.backgroundColor = WHITE
+            row.style.color = BLACK
             let cell1 = row.insertCell(0)
             let cell2 = row.insertCell(1)
             let cell3 = row.insertCell(2)
@@ -773,16 +1030,16 @@ $("#student-search-input-field").on('keyup', function (e) {
             let cell5State = row.insertCell(4)
             if(Participants[i].state === "Not Registered"){
                 row.style.backgroundColor = "#b8b8b8"
-                cell5State.style.color = "#000000"
+                cell5State.style.color = BLACK
             }
             else if(Participants[i].state === "Absent"){
-                cell5State.style.color = "#dd174d"
+                cell5State.style.color = ABSENT_RED
             }
             else if(Participants[i].state === "Left Meeting"){
-                cell5State.style.color = "#ddb217"
+                cell5State.style.color = LEFT_MEETING_YELLOW
             }
             else if(Participants[i].state === "Present"){
-                cell5State.style.color = "#00bc50"
+                cell5State.style.color = PRESENT_GREEN
             }
             cell5State.innerHTML = Participants[i].state
             cell1.innerHTML = Participants[i].firstName
@@ -816,9 +1073,9 @@ function filterClick(clicked_id){
                 presentParticipantCount += 1
             }
             else{
-                row.style.backgroundColor = "#ffffff"
+                row.style.backgroundColor = WHITE
             }
-            row.style.color = "#000000"
+            row.style.color = BLACK
             let cell1 = row.insertCell(0)
             let cell2 = row.insertCell(1)
             let cell3 = row.insertCell(2)
@@ -826,16 +1083,16 @@ function filterClick(clicked_id){
             let cell5Status = row.insertCell(4)
             cell5Status.innerHTML = Participants[i].state
             if(Participants[i].state === "Present"){
-                cell5Status.style.color = "#00bc50"
+                cell5Status.style.color = PRESENT_GREEN
                 presentParticipantCount += 1
                 totalParticipants += 1
             }
             if(Participants[i].state === "Absent"){
-                cell5Status.style.color = "#dd174d"
+                cell5Status.style.color = ABSENT_RED
                 totalParticipants += 1
             }
             if(Participants[i].state === "Left Meeting"){
-                cell5Status.style.color = "#ddb217"
+                cell5Status.style.color = LEFT_MEETING_YELLOW
                 totalParticipants += 1
             }
             cell1.innerHTML = Participants[i].firstName
@@ -853,15 +1110,15 @@ function filterClick(clicked_id){
             if(Participants[i].state === "Present"){
                 presentParticipantCount += 1
                 let row = participantTable.insertRow(1+ findIndexOfRow(i));
-                row.style.backgroundColor = "#ffffff"
-                row.style.color = "#000000"
+                row.style.backgroundColor = WHITE
+                row.style.color = BLACK
                 let cell1 = row.insertCell(0)
                 let cell2 = row.insertCell(1)
                 let cell3 = row.insertCell(2)// cell 3 contains time now
                 let cell4TimeLeft = row.insertCell(3)
                 let cell5State = row.insertCell(4) // changed cell3 to cell4
                 cell5State.innerHTML = Participants[i].state
-                cell5State.style.color = "#00bc50"
+                cell5State.style.color = PRESENT_GREEN
                 cell1.innerHTML = Participants[i].firstName
                 cell2.innerHTML = Participants[i].lastName
                 cell3.innerHTML = isoToLocalString(Participants[i].timeJoined)
@@ -888,15 +1145,15 @@ function filterClick(clicked_id){
         for(let i = Participants.length-1; i >= 0; i--){
             if(Participants[i].state === "Absent"){
                 let row = participantTable.insertRow(1+ findIndexOfRow(i));
-                row.style.backgroundColor = "#ffffff"
-                row.style.color = "#000000"
+                row.style.backgroundColor = WHITE
+                row.style.color = BLACK
                 let cell1 = row.insertCell(0)
                 let cell2 = row.insertCell(1)
                 let cell3 = row.insertCell(2)// cell 3 contains time now
                 let cell4TimeLeft = row.insertCell(3)
                 let cell5State = row.insertCell(4) // changed cell3 to cell4
                 cell5State.innerHTML = Participants[i].state
-                cell5State.style.color = "#dd174d"
+                cell5State.style.color = ABSENT_RED
                 cell1.innerHTML = Participants[i].firstName
                 cell2.innerHTML = Participants[i].lastName
                 cell3.innerHTML = ""
@@ -926,7 +1183,7 @@ function filterClick(clicked_id){
                 notRegisteredCount += 1
                 let row = participantTable.insertRow(1+ findIndexOfRow(i));
                 row.style.backgroundColor = "#b8b8b8"
-                row.style.color = "#000000"
+                row.style.color = BLACK
                 let cell1 = row.insertCell(0)
                 let cell2 = row.insertCell(1)
                 let cell3 = row.insertCell(2)// cell 3 contains time now
@@ -959,14 +1216,14 @@ function filterClick(clicked_id){
         for(let i = Participants.length-1; i >= 0; i--){
             if(Participants[i].state === "Left Meeting"){
                 let row = participantTable.insertRow(1+ findIndexOfRow(i));
-                row.style.backgroundColor = "#ffffff"
+                row.style.backgroundColor = WHITE
                 let cell1 = row.insertCell(0)
                 let cell2 = row.insertCell(1)
                 let cell3 = row.insertCell(2)// cell 3 contains time now
                 let cell4TimeLeft = row.insertCell(3)
                 let cell5State = row.insertCell(4) // changed cell3 to cell4
                 cell5State.innerHTML = Participants[i].state
-                cell5State.style.color = "#ddb217"
+                cell5State.style.color = LEFT_MEETING_YELLOW
                 cell1.innerHTML = Participants[i].firstName
                 cell2.innerHTML = Participants[i].lastName
                 cell3.innerHTML = isoToLocalString(Participants[i].timeJoined)
@@ -1073,7 +1330,7 @@ function sortByTimeLeft(){
     updateParticipantTable()
 }
 
-function findIndexOfRow( i){
+function findIndexOfRow(i){
 
     let searchFor;
     if(ParticipantTableSortBy === "first"){
@@ -1220,7 +1477,6 @@ function addNotRegisteredCreate(filter){
     }
 }
 
-
 function compareMeetings(a, b) {
     if (a.name > b.name) return 1;
     if (b.name > a.name) return -1;
@@ -1232,8 +1488,6 @@ function comparePastMeetings(a, b) {
     if (a.MeetingStart > b.MeetingEnd) return -1
     return 1;
 }
-
-
 
 $("#records-search-input-field").on('keyup', function (e) {
     const recordTable = document.getElementById("records-table")
@@ -1270,7 +1524,7 @@ $("#records-search-input-field").on('keyup', function (e) {
             let cell1 = currentRow.insertCell(0)
             let cell2 = currentRow.insertCell(1)
             let cell3 = currentRow.insertCell(2)
-            currentRow.style.backgroundColor = "#ffffff"
+            currentRow.style.backgroundColor = WHITE
             cell1.innerHTML = PastMeetings[i].MeetingName
             cell2.innerHTML = PastMeetings[i].MeetingID
             cell3.innerHTML = PastMeetings[i].MeetingStart.toDate().toLocaleString()
@@ -1294,8 +1548,8 @@ $("#current-record-search-input-field").on('keyup', function (e) {
         const currString = CryptoJS.AES.decrypt(PastMeetings[currentRecordIndex].events[i],auth.currentUser.uid).toString(CryptoJS.enc.Utf8);
         if(currString.toLowerCase().includes(currValue.toLowerCase().trim())){
             let row = currentRecordTable.insertRow(0);
-            row.style.backgroundColor = "#ffffff"
-            row.style.color = "#000000"
+            row.style.backgroundColor = WHITE
+            row.style.color = BLACK
             let cell1 = row.insertCell(0)
             cell1.innerHTML = CryptoJS.AES.decrypt(PastMeetings[currentRecordIndex].events[i],auth.currentUser.uid).toString(CryptoJS.enc.Utf8);
 

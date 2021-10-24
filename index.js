@@ -115,7 +115,6 @@ app.get('/support', (req, res) => {
 })
 app.get('/authorize', (req, res) => {
     const authorizationCode = req.query.code
-    console.log(authorizationCode)
     if (authorizationCode && authorizationCode !== "") {
         try {
             request({
@@ -406,10 +405,6 @@ async function createWebexWebhooksAndOAuth(body, refreshToken, accessToken, res)
 //TODO("Modularize this")
 app.get('/authorize_webex', (req, res) => {
     const authorizationCode = req.query.code
-    console.log("webex authorization code = " + authorizationCode)
-    console.log("webex_clientid = " + process.env.webex_clientid)
-    console.log("webex_clientsecret = " + process.env.webex_clientsecret)
-
     if (authorizationCode && authorizationCode !== "") {
         try {
             request({
@@ -433,7 +428,6 @@ app.get('/authorize_webex', (req, res) => {
                     console.log(body)
                     const accessToken = body.access_token
                     const refreshToken = body.refresh_token
-                    console.log("webex accesstoken = " + accessToken)
                     request({
                         url: 'https://webexapis.com/v1/memberships',
                         method: 'GET',
@@ -606,7 +600,6 @@ app.post('/api/requests', (req, res) => {
     res.send()
     console.log("post request to /api/requests sent ")
     console.log(req.body)
-    console.log(req.headers.authorization)
     if (req && req.headers && (req.headers.authorization === process.env.zoom_verification_token)) {
         const body = req.body
         const host_id = body.payload.object.host_id
