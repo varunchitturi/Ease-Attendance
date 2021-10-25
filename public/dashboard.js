@@ -372,7 +372,7 @@ function evaluateBreakoutRoomTable(doc){
 function reorganizeStudents(){
     if (!breakoutRoomUser) return;
     if (!MeetingIsOccurring){
-        redNotification("There is no meeting occuring!")
+        redNotification("There is no meeting occuring")
         return;
     }
     if (!BRPartipantsArray){
@@ -383,11 +383,11 @@ function reorganizeStudents(){
     let averageStudentCount = studentCountBR/instructorCountBR
 
     if(studentCountBR==0){
-        redNotification("You have no students!")
+        redNotification("You have no students")
         return;
     }
     if(instructorCountBR==0){
-        redNotification("You have no teachers!")
+        redNotification("You have no teachers")
         return;
     }
 
