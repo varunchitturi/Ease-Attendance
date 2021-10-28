@@ -19,9 +19,9 @@ pipelines:
           script:
             - npm install
             - npm build
-            - git archive --format=tar.gz master -o app-$BITBUCKET_BUILD_NUMBER.tar.gz 
+            - git archive --format=tar.gz master -o application.tar.gz 
           artifacts:
-            - app-$BITBUCKET_BUILD_NUMBER.tar.gz
+            - application.tar.gz
       - step:
           name: Deploy to Production
           deployment: Production
@@ -30,5 +30,5 @@ pipelines:
               variables:
                 HEROKU_API_KEY: $heroku_api_key
                 HEROKU_APP_NAME: $heroku_app_name
-                ZIP_FILE: app-$BITBUCKET_BUILD_NUMBER.tar.gz
+                ZIP_FILE: application.tar.gz
        
