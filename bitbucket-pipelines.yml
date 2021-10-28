@@ -1,5 +1,8 @@
 image: node:10.15.3
 
+clone:
+  depth: full
+
 pipelines:
   default:
     - step:
@@ -19,16 +22,9 @@ pipelines:
           script:
             - npm install
             - npm build
-            - git push https://heroku:$heroku_api_key@git.heroku.com/$heroku_app_name.git HEAD
-          artifacts:
-            - application.tar.gz
       - step:
           name: Deploy to Production
           deployment: Production
           script:
-            - pipe: atlassian/heroku-deploy:1.2.1
-              variables:
-                HEROKU_API_KEY: $heroku_api_key
-                HEROKU_APP_NAME: $heroku_app_name
-                ZIP_FILE: application.tar.gz
+            - git push https://heroku:$heroku_api_key@git.heroku.com/$heroku_app_name.git HEAD
        
