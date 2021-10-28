@@ -1,0 +1,34 @@
+image: node:10.15.3
+
+pipelines:
+  default:
+    - step:
+        name: Build and Run
+        caches:
+          - node
+        script:
+          - npm install
+          - npm build
+          
+  branches:
+    prod:
+      - step:
+          name: Build
+          caches:
+            - node
+          script:
+            - npm install
+            - npm build
+            - zip -r app-$BITBUCKET_BUILD_NUMBER.zip . -x *.git* bitbucket-pipelines.yml
+          artifacts:
+            - "*.zip"
+      - step:
+          name: Deploy to Production
+          deployment: Production
+          script:
+            - pipe: atlassian/heroku-deploy:1.2.1
+              variables:
+                HEROKU_API_KEY: $heroku_api_key
+                HEROKU_APP_NAME: $heroku_app_name
+                ZIP_FILE: app-$BITBUCKET_BUILD_NUMBER.zip
+       
