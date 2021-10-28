@@ -9,18 +9,19 @@ pipelines:
         script:
           - npm install
           - npm build
-          - npm start
           
   branches:
     prod:
       - step:
-          name: Build and Run
+          name: Build
           caches:
             - node
           script:
             - npm install
             - npm build
-            - npm start
+            - zip -r app-$BITBUCKET_BUILD_NUMBER.zip . -x *.git* bitbucket-pipelines.yml
+          artifacts:
+            - "*.zip"
       - step:
           name: Deploy to Production
           deployment: Production
@@ -29,5 +30,5 @@ pipelines:
               variables:
                 HEROKU_API_KEY: $heroku_api_key
                 HEROKU_APP_NAME: $heroku_app_name
-                ZIP_FILE: "application.tar.gz"
+                ZIP_FILE: app-$BITBUCKET_BUILD_NUMBER.zip
        
