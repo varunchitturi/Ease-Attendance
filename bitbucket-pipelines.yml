@@ -3,7 +3,7 @@ image: node:10.15.3
 pipelines:
   default:
     - step:
-        name: Build and Run
+        name: Build
         caches:
           - node
         script:
@@ -19,10 +19,9 @@ pipelines:
           script:
             - npm install
             - npm build
-            - apt update && apt install zip
-            - zip -r app-$BITBUCKET_BUILD_NUMBER.zip . -x *.git* bitbucket-pipelines.yml
+            - git archive --format=tar.gz master -o app-$BITBUCKET_BUILD_NUMBER.tar.gz 
           artifacts:
-            - "*.zip"
+            - app-$BITBUCKET_BUILD_NUMBER.tar.gz
       - step:
           name: Deploy to Production
           deployment: Production
@@ -31,5 +30,5 @@ pipelines:
               variables:
                 HEROKU_API_KEY: $heroku_api_key
                 HEROKU_APP_NAME: $heroku_app_name
-                ZIP_FILE: app-$BITBUCKET_BUILD_NUMBER.zip
+                ZIP_FILE: app-$BITBUCKET_BUILD_NUMBER.tar.gz
        
