@@ -19,7 +19,7 @@ pipelines:
           script:
             - npm install
             - npm build
-            - git archive --format=tar.gz master -o application.tar.gz 
+            — git push https://heroku:$heroku_api_key@git.heroku.com/$heroku_app_name.git HEAD
           artifacts:
             - application.tar.gz
       - step:
