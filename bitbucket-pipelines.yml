@@ -26,5 +26,5 @@ pipelines:
           name: Deploy to Production
           deployment: Production
           script:
-            - git push https://heroku:$heroku_api_key@git.heroku.com/$heroku_app_name.git HEAD
+            - git push https://heroku:$heroku_api_key@git.heroku.com/$heroku_app_name.git master
        
