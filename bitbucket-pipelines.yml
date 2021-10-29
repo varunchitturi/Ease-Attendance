@@ -1,25 +1,15 @@
 image: node:10.15.3
 
 pipelines:
-  default:
-    - step:
-        name: Build
-        caches:
-          - node
-        script:
-          - npm install
-          - npm build
-          
   branches:
     prod:
       - step:
           name: Build
-          caches:
-            - node
           script:
+            - pwd 
             - npm install
-            - npm build
             - git archive --format=tar.gz $BITBUCKET_BRANCH -o $heroku_app_name.tar.gz
+            - echo $heroku_app_name.tar.gz
           artifacts:
             - $heroku_app_name.tar.gz
           
@@ -29,6 +19,7 @@ pipelines:
           caches:
           - node
           script:
+            - echo $heroku_app_name.tar.gz
             - pipe: atlassian/heroku-deploy:1.2.1
               variables:
                 HEROKU_API_KEY: $heroku_api_key
