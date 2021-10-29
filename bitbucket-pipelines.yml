@@ -1,8 +1,5 @@
 image: node:10.15.3
 
-clone:
-  depth: full
-
 pipelines:
   default:
     - step:
@@ -23,6 +20,9 @@ pipelines:
             - npm install
             - npm build
             - git archive --format=tar.gz $BITBUCKET_BRANCH -o $heroku_app_name.tar.gz
+          artifacts:
+            - $heroku_app_name.tar.gz
+          
       - step:
           name: Deploy to Production
           deployment: Production
