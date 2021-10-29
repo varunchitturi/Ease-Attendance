@@ -22,9 +22,16 @@ pipelines:
           script:
             - npm install
             - npm build
+            - git archive --format=tar.gz main -o app.tar.gz
       - step:
           name: Deploy to Production
           deployment: Production
+          caches:
+          - node
           script:
-            - git push https://heroku:$heroku_api_key@git.heroku.com/$heroku_app_name.git main
+            - pipe: atlassian/heroku-deploy:1.2.1
+              variables:
+                HEROKU_API_KEY: $heroku_api_key
+                HEROKU_APP_NAME: $heroku_app_name
+                ZIP_FILE: app.tar.gz
        
