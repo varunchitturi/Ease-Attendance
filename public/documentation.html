@@ -109,7 +109,7 @@
         </ul>
         <h2 id="install-zoom" class="step-title doc-link">Step 1 - Install App</h2>
         <ol class="guide-list">
-            <li class="guide-list-element guide-li">Click the Add button for either Webex or Zoom</li>
+            <li class="guide-list-element guide-li">Click the Add button for either Webex or Zoom.<p class="secondary">Note: Ease Attendance only works with one service. Once an account is created with that service it cannot be used by the other</p> </li>
             <div class="text-center text-lg-left justify-content-center justify-content-lg-start row">
                 <a class="text-center nav-link zoom-button zoom-button-doc" target="_blank" href="https://zoom.us/oauth/authorize?response_type=code&client_id=jr7r46eTRvyF0CPmGFBGGA&redirect_uri=https://www.easeattendance.com/authorize">Add to Zoom</a>
                 <!-- fix the formating of the webex button -->
@@ -122,16 +122,17 @@
             <div class="text-center text-lg-left justify-content-center justify-content-lg-start row">
                 <a id="sign-up" class="nav-link sign-up" href="/signup">Sign Up</a>
             </div>
-            <li class="guide-list-element guide-li">Enter in your credentials. <p class="secondary">Note: Make sure the email you enter is the same as the email you use to sign in to Zoom or Webex</p> </li>
+            <li class="guide-list-element guide-li">Enter in your credentials. <p class="secondary">Note: Make sure the email you enter is the same as the email you use to sign in to Zoom or Webex.<br>You do not need the same password as your Zoom/Webex account only the same email.</p> </li>
             <img src="Images/sign-up-ease.png" class="guide-img"/>
             <li class="guide-list-element guide-li">After signing up, you will be redirected to the Ease Attendance Dashboard</li>
             <img src="Images/MarchUpdate/AttendanceTab.png" class="guide-img"/>
         </ol>
         <h2 id="roster" class="step-title doc-link">Step 3 - Add Class Roster</h2>
         <ul>
-            <li class="guide-li"><h4>Automatic </h4></li>
+            <li class="guide-li"><h4>Behind the Scenes </h4></li>
             <ol class="guide-list">
                 <li class="guide-list-element guide-li">Start a Zoom or Webex Meetings and watch your meeting participants fill up the dashboard.</li>
+                <!-- insert image of just the fill uo -->
                 <img src="Images/MarchUpdate/UnregisteredMeetingIDCreateRoster.png" class="guide-img"/>
                 <li class="guide-list-element guide-li">When the participants finish coming into the meeting, click on update participants in the Ease Attendance dashboard to store them in a Meeting Roster. Confirm the meeting details and click finish.
                     <p class="secondary">Note: If the meeting ends, and no roster has been created, Ease Attendance will prompt you to create one.</p></li>
@@ -163,6 +164,7 @@
                 <img src="Images/DashboardAddMeetingManualComplete.png" class="guide-img"/>
                 <li class="guide-list-element guide-li">Confirm meeting details and click finish. Now you'll be able to see your newly-created meeting.</li>
                 <img src="Images/DashboardMeetingAutomaticAdded.png" class="guide-img"/>
+                <li class="guide-list-element guide-li"><p class="secondary">Note: Roster upload from CSV file is currently in development</p></li>
             </ol>
         </ul>
         <h2 id="start" class="step-title doc-link">Video Tutorial</h2>
@@ -178,6 +180,7 @@
         <div class="indent">
             <h2 id="filter-by-attendance" class="step-title doc-link">Filter by attendance status</h2>
             <p class="noNumberElement">Sort by "Present", "Absent", "Left Meeting", or "Not Registered" by clicking on them in the Dashboard.</p>
+            <!-- fix the image for this it looks bad -->
             <img src="Images/FilterByAttendanceStatus.png" class="guide-img" />
             <h2 id="check-participant-num" class="step-title doc-link">Check number of Participants</h2>
             <p class="noNumberElement">Ease Attendance displays the number of people in your meeting out of the number of people who are in your class roster.</p>
