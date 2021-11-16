@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ease Attendance - Varun Chitturi
+ * Copyright (c) 2021 School Scope Technologies
  */
 const navBlock = "<nav class=\"navbar fixed-top navbar-expand-lg\">\n" +
     "    <a class=\"navbar-brand\" href=\"/\"><img  class=\"logo\" src=\"Images/Ease%20Attendance%20Header%20Logo.png\"></a>\n" +

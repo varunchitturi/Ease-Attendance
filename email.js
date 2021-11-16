@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ease Attendance - Varun Chitturi
+ * Copyright (c) 2021 School Scope Technologies
  */
 module.exports = {email : "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional //EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n" +
     "<!--[if IE]><html xmlns=\"http://www.w3.org/1999/xhtml\" class=\"ie\"><![endif]-->\n" +

@@ -66,4 +66,4 @@ OR
 
 
 
-Copyright (c) 2021 Ease Attendance - Varun Chitturi
+Copyright (c) 2021 School Scope Technologies

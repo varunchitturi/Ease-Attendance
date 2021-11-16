@@ -1,4 +1,4 @@
-/* Copyright (c) 2021 Ease Attendance - Varun Chitturi */
+/* Copyright (c) 2021 School Scope Technologies */
 
 $('.dropdown').on('show.bs.dropdown', function() {
     $(this).find('.dropdown-menu').first().stop(true, true).slideDown();

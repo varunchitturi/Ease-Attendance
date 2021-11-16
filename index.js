@@ -1,5 +1,5 @@
 /*
-    * Copyright (c) 2021 Ease Attendance - Varun Chitturi
+    * Copyright (c) 2021 School Scope Technologies
 */
 var email = require("./email.js").email
 console.log("email html loaded")
