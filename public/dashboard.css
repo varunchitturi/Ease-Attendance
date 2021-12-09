@@ -255,6 +255,10 @@ hr{
     color:black;
     padding-bottom: 15px;
 }
+#input-roster-csv {
+    padding-top: 5px;
+    font-size: 14px;
+}
 .dots {
     margin: 40px auto;
 }
