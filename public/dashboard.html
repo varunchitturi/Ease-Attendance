@@ -44,10 +44,11 @@
             integrity="sha512-nOQuvD9nKirvxDdvQ9OMqe2dgapbPB7vYAMrzJihw5m+aNcf0dX53m6YxM4LgA9u8e9eg9QX+/+mPu8kCNpV2A=="
             crossorigin="anonymous"></script>
 
-    <!-- BREAKOUT ROOMS PAPAPARSE  -->
+    <!--  PAPAPARSE  -->
     <script src="./modules/papaparse.min.js"></script>
     <script>
         var data;
+        var importRoster;
         function handleFileSelect(evt) {
             var file = evt.target.files[0];
             Papa.parse(file, {
@@ -61,8 +62,22 @@
         $(document).ready(function(){
             $("#enter-csv-file-breakout_rooms").change(handleFileSelect);
         });
+
+        function handleFileSelectEnterRoster(evt) {
+            var file = evt.target.files[0];
+            Papa.parse(file, {
+                dynamicTyping: true,
+                complete: function(results) {
+                    data = results;
+                    addedCSVforRoster(data)
+                }
+            });
+        }
+        $(document).ready(function(){
+            $("#input-roster-csv").change(handleFileSelectEnterRoster);
+        });
     </script>
-    <!-- BREAKOUT ROOMS PAPAPARSE END -->
+    <!--  PAPAPARSE END -->
 
 </head>
 <div class="notify"><span id="notifyType"></span></div>
@@ -480,6 +495,9 @@
                                 <h5>Participants</h5>
                                 <h6 class="text-secondary modal-title" id="roster-participant-count">Participant Count:
                                     0</h6>
+                                <h5 id="enter-csv-file-roster">Enter CSV File:
+                                    <input type="file" accept=".csv" id="input-roster-csv">
+                                </h5>
                                 <table id="student-input-table">
                                     <tbody id="student-input-table-body">
                                     <tr>

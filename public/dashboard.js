@@ -588,6 +588,14 @@ function addedCSV(data){
     BRPartipantsArray = data.data
     evaluateBRTable();
 }
+function addedCSVforRoster(data){
+    console.log(data)
+    var inData = data.data
+    console.log("indata : " + inData)
+    for(var i = 0; i < inData.length ; i++) {
+        addStudent(inData[i][0])
+    }
+}
 function clearBRTable(table){
     let tableRows = table.getElementsByTagName("tr")
     let rowCount = tableRows.length
