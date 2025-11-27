@@ -13,7 +13,7 @@
     "crypto-js": "^4.1.1",
     "dotenv": "^8.6.0",
     "express": "^4.17.1",
-    "firebase-admin": "^9.11.1",
+    "firebase-admin": "^13.6.0",
     "fs": "^0.0.1-security",
     "nodemailer": "^6.6.5",
     "papaparse": "^5.3.1",
